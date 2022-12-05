@@ -8,6 +8,7 @@
   <link rel="preload" as="style" href="css/style.pure.css">
   <link rel="stylesheet" href="css/style.pure.css" />
   <link rel="icon" href="data:,">
+  <script defer src="js/main.js"></script>
   <title>Copysiper</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="title" content="Copysiper">
@@ -24,7 +25,8 @@
     <a href="https://vk.com/copysiper" class="icon" aria-label="Vk"><i class="lab la-vk"></i></a>
     <a href="https://github.com/copysiper/" class="icon" aria-label="GitHub"><i class="lab la-github"></i></a>
     <a href="https://steamcommunity.com/id/copysiper/" class="icon" aria-label="Steam"><i class="lab la-steam"></i></a>
-    <h2 class="mail">oleg@tsvetkov.dev</h2>
+    <h2 class="mail" id="mail" onclick="copyToClipboard()" onmouseout="outFunc()" onmouseover="inFunc()">oleg@tsvetkov.dev</h2>
+    <h2 class="tooltip mail" id="tooltip"><span class="tooltiptext" id="myTooltip" hidden>Скопировать</span></h2>
   </div>
 </div>
 </body>
