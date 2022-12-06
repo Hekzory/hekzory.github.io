@@ -1,9 +1,9 @@
 <!doctype html>
 <html lang="ru">
 <head>
+  <meta charset="UTF-8">
   <meta http-equiv="Content-Security-Policy" content="default-src 'self' *.tsvetkov.dev ajax.cloudflare.com tsvetkov.dev 'unsafe-inline'; img-src * data:;">
   <base target="_blank">
-  <meta charset="UTF-8">
   <link rel="preload" as="font" href="css/la/fonts/la-brands-400-mod.woff2" type="font/woff2" crossorigin>
   <link rel="preload" as="style" href="css/style.pure.css">
   <link rel="stylesheet" href="css/style.pure.css">
@@ -12,15 +12,22 @@
   <title>Страница-визитка | Copysiper | Олег Цветков</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="title" content="Страница-визитка | Copysiper | Олег Цветков">
-  <meta name="description" content="Личная страница, здесь можно узнать мои контакты и узнать краткую информацию обо мне.">
+  <meta name="description" content="Личная страница, здесь можно узнать мои контакты и прочитать краткую информацию обо мне.">
   <meta name="keywords" content="copysiper, tsvetkov, Цветков, Олег Цветков, tsvetkov.dev">
   <meta name="robots" content="index, follow">
   <meta name="language" content="Russian">
-  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Личная страница Copysiper" />
+  <meta property="og:type" content="profile">
   <meta property="og:title" content="Личная страница Copysiper">
-  <meta property="og:description" content="Страница-визитка, здесь можно узнать мои контакты и узнать краткую информацию обо мне.">
+  <meta property="og:description" content="Страница-визитка, здесь можно узнать мои контакты и прочитать краткую информацию обо мне.">
   <meta property="og:url" content="https://tsvetkov.dev">
   <meta property="og:locale" content="ru_RU">
+  <meta property="og:image" content="">
+  <meta property="twitter:domain" content="tsvetkov.dev">
+  <meta property="twitter:url" content="https://tsvetkov.dev">
+  <meta name="twitter:title" content="Личная страница Copysiper">
+  <meta name="twitter:description" content="Страница-визитка, здесь можно узнать мои контакты и прочитать краткую информацию обо мне.">
+  <meta name="twitter:image" content="">
   </head>
 <body>
 <div>
@@ -31,7 +38,7 @@
     <a href="https://github.com/copysiper/" class="icon" aria-label="GitHub"><i class="lab la-github"></i></a>
     <a href="https://steamcommunity.com/id/copysiper/" class="icon" aria-label="Steam"><i class="lab la-steam"></i></a>
     <h2 class="mail" id="mail" onclick="copyToClipboard()" onmouseout="outFunc()" onmouseover="inFunc()">oleg@tsvetkov.dev</h2>
-    <h2 class="tooltip mail" id="tooltip"><span class="tooltiptext" id="myTooltip" hidden>Скопировать</span></h2>
+    <h2 class="tooltip mail" id="tooltip"><span class="tooltiptext" id="myTooltip" hidden></span></h2>
   </div>
 </div>
 <script src="js/main.js" defer></script>
