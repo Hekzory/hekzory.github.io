@@ -16,7 +16,6 @@
   <meta name="title" content="Страница-визитка | Copysiper | Олег Цветков">
   <meta name="description" content="Личная страница, здесь можно узнать мои контакты и прочитать краткую информацию обо мне.">
   <meta name="keywords" content="copysiper, tsvetkov, Цветков, Олег Цветков, tsv.one, tsvetkov.dev">
-  <meta name="robots" content="index, follow">
   <meta name="language" content="Russian">
   <meta property="og:site_name" content="Личная страница Copysiper" />
   <meta property="og:type" content="website">
@@ -35,12 +34,14 @@
 <body>
 <div>
   <div id="intro">
-    <h1 class="username">Copysiper</h1>
-    <a href="https://t.me/copysiper" class="icon" aria-label="Telegram"><i class="lab la-telegram"></i></a>    
-    <a href="https://vk.com/copysiper" class="icon" aria-label="Vk"><i class="lab la-vk"></i></a>
-    <a href="https://github.com/copysiper/" class="icon" aria-label="GitHub"><i class="lab la-github"></i></a>
-    <a href="https://steamcommunity.com/id/copysiper/" class="icon" aria-label="Steam"><i class="lab la-steam"></i></a>
-    <h2 class="mail" id="mail" onclick="copyToClipboard()" onmouseout="outFunc()" onmouseover="inFunc()">oleg@tsv.one</h2>
+    <header><h1 class="username">Copysiper</h1></header>
+    <main>
+    <a href="https://t.me/copysiper" class="icon" aria-label="Telegram link" title="Visit me on Telegram" target="_blank"><span role="img" class="lab la-telegram"></span></a>    
+    <a href="https://vk.com/copysiper" class="icon" aria-label="Vk link" title="Visit me on Vk" target="_blank"><span role="img" class="lab la-vk"></span></a>
+    <a href="https://github.com/copysiper/" class="icon" aria-label="GitHub link" title="Visit me on GitHub" target="_blank"><span role="img" class="lab la-github"></span></a>
+    <a href="https://steamcommunity.com/id/copysiper/" class="icon" aria-label="Steam link" title="Visit me on Steam" target="_blank"><span role="img" class="lab la-steam"></span></a>
+    <h2 class="mail" id="mail" onclick="copyToClipboard()" onmouseout="outFunc()" onmouseover="inFunc()" role="button" title="Моя почта">oleg@tsv.one</h2>
+    </main>
     <div class="tooltip mail" id="tooltip"><span class="tooltiptext" id="myTooltip" hidden></span></div>
   </div>
 </div>
