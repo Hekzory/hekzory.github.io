@@ -1,4 +1,4 @@
 https://copysiper.pages.dev/*
   X-Robots-Tag: noindex
 /
-  Content-Security-Policy: default-src 'self' *.tsv.one ajax.cloudflare.com tsv.one 'unsafe-inline'; img-src * data:;
+  Content-Security-Policy: default-src 'self' *.tsv.one ajax.cloudflare.com tsv.one; img-src * data:;
