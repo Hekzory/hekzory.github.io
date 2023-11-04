@@ -7,7 +7,7 @@ GitHub-репозиторий сайта-визитки
 </h1>
 
 <p align="center">
-<img height="400" src="https://user-images.githubusercontent.com/36638457/229371565-3b89c7ad-02b1-453d-826a-15ac27dbc4e4.png" alt="banner">
+<img height="400" src="https://repository-images.githubusercontent.com/386972042/4d776f21-15c5-44f8-9b80-60f6cbf4900b" alt="banner">
 </p>
 
 <p align="center">
