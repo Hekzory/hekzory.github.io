@@ -4,4 +4,4 @@ https://copysiper.pages.dev/*
   Content-Security-Policy: default-src 'self' *.tsv.one; img-src * data:; object-src 'none'; base-uri 'self'; frame-ancestors 'self' *.tsv.one;
   X-Frame-Options: SAMEORIGIN
   X-Content-Type-Options: nosniff
-  Link: <css/style.css>; rel=preload; as=style
+  Link: </css/style.css>; rel=preload; as=style
