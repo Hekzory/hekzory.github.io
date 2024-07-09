@@ -13,5 +13,7 @@
             "type": "image/png"
         }
     ],
-    "start_url": "https://tsv.one"
+    "theme_color": "#ffffff",
+    "background_color": "#ffffff",
+    "display": "standalone"
 }

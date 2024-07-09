@@ -1,0 +1,19 @@
+{
+    "name": "app",
+    "private": true,
+    "version": "0.0.1",
+    "type": "module",
+    "scripts": {
+        "dev": "pnpm exec vite",
+        "build": "pnpm exec vite build",
+        "preview": "pnpm exec vite preview"
+    },
+    "devDependencies": {
+        "happy-dom": "^14.12.3",
+        "lightningcss": "^1.25.1",
+        "terser": "^5.31.1",
+        "vite": "^5.3.3",
+        "vite-plugin-compression2": "^1.1.2",
+        "vite-plugin-html": "^3.2.2"
+    }
+}
