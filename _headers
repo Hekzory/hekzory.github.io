@@ -1,4 +1,4 @@
-https://copysiper.pages.dev/*
+https://hekz.pages.dev/*
   X-Robots-Tag: noindex
 /*
   Content-Security-Policy: default-src 'self' *.tsv.one; img-src * data:; object-src 'none'; base-uri 'self'; frame-ancestors 'self' *.tsv.one;
