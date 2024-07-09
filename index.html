@@ -1,70 +1,98 @@
 <!doctype html>
-<html lang="ru">
-<head>
-  <meta charset="UTF-8">
-  <base target="_blank">
-  <link rel="preload" href="/js/main.js" as="script">
-  <link rel="stylesheet" href="/css/style.css">
-  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
-  <link rel="icon" type="image/svg+xml" href="/favicon.svg">
-  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
-  <link rel="icon" type="image/png" sizes="192x192" href="/android-chrome-192x192.png">
-  <link rel="icon" type="image/png" sizes="512x512" href="/android-chrome-512x512.png">
-  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
-  <link rel="manifest" href="/site.webmanifest">
-  <link rel="mask-icon" href="/safari-pinned-tab.svg" color="#4e5180">
-  <meta name="theme-color" content="#ffffff">
-  <link rel="alternate" href="https://tsv.one/" hreflang="x-default">
-  <link rel="canonical" href="https://tsv.one/">
-  <title>Страница-визитка | Hekzo | Олег Цветков</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="title" content="Страница-визитка | Hekzo | Олег Цветков">
-  <meta name="description" content="Личная страница, здесь можно узнать мои контакты и прочитать краткую информацию обо мне.">
-  <meta name="keywords" content="hekzo, hekzory, copysiper, tsvetkov, Цветков, Олег Цветков, tsv.one">
-  <meta name="language" content="Russian">
-  <meta property="og:site_name" content="Личная страница Hekzo">
-  <meta property="og:type" content="website">
-  <meta property="og:title" content="Личная страница Hekzo">
-  <meta property="og:description" content="Страница-визитка, здесь можно узнать мои контакты и прочитать краткую информацию обо мне">
-  <meta property="og:url" content="https://tsv.one">
-  <meta property="og:locale" content="ru_RU">
-  <meta property="og:image" content="https://repository-images.githubusercontent.com/386972042/4d776f21-15c5-44f8-9b80-60f6cbf4900b">
-  <meta property="twitter:domain" content="tsv.one">
-  <meta property="twitter:url" content="https://tsv.one">
-  <meta property="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="Личная страница Hekzo">
-  <meta name="twitter:description" content="Страница-визитка, здесь можно узнать мои контакты и прочитать краткую информацию обо мне">
-  <meta name="twitter:image" content="https://repository-images.githubusercontent.com/386972042/4d776f21-15c5-44f8-9b80-60f6cbf4900b">
-  </head>
-<body>
-<div>
-  <div id="intro">
-    <header><h1 class="username">Hekzo</h1></header>
-    <main>
-    <a href="https://t.me/hekzory" class="icon" aria-label="Telegram ссылка" title="Visit me on Telegram" target="_blank"><span role="img" class="lab la-telegram"></span></a>    
-    <a href="https://vk.com/hekzo" class="icon" aria-label="Vk ссылка" title="Visit me on Vk" target="_blank"><span role="img" class="lab la-vk"></span></a>
-    <a href="https://github.com/hekzory/" class="icon" aria-label="GitHub ссылка" title="Visit me on GitHub" target="_blank"><span role="img" class="lab la-github"></span></a>
-    <a href="https://steamcommunity.com/id/hekzory/" class="icon" aria-label="Steam ссылка" title="Visit me on Steam" target="_blank"><span role="img" class="lab la-steam"></span></a>
-    <h2 class="mail" id="mail" onclick="copyToClipboard()" title="Моя почта">oleg@tsv.one</h2>
-    </main>
-    <div class="tooltip mail" id="tooltip"><span class="tooltiptext" id="myTooltip" role="tooltip" hidden></span></div>
-  </div>
-</div>
-<script src="/js/main.js" defer></script>
-<script type="application/ld+json">
-{
-  "@context": "https://schema.org/",
-  "@type": "Person",
-  "name": "Oleg Tsvetkov",
-  "url": "https://tsv.one/",
-  "jobTitle": "Programmer",
-  "sameAs": [
-    "https://vk.com/hekzo",
-    "https://github.com/hekzory",
-    "https://steamcommunity.com/id/hekzory",
-    "https://t.me/hekzory"
-  ]
-}
-</script>
-</body>
+<html lang="en">
+    <head>
+        <base target="_blank" />
+        <link rel="icon" href="/favicon.svg" sizes="any" type="image/svg+xml" />
+        <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+        <link rel="icon" href="/favicon.ico" sizes="48x48" />
+        <link rel="mask-icon" href="/safari-pinned-tab.svg" color="#507db0" />
+        <link rel="manifest" href="/site.webmanifest" />
+        <link rel="preload" href="/css/martianmono.woff2" as="font" type="font/woff2" crossorigin />
+        <link rel="prefetch" href="/css/icons.svg" />
+        <link rel="preload" href="/css/backgroundanim.svg" as="image" type="image/svg+xml" />
+        <link rel="preload" href="/css/foregroundanim.svg" as="image" type="image/svg+xml" />
+        <link href="/css/fonts.css" rel="stylesheet" type="text/css" />
+        <link href="/css/style.css" rel="stylesheet" type="text/css" />
+    </head>
+    <body class="is-loading">
+        <div id="wrapper">
+            <div id="main">
+                <div class="inner">
+                    <div class="container">
+                        <div class="wrapper">
+                            <div class="inner">
+                                <div id="image03" class="image">
+                                    <span class="frame"><img src="/resources/photo.webp" alt="Hi!" /></span>
+                                </div>
+                                <h2 id="text24">Software Engineer</h2>
+                                <h1 id="text36">Oleg Tsvetkov</h1>
+                                <p id="text37">
+                                    Username: <mark><strong>@Hekzo</strong></mark>
+                                </p>
+                                <div class="buttons">
+                                    <button onclick="_clipboard(event, 'oleg@tsv.one');" class="button">
+                                        <svg aria-label="Email">
+                                            <use href="/css/icons.svg#i-ml"></use>
+                                        </svg>
+                                        <span class="label">Email</span>
+                                    </button>
+                                </div>
+                                <hr id="divider08" class="full" />
+                                <div class="icons">
+                                    <a href="https://t.me/hekzory" class="icon-link">
+                                        <svg aria-label="Telegram">
+                                            <use href="/css/icons.svg#i-tg"></use>
+                                        </svg>
+                                        <span class="label">Telegram</span>
+                                    </a>
+                                    <a href="https://github.com/hekzory/" class="icon-link">
+                                        <svg aria-label="GitHub">
+                                            <use href="/css/icons.svg#i-gh"></use>
+                                        </svg>
+                                        <span class="label">GitHub</span>
+                                    </a>
+                                    <a href="https://vk.com/hekzo" class="icon-link">
+                                        <svg aria-label="VK">
+                                            <use href="/css/icons.svg#i-vk"></use>
+                                        </svg>
+                                        <span class="label">VK</span>
+                                    </a>
+                                    <a href="https://steamcommunity.com/id/hekzory/" class="icon-link">
+                                        <svg aria-label="Steam">
+                                            <use href="/css/icons.svg#i-st"></use>
+                                        </svg>
+                                        <span class="label">Steam</span>
+                                    </a>
+                                    <button onclick="_clipboard(event, 'Hekzory');" class="icon-link">
+                                        <svg aria-label="Discord">
+                                            <use href="/css/icons.svg#i-ds"></use>
+                                        </svg>
+                                        <span class="label">Discord</span>
+                                    </button>
+                                    <button onclick="_clipboard(event, 'oleg-tsv@yandex.ru');" class="icon-link">
+                                        <svg aria-label="Yandex">
+                                            <use href="/css/icons.svg#i-ya"></use>
+                                        </svg>
+                                        <span class="label">Yandex</span>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="container">
+                        <div class="wrapper">
+                            <div class="inner">
+                                <p id="text01">
+                                    Currently working at <mark><strong>VK</strong></mark
+                                    ><!-- as the
+									<em>test automation software engineer</em>.-->
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <script type="module" src="/js/main.js" defer></script>
+    </body>
 </html>
