@@ -189,5 +189,13 @@
             dialog.open(content);
             return false;
         };
+
+        const emailButton = $("#ml-btn");
+        const discordButton = $("#ds-btn");
+        const yandexButton = $("#ya-btn");
+
+        emailButton.addEventListener("click", (event) => _clipboard(event, 'oleg@tsv.one'));
+        discordButton.addEventListener("click", (event) => _clipboard(event, 'Hekzory'));
+        yandexButton.addEventListener("click", (event) => _clipboard(event, 'oleg-tsv@yandex.ru'));
     })();
 })();
