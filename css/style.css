@@ -644,6 +644,8 @@ dialog.clipboard.active::backdrop {
     max-width: 100%;
     vertical-align: top;
     width: inherit;
+    max-height: 100%;
+    height: inherit;
 }
 
 .image.full .frame {
