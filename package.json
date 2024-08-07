@@ -10,7 +10,7 @@
     },
     "devDependencies": {
         "happy-dom": "^14.12.3",
-        "lightningcss": "^1.25.1",
+        "lightningcss": "^1.26.0",
         "terser": "^5.31.3",
         "vite": "^5.3.5",
         "vite-plugin-compression2": "^1.1.3",
