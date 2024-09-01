@@ -9,8 +9,8 @@ importers:
   .:
     devDependencies:
       happy-dom:
-        specifier: ^14.12.3
-        version: 14.12.3
+        specifier: ^15.7.2
+        version: 15.7.2
       lightningcss:
         specifier: ^1.26.0
         version: 1.26.0
@@ -451,9 +451,9 @@ packages:
   graceful-fs@4.2.11:
     resolution: {integrity: sha512-RbJ5/jmFcNNCcDV5o9eTnBLJ/HszWV0P73bc+Ff4nS/rJj+YaS6IGyiOL0VoBYX+l1Wrl3k63h/KrH+nhJ0XvQ==}
 
-  happy-dom@14.12.3:
-    resolution: {integrity: sha512-vsYlEs3E9gLwA1Hp+w3qzu+RUDFf4VTT8cyKqVICoZ2k7WM++Qyd2LwzyTi5bqMJFiIC/vNpTDYuxdreENRK/g==}
-    engines: {node: '>=16.0.0'}
+  happy-dom@15.7.2:
+    resolution: {integrity: sha512-ZU4a27Sj+J7fgd+Kx3PVZ5NbANQxQS4gGZ1SaNMA4zvSDB5ZNkXg4UHLCkMko0fogg9XowI4f51p5FzgDfhVeQ==}
+    engines: {node: '>=18.0.0'}
 
   has-flag@4.0.0:
     resolution: {integrity: sha512-EykJT/Q1KjTWctppgIAgfSO0tKVuZUjhgMr17kqTumMl6Afv3EISleU7qZUzoXDFTAHTDC4NOoG/ZxU3EvlMPQ==}
@@ -1038,7 +1038,7 @@ snapshots:
 
   graceful-fs@4.2.11: {}
 
-  happy-dom@14.12.3:
+  happy-dom@15.7.2:
     dependencies:
       entities: 4.5.0
       webidl-conversions: 7.0.0
