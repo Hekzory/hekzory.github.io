@@ -662,15 +662,15 @@ dialog.clipboard.active::backdrop {
     border-bottom-right-radius: inherit;
 }
 
-#image03:not(:first-child) {
+#profile-image:not(:first-child) {
     margin-top: 1.75rem !important;
 }
 
-#image03:not(:last-child) {
+#profile-image:not(:last-child) {
     margin-bottom: 1.75rem !important;
 }
 
-#image03 .frame {
+#profile-image .frame {
     width: 6.5rem;
     border-radius: 100%;
     border-color: rgba(255, 255, 255, 0.141);
@@ -679,12 +679,12 @@ dialog.clipboard.active::backdrop {
     transition: none;
 }
 
-#image03 img {
+#profile-image img {
     border-radius: inherit !important;
     padding: 0.25rem;
 }
 
-#image03 .frame img {
+#profile-image .frame img {
     transition: none;
 }
 
@@ -731,7 +731,7 @@ p spoiler-text {
     -webkit-text-fill-color: currentcolor;
 }
 
-#text24 {
+#profile-title {
     text-transform: uppercase;
     color: #de8b5d;
     font-family: "Martian Mono", monospace;
@@ -745,32 +745,32 @@ p spoiler-text {
     -webkit-text-fill-color: transparent;
 }
 
-#text24 mark {
+#profile-title mark {
     color: #ffffff;
     background-color: transparent;
 }
 
-#text24 a {
+#profile-title a {
     color: #ffffff;
     text-decoration: underline;
 }
 
-#text24 a:hover {
+#profile-title a:hover {
     color: #6a00ff;
 }
 
-#text24 span.p:nth-child(n + 2) {
+#profile-title span.p:nth-child(n + 2) {
     margin-top: 1rem;
     -webkit-text-fill-color: currentcolor;
 }
 
-#text24 span.p {
+#profile-title span.p {
     background-image: linear-gradient(142deg, #8c51d6 0%, #de8b5d 43%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent !important;
 }
 
-#text36 {
+#profile-name {
     color: #ffffff;
     font-family: "Martian Mono", monospace;
     letter-spacing: 0.025rem;
@@ -780,28 +780,28 @@ p spoiler-text {
     font-weight: 200;
 }
 
-#text36 mark {
+#profile-name mark {
     background-color: transparent;
 }
 
-#text36 a:hover {
+#profile-name a:hover {
     color: #6a00ff;
 }
 
-#text36 a {
+#profile-name a {
     text-decoration: underline;
 }
 
-#text36 span.p:nth-child(n + 2) {
+#profile-name span.p:nth-child(n + 2) {
     margin-top: 1rem;
 }
 
-#text36 > * {
+#profile-name > * {
     display: inline-block;
     line-height: 1.2;
 }
 
-#text37 {
+#profile-username {
     color: rgba(255, 255, 255, 0.612);
     font-family: "Martian Mono", monospace;
     font-size: 1em;
@@ -809,21 +809,21 @@ p spoiler-text {
     font-weight: 200;
 }
 
-#text37 mark {
+#profile-username mark {
     color: #ffffff;
     background-color: transparent;
 }
 
-#text37 a {
+#profile-username a {
     color: #ffffff;
     text-decoration: underline;
 }
 
-#text37 a:hover {
+#profile-username a:hover {
     color: #bc8df7;
 }
 
-#text37 span.p:nth-child(n + 2) {
+#profile-username span.p:nth-child(n + 2) {
     margin-top: 1rem;
 }
 
@@ -1134,33 +1134,33 @@ hr:before {
         --spacing: 2rem;
     }
 
-    #image03:not(:first-child) {
+    #profile-image:not(:first-child) {
         margin-top: 1.3125rem !important;
     }
 
-    #image03:not(:last-child) {
+    #profile-image:not(:last-child) {
         margin-bottom: 1.3125rem !important;
     }
 
-    #image03 .frame {
+    #profile-image .frame {
         width: 6.5rem;
     }
 
-    #text24 {
+    #profile-title {
         letter-spacing: 0.196875rem;
         width: calc(100% + 0.196875rem);
         font-size: 1em;
         line-height: 1.75;
     }
 
-    #text36 {
+    #profile-name {
         letter-spacing: 0.021875rem;
         width: calc(100% + 0.021875rem);
         font-size: 2.75em;
         line-height: 1.5;
     }
 
-    #text37 {
+    #profile-username {
         letter-spacing: 0rem;
         width: 100%;
         font-size: 1em;
@@ -1251,15 +1251,15 @@ hr:before {
         --spacing: 1.5rem;
     }
 
-    #text24 {
+    #profile-title {
         font-size: 1em;
     }
 
-    #text36 {
+    #profile-name {
         font-size: 2em;
     }
 
-    #text37 {
+    #profile-username {
         font-size: 1em;
     }
 

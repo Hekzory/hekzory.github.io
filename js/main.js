@@ -1,10 +1,7 @@
 (function () {
     const on = addEventListener,
-        off = removeEventListener,
         $ = (q) => document.querySelector(q),
-        $$ = (q) => document.querySelectorAll(q),
-        $body = document.body,
-        $inner = $(".inner");
+        $body = document.body;
     const client = (function () {
         const o = {
                 browser: "other",
@@ -130,72 +127,57 @@
             on("blur", iosFocusFixHandler, true);
         })();
     }
-    (function () {
-        let dialog = null;
-        class ClipboardDialog {
-            constructor() {
-                this.isLocked = false;
-                this.$dialog = this.createElement("dialog", "clipboard", document.body);
-                this.$content = this.createElement(
-                    "p",
-                    "content",
-                    this.createElement("div", "wrapper", this.$dialog),
-                    "-",
-                );
-                this.createElement("div", "close", this.$dialog).addEventListener("click", () => this.close());
-                this.addEventListeners();
-            }
-            createElement(tag, className, parent, innerText = "") {
-                const el = document.createElement(tag);
-                el.classList.add(className);
-                el.innerText = innerText;
-                parent.appendChild(el);
-                return el;
-            }
-            addEventListeners() {
-                this.$dialog.addEventListener("click", () => this.close());
-                this.$dialog.addEventListener("keydown", (e) => e.key === "Escape" && this.close());
-                this.$content.parentElement.addEventListener("click", (e) => {
-                    e.stopPropagation();
-                    navigator.clipboard.writeText(this.$content.innerText);
-                    this.$content.parentElement.classList.add("copied");
-                    setTimeout(() => this.close(), 250);
-                });
-            }
-            close() {
-                if (this.isLocked) return;
-                this.isLocked = true;
-                this.$dialog.classList.remove("active");
-                setTimeout(() => {
-                    this.$dialog.close();
-                    this.$content.parentElement.classList.remove("copied");
-                    this.isLocked = false;
-                }, 750);
-            }
-            open(content) {
-                if (this.isLocked) return;
-                this.isLocked = true;
-                this.$content.innerText = unescape(content);
-                this.$dialog.showModal();
-                requestAnimationFrame(() => {
-                    this.$dialog.classList.add("active");
-                    setTimeout(() => (this.isLocked = false), 250);
-                });
-            }
+    class ClipboardDialog {
+        constructor() {
+            this.isLocked = false;
+            this.$dialog = this.createElement("dialog", "clipboard", document.body);
+            this.$contentWrapper = this.createElement("div", "wrapper", this.$dialog);
+            this.$content = this.createElement("p", "content", this.$contentWrapper, "-");
+            this.createElement("div", "close", this.$dialog).addEventListener("click", () => this.close());
+            this.$dialog.addEventListener("click", () => this.close());
+            this.$dialog.addEventListener("keydown", (e) => e.key === "Escape" && this.close());
+            this.$content.parentElement.addEventListener("click", (e) => {
+                e.stopPropagation();
+                navigator.clipboard.writeText(this.$content.innerText);
+                this.$content.parentElement.classList.add("copied");
+                setTimeout(() => this.close(), 250);
+            });
         }
-        window._clipboard = (event, content) => {
-            event.preventDefault();
-            if (!dialog) dialog = new ClipboardDialog();
-            dialog.open(content);
-            return false;
-        };
-
-        const emailButton = $("#ml-btn");
-        const discordButton = $("#ds-btn");
-        const yandexButton = $("#ya-btn");
-
-        emailButton.addEventListener("click", (event) => _clipboard(event, 'oleg@tsv.one'));
-        discordButton.addEventListener("click", (event) => _clipboard(event, 'Hekzory'));
-        yandexButton.addEventListener("click", (event) => _clipboard(event, 'oleg-tsv@yandex.ru'));
-    })();
+        createElement(tag, className, parent, innerText = "") {
+            const el = document.createElement(tag);
+            el.classList.add(className);
+            el.innerText = innerText;
+            parent.appendChild(el);
+            return el;
+        }
+        close() {
+            if (this.isLocked) return;
+            this.isLocked = true;
+            this.$dialog.classList.remove("active");
+            setTimeout(() => {
+                this.$dialog.close();
+                this.$content.parentElement.classList.remove("copied");
+                this.isLocked = false;
+            }, 750);
+        }
+        open(content) {
+            if (this.isLocked) return;
+            this.isLocked = true;
+            this.$content.innerText = unescape(content);
+            this.$dialog.showModal();
+            requestAnimationFrame(() => {
+                this.$dialog.classList.add("active");
+                setTimeout(() => (this.isLocked = false), 250);
+            });
+        }
+    }
+    const clipboardDialog = new ClipboardDialog();
+    const showClipboard = (event, content) => {
+        event.preventDefault();
+        clipboardDialog.open(content);
+        return false;
+    };
+    $("#ml-btn").addEventListener("click", (event) => showClipboard(event, "oleg@tsv.one"));
+    $("#ds-btn").addEventListener("click", (event) => showClipboard(event, "Hekzory"));
+    $("#ya-btn").addEventListener("click", (event) => showClipboard(event, "oleg-tsv@yandex.ru"));
 })();
