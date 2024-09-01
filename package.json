@@ -9,7 +9,7 @@
         "preview": "pnpm exec vite preview"
     },
     "devDependencies": {
-        "happy-dom": "^14.12.3",
+        "happy-dom": "^15.7.2",
         "lightningcss": "^1.26.0",
         "terser": "^5.31.6",
         "vite": "^5.3.5",
