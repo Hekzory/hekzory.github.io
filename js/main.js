@@ -70,16 +70,7 @@
         o.flags.lsdUnits = o.canUse("width", "100dvw");
         return o;
     })();
-    let loaderTimeout = setTimeout(() => $body.classList.add("with-loader"), 500);
-    const loadHandler = () => {
-        clearTimeout(loaderTimeout);
-        $body.classList.remove("is-loading");
-        $body.classList.add("is-playing");
-        setTimeout(() => {
-            $body.classList.replace("is-playing", "is-ready");
-        }, 5e3);
-    };
-    on("load", loadHandler);
+    on("load", () => $body.classList.remove("is-loading"));
     if (client.mobile) {
         const setViewportHeight = () => {
             const viewportHeight = client.flags.lsdUnits ? "100svh" : `${window.innerHeight}px`;
