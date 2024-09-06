@@ -9,7 +9,6 @@
                 os: "other",
                 osVersion: 0,
                 mobile: false,
-                canUse: null,
                 flags: { lsdUnits: false },
             },
             ua = navigator.userAgent,
@@ -59,13 +58,12 @@
             o.os = "ios";
         }
         o.mobile = ["android", "ios"].includes(o.os);
-        const _canUse = document.createElement("div");
+        const _canUse = document.createElement("div").style;
         o.canUse = (property, value) => {
-            const style = _canUse.style;
-            if (!(property in style)) return false;
+            if (!(property in _canUse)) return false;
             if (value !== undefined) {
-                style[property] = value;
-                if (style[property] === "") return false;
+                _canUse[property] = value;
+                if (_canUse[property] === "") return false;
             }
             return true;
         };
@@ -73,59 +71,43 @@
         return o;
     })();
     let loaderTimeout = setTimeout(() => $body.classList.add("with-loader"), 500);
-    const loadHandler = () =>
+    const loadHandler = () => {
+        clearTimeout(loaderTimeout);
+        $body.classList.remove("is-loading");
+        $body.classList.add("is-playing");
         setTimeout(() => {
-            clearTimeout(loaderTimeout);
-            $body.classList.remove("is-loading");
-            $body.classList.add("is-playing");
-            setTimeout(() => {
-                $body.classList.remove("is-playing");
-                $body.classList.add("is-ready");
-            }, 5e3);
-        }, 100);
+            $body.classList.replace("is-playing", "is-ready");
+        }, 5e3);
+    };
     on("load", loadHandler);
     if (client.mobile) {
-        (function () {
-            if (client.flags.lsdUnits) {
-                document.documentElement.style.setProperty("--viewport-height", "100svh");
-                document.documentElement.style.setProperty("--background-height", "100lvh");
-            } else {
-                var f = function () {
-                    document.documentElement.style.setProperty("--viewport-height", window.innerHeight + "px");
-                    document.documentElement.style.setProperty("--background-height", window.innerHeight + 250 + "px");
-                };
-                on("load", f);
-                on("orientationchange", function () {
-                    setTimeout(f, 100);
-                });
-            }
-            $body.classList.add("is-touch");
-        })();
+        const setViewportHeight = () => {
+            const viewportHeight = client.flags.lsdUnits ? "100svh" : `${window.innerHeight}px`;
+            const backgroundHeight = client.flags.lsdUnits ? "100lvh" : `${window.innerHeight + 250}px`;
+            document.documentElement.style.setProperty("--viewport-height", viewportHeight);
+            document.documentElement.style.setProperty("--background-height", backgroundHeight);
+        };
+        if (!client.flags.lsdUnits) {
+            on("load", setViewportHeight);
+            on("orientationchange", () => setTimeout(setViewportHeight, 100));
+        } else {
+            setViewportHeight();
+        }
+        $body.classList.add("is-touch");
     }
     if (client.os == "android") {
-        (function () {
-            const f = () => {
-                document.body.style.height = Math.max(screen.width, screen.height) + "px";
-            };
-            on("load", f);
-            on("orientationchange", f);
-            on("touchmove", f);
-        })();
+        const adjustHeight = () => {
+            document.body.style.height = Math.max(screen.width, screen.height) + "px";
+        };
+        ["load", "orientationchange", "touchmove"].forEach((event) => on(event, adjustHeight));
     } else if (client.os == "ios" && client.osVersion <= 11) {
-        (function () {
-            document.body.style.webkitTransform = "scale(1.0)";
-            const iosFocusFixHandler = (event) => {
-                if (event.type === "focus") {
-                    document.body.classList.add("ios-focus-fix");
-                    document.body.style.height = "calc(100% + 60px)";
-                } else {
-                    document.body.classList.remove("ios-focus-fix");
-                    document.body.style.height = "";
-                }
-            };
-            on("focus", iosFocusFixHandler, true);
-            on("blur", iosFocusFixHandler, true);
-        })();
+        document.body.style.webkitTransform = "scale(1.0)";
+        const iosFocusFixHandler = (event) => {
+            const isFocus = event.type === "focus";
+            document.body.classList.toggle("ios-focus-fix", isFocus);
+            document.body.style.height = isFocus ? "calc(100% + 60px)" : "";
+        };
+        ["focus", "blur"].forEach((event) => on(event, iosFocusFixHandler, true));
     }
     class ClipboardDialog {
         constructor() {
