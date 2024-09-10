@@ -1,0 +1,18 @@
+{{- with resources.Get "css/fonts.css" }}
+  {{- if eq hugo.Environment "development" }}
+    <link rel="stylesheet" href="{{ .RelPermalink }}" type="text/css">
+  {{- else }}
+    {{- with . | minify | fingerprint }}
+      <link rel="stylesheet" href="{{ .RelPermalink }}" integrity="{{ .Data.Integrity }}" crossorigin="anonymous" type="text/css">
+    {{- end }}
+  {{- end }}
+{{- end }}
+{{- with resources.Get "css/style.css" }}
+  {{- if eq hugo.Environment "development" }}
+    <link rel="stylesheet" href="{{ .RelPermalink }}" type="text/css">
+  {{- else }}
+    {{- with . | minify | fingerprint }}
+      <link rel="stylesheet" href="{{ .RelPermalink }}" integrity="{{ .Data.Integrity }}" crossorigin="anonymous" type="text/css">
+    {{- end }}
+  {{- end }}
+{{- end }}

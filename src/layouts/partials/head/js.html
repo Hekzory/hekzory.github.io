@@ -1,0 +1,32 @@
+{{- with resources.Get "js/main.js" }}
+  {{- if eq hugo.Environment "development" }}
+    {{- with . | js.Build }}
+      <script src="{{ .RelPermalink }}" defer></script>
+    {{- end }}
+  {{- else }}
+    {{- $opts := dict "minify" true }}
+    {{- with . | js.Build $opts | fingerprint }}
+      <script src="{{ .RelPermalink }}" integrity="{{- .Data.Integrity }}" crossorigin="anonymous" defer></script>
+    {{- end }}
+  {{- end }}
+{{- end }}
+<script type="application/ld+json">
+  {
+      "@context": "https://schema.org/",
+      "@type": "Person",
+      "name": "Oleg Tsvetkov",
+      "url": "https://tsv.one/",
+      "image": "https://tsv.one/photo.webp",
+      "sameAs": [
+          "https://github.com/Hekzory",
+          "https://vk.com/hekzo",
+          "https://t.me/hekzory",
+          "https://steamcommunity.com/id/hekzory/"
+      ],
+      "jobTitle": "Developer",
+      "worksFor": {
+          "@type": "Organization",
+          "name": "VK"
+      }
+  }
+</script>
