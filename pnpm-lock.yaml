@@ -21,8 +21,8 @@ importers:
         specifier: ^5.4.5
         version: 5.4.5(lightningcss@1.27.0)(terser@5.32.0)
       vite-plugin-compression2:
-        specifier: ^1.3.0
-        version: 1.3.0(rollup@4.21.2)
+        specifier: ^1.3.1
+        version: 1.3.1(lightningcss@1.27.0)(rollup@4.21.2)(terser@5.32.0)
       vite-plugin-html:
         specifier: ^3.2.2
         version: 3.2.2(vite@5.4.5(lightningcss@1.27.0)(terser@5.32.0))
@@ -657,8 +657,8 @@ packages:
     resolution: {integrity: sha512-gptHNQghINnc/vTGIk0SOFGFNXw7JVrlRUtConJRlvaw6DuX0wO5Jeko9sWrMBhh+PsYAZ7oXAiOnf/UKogyiw==}
     engines: {node: '>= 10.0.0'}
 
-  vite-plugin-compression2@1.3.0:
-    resolution: {integrity: sha512-/cYzISoYOo/SwPUBReS1E02a8eNTpQm8+lQUBj5NNGxuq4iZ3JOfWExUlobhVhPMJuejD7dipT+cMLbaWsMbdw==}
+  vite-plugin-compression2@1.3.1:
+    resolution: {integrity: sha512-UMr66CFu+RVPiD8E3iaX9BdZjCgO+lzzaAPAZvL5YgwH6FU4OR/MulJEyp9wq9EKoO6ErjUtPpaiDi3hvzv79Q==}
 
   vite-plugin-html@3.2.2:
     resolution: {integrity: sha512-vb9C9kcdzcIo/Oc3CLZVS03dL5pDlOFuhGlZYDCJ840BhWl/0nGeZWf3Qy7NlOayscY4Cm/QRgULCQkEZige5Q==}
@@ -1246,12 +1246,22 @@ snapshots:
 
   universalify@2.0.1: {}
 
-  vite-plugin-compression2@1.3.0(rollup@4.21.2):
+  vite-plugin-compression2@1.3.1(lightningcss@1.27.0)(rollup@4.21.2)(terser@5.32.0):
     dependencies:
       '@rollup/pluginutils': 5.1.0(rollup@4.21.2)
       tar-mini: 0.2.0
+    optionalDependencies:
+      vite: 5.4.5(lightningcss@1.27.0)(terser@5.32.0)
     transitivePeerDependencies:
+      - '@types/node'
+      - less
+      - lightningcss
       - rollup
+      - sass
+      - sass-embedded
+      - stylus
+      - sugarss
+      - terser
 
   vite-plugin-html@3.2.2(vite@5.4.5(lightningcss@1.27.0)(terser@5.32.0)):
     dependencies:
