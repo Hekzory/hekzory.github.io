@@ -3,8 +3,6 @@ import { resolve } from "path";
 import { compression } from "vite-plugin-compression2";
 import { createHtmlPlugin } from "vite-plugin-html";
 import htmlMetaPlugin from "./vite-plugin-html-meta";
-import constants from "node:zlib";
-import fs from "fs";
 
 export default defineConfig({
     appType: "mpa",
@@ -21,6 +19,9 @@ export default defineConfig({
             },
         }),
     ],
+    json: {
+        stringify: true,
+    },
     build: {
         rollupOptions: {
             input: {
@@ -35,7 +36,7 @@ export default defineConfig({
             compress: {
                 drop_console: true,
                 drop_debugger: true,
-                passes: 2,
+                passes: 3,
                 ecma: 2021,
                 module: true,
                 toplevel: true,
