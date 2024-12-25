@@ -21,8 +21,8 @@ importers:
         specifier: ^6.0.5
         version: 6.0.5(lightningcss@1.27.0)(terser@5.37.0)
       vite-plugin-compression2:
-        specifier: ^1.3.0
-        version: 1.3.0(rollup@4.29.1)
+        specifier: ^1.3.3
+        version: 1.3.3(rollup@4.29.1)(vite@6.0.5(lightningcss@1.27.0)(terser@5.37.0))
       vite-plugin-html:
         specifier: ^3.2.2
         version: 3.2.2(vite@6.0.5(lightningcss@1.27.0)(terser@5.37.0))
@@ -313,9 +313,6 @@ packages:
     resolution: {integrity: sha512-+10CMg9vt1MoHj6x1pxyjPSMjHTIlqs8/tBztXvPAx24SKs9jwVnKqHJumlH/IzhaPUaj3T6T6wfZr8okdXaIg==}
     cpu: [x64]
     os: [win32]
-
-  '@types/estree@1.0.5':
-    resolution: {integrity: sha512-/kYRxGDLWzHOB7q+wtSUQlFrtcdUccpfy+X+9iMBpHK8QLLhx2wIPYuS5DYtR9Wa/YlZAbIovy7qVdB1Aq6Lyw==}
 
   '@types/estree@1.0.6':
     resolution: {integrity: sha512-AYnb1nQyY49te+VRAVgmzfcgjYS91mY5P0TKUDCLEM+gNnA+3T6rWITXRLYCpahpqSQbN5cE+gHpnPyXjHWxcw==}
@@ -681,8 +678,10 @@ packages:
     resolution: {integrity: sha512-gptHNQghINnc/vTGIk0SOFGFNXw7JVrlRUtConJRlvaw6DuX0wO5Jeko9sWrMBhh+PsYAZ7oXAiOnf/UKogyiw==}
     engines: {node: '>= 10.0.0'}
 
-  vite-plugin-compression2@1.3.0:
-    resolution: {integrity: sha512-/cYzISoYOo/SwPUBReS1E02a8eNTpQm8+lQUBj5NNGxuq4iZ3JOfWExUlobhVhPMJuejD7dipT+cMLbaWsMbdw==}
+  vite-plugin-compression2@1.3.3:
+    resolution: {integrity: sha512-Mb+xi/C5b68awtF4fNwRBPtoZiyUHU3I0SaBOAGlerlR31kusq1si6qG31lsjJH8T7QNg/p3IJY2HY9O9SvsfQ==}
+    peerDependencies:
+      vite: ^2.0.0||^3.0.0||^4.0.0||^5.0.0 ||^6.0.0
 
   vite-plugin-html@3.2.2:
     resolution: {integrity: sha512-vb9C9kcdzcIo/Oc3CLZVS03dL5pDlOFuhGlZYDCJ840BhWl/0nGeZWf3Qy7NlOayscY4Cm/QRgULCQkEZige5Q==}
@@ -852,7 +851,7 @@ snapshots:
 
   '@rollup/pluginutils@5.1.0(rollup@4.29.1)':
     dependencies:
-      '@types/estree': 1.0.5
+      '@types/estree': 1.0.6
       estree-walker: 2.0.2
       picomatch: 2.3.1
     optionalDependencies:
@@ -914,8 +913,6 @@ snapshots:
 
   '@rollup/rollup-win32-x64-msvc@4.29.1':
     optional: true
-
-  '@types/estree@1.0.5': {}
 
   '@types/estree@1.0.6': {}
 
@@ -1297,10 +1294,11 @@ snapshots:
 
   universalify@2.0.1: {}
 
-  vite-plugin-compression2@1.3.0(rollup@4.29.1):
+  vite-plugin-compression2@1.3.3(rollup@4.29.1)(vite@6.0.5(lightningcss@1.27.0)(terser@5.37.0)):
     dependencies:
       '@rollup/pluginutils': 5.1.0(rollup@4.29.1)
       tar-mini: 0.2.0
+      vite: 6.0.5(lightningcss@1.27.0)(terser@5.37.0)
     transitivePeerDependencies:
       - rollup
 
