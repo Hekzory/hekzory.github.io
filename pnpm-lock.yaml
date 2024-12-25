@@ -9,8 +9,8 @@ importers:
   .:
     devDependencies:
       happy-dom:
-        specifier: ^15.7.4
-        version: 15.7.4
+        specifier: ^15.10.2
+        version: 15.10.2
       lightningcss:
         specifier: ^1.27.0
         version: 1.27.0
@@ -475,8 +475,8 @@ packages:
   graceful-fs@4.2.11:
     resolution: {integrity: sha512-RbJ5/jmFcNNCcDV5o9eTnBLJ/HszWV0P73bc+Ff4nS/rJj+YaS6IGyiOL0VoBYX+l1Wrl3k63h/KrH+nhJ0XvQ==}
 
-  happy-dom@15.7.4:
-    resolution: {integrity: sha512-r1vadDYGMtsHAAsqhDuk4IpPvr6N8MGKy5ntBo7tSdim+pWDxus2PNqOcOt8LuDZ4t3KJHE+gCuzupcx/GKnyQ==}
+  happy-dom@15.10.2:
+    resolution: {integrity: sha512-NbA5XrSovenJIIcfixCREX3ZnV7yHP4phhbfuxxf4CPn+LZpz/jIM9EqJ2DrPwgVDSMoAKH3pZwQvkbsSiCrUw==}
     engines: {node: '>=18.0.0'}
 
   has-flag@4.0.0:
@@ -594,8 +594,8 @@ packages:
     resolution: {integrity: sha512-lKwV/1brpG6mBUFHtb7NUmtABCb2WZZmm2wNiOA5hAb8VdCS4B3dtMWyvcoViccwAW/COERjXLt0zP1zXUN26g==}
     engines: {node: '>=10'}
 
-  nanoid@3.3.7:
-    resolution: {integrity: sha512-eSRppjcPIatRIMC1U6UngP8XFcz8MQWGQdt1MTBQ7NaAmvXDfvNxbvWV3x2y6CdEUciCSsDHDQZbhYaB8QEo2g==}
+  nanoid@3.3.8:
+    resolution: {integrity: sha512-WNLf5Sd8oZxOm+TzppcYk8gVOgP+l58xNy58D0nbUnOxOWRWvlcCV4kUF7ltmI6PsrLl/BgKEyS4mqsGChFN0w==}
     engines: {node: ^10 || ^12 || ^13.7 || ^14 || >=15.0.1}
     hasBin: true
 
@@ -1089,7 +1089,7 @@ snapshots:
 
   graceful-fs@4.2.11: {}
 
-  happy-dom@15.7.4:
+  happy-dom@15.10.2:
     dependencies:
       entities: 4.5.0
       webidl-conversions: 7.0.0
@@ -1194,7 +1194,7 @@ snapshots:
     dependencies:
       brace-expansion: 2.0.1
 
-  nanoid@3.3.7: {}
+  nanoid@3.3.8: {}
 
   no-case@3.0.4:
     dependencies:
@@ -1228,7 +1228,7 @@ snapshots:
 
   postcss@8.4.49:
     dependencies:
-      nanoid: 3.3.7
+      nanoid: 3.3.8
       picocolors: 1.1.1
       source-map-js: 1.2.1
 
