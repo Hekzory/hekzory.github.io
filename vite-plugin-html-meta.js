@@ -64,7 +64,7 @@ export default function htmlMetaPlugin(options = {}) {
                 document.head.appendChild(canonical);
             }
             canonical.setAttribute("href", meta.url);
-            return document.documentElement.innerHTML;
+            return `<!DOCTYPE html>\n${document.documentElement.outerHTML}`;
         },
     };
 }
