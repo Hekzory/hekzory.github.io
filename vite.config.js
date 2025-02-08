@@ -31,7 +31,6 @@ export default defineConfig({
         },
         target: "es2021",
         minify: "terser",
-        cssMinify: "lightningcss",
         terserOptions: {
             compress: {
                 drop_console: true,
