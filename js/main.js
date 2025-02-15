@@ -6,7 +6,9 @@
         os: (/android|ios|windows|mac/i.exec(navigator.userAgent.toLowerCase()) || ["other"])[0],
         supportsViewportUnits: CSS.supports("height", "100dvh"),
     };
-    addEventListener("load", () => $body.classList.remove("is-loading"));
+    addEventListener("load", () => {
+        $body.classList.remove("is-loading");
+    });
     if (client.mobile) {
         const setVH = () => {
             const height = client.supportsViewportUnits ? "100svh" : `${window.innerHeight}px`;
@@ -37,7 +39,7 @@
                 e.stopPropagation();
                 navigator.clipboard.writeText(this.$content.innerText);
                 this.$content.parentElement.classList.add("copied");
-                setTimeout(() => this.close(), 250);
+                setTimeout(() => this.close(), 300);
             });
         }
         createElement(tag, className, parent, innerText = "") {
@@ -55,7 +57,7 @@
                 this.$dialog.close();
                 this.$content.parentElement.classList.remove("copied");
                 this.isLocked = false;
-            }, 400);
+            }, 200);
         }
         open(content) {
             if (this.isLocked) return;
@@ -64,7 +66,7 @@
             this.$dialog.showModal();
             requestAnimationFrame(() => {
                 this.$dialog.classList.add("active");
-                setTimeout(() => (this.isLocked = false), 250);
+                setTimeout(() => (this.isLocked = false), 300);
             });
         }
     }
