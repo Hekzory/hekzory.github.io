@@ -43,8 +43,7 @@ body:before {
 }
 
 @keyframes gradientMove {
-    0% {transform: scale(1) rotate(0)}
-    100% {transform: scale(1.05) rotate(1deg)}
+    to {transform: scale(1.05) rotate(1deg)}
 }
 
 /* Add subtle grain texture */
@@ -74,14 +73,23 @@ body:after {
 }
 
 /* Profile section */
-.profile-section {
+.profile-section, .work-info {
     background: var(--section-bg);
     border: 1px solid var(--border);
     border-radius: 1.5rem;
-    padding: 3.5rem;
     text-align: center;
-    margin-bottom: 2rem;
     transition: transform .4s cubic-bezier(.175,.885,.32,1.275), background-color .3s ease;
+}
+
+.profile-section {
+    padding: 3.5rem;
+    margin-bottom: 2rem;
+}
+
+.work-info {
+    padding: 3rem;
+    color: var(--text-muted);
+    font-weight: 200;
 }
 
 .profile-image img {
@@ -186,21 +194,24 @@ body:after {
     margin-bottom: 2.5rem;
 }
 
-.button {
+.button, .social-button {
     display: inline-flex;
     align-items: center;
     justify-content: center;
+    cursor: pointer;
+    position: relative;
+    text-decoration: none;
+    font: inherit;
+}
+
+.button {
     width: 10.875rem;
     height: 3.625rem;
     border: 0;
     border-radius: 1.625rem;
     background: linear-gradient(135deg,var(--primary),var(--secondary));
     color: var(--text);
-    cursor: pointer;
     transition: all .4s cubic-bezier(.175,.885,.32,1.275);
-    font: 200 1em "Martian Mono",monospace;
-    text-decoration: none;
-    position: relative;
     overflow: hidden;
     box-shadow: 0 4px 12px rgba(34,197,181,.15), 0 2px 4px rgba(34,197,181,.1);
     z-index: 1;
@@ -240,25 +251,15 @@ body:after {
     margin: 3rem 0;
 }
 
-/* Update social buttons styling */
 .social-button {
-    display: flex;
-    align-items: center;
-    justify-content: center;
     width: 2.5em;
     height: 2.5em;
     padding: 0;
+    margin: 0;
     border: 1px solid var(--border);
     background: var(--section-bg);
-    backdrop-filter: var(--blur);
-    -webkit-backdrop-filter: var(--blur);
-    cursor: pointer;
-    transition: all .4s cubic-bezier(.175,.885,.32,1.275);
-    position: relative;
     border-radius: .75rem;
-    text-decoration: none;
-    font: inherit;
-    margin: 0;
+    transition: all .4s cubic-bezier(.175,.885,.32,1.275);
 }
 
 .social-button:hover {
@@ -286,18 +287,6 @@ body:after {
 }
 
 /* Work info section */
-.work-info {
-    background: var(--section-bg);
-    border: 1px solid var(--border);
-    border-radius: 1.5rem;
-    padding: 3rem;
-    text-align: center;
-    color: var(--text-muted);
-    font-weight: 200;
-    transition: transform .4s cubic-bezier(.175,.885,.32,1.275),
-                background-color .3s ease;
-}
-
 .work-info mark {
     transition: color .3s ease;
 }
@@ -453,16 +442,18 @@ mark {
     #main {margin: 1rem; padding: 1rem}
     .profile-section, .work-info {padding: 2.5rem}
     .profile-name {font-size: 2em}
-    dialog.clipboard .wrapper {
-        font-size: 1.25rem;
-        padding: 1.25rem;
-        margin: 1rem;
-    }
-    dialog.clipboard .wrapper .content {padding: 1rem}
-    dialog.clipboard .close {
-        background-size: 1.25rem;
-        height: 2.5rem;
-        width: 2.5rem;
+    dialog.clipboard {
+        .wrapper {
+            font-size: 1.25rem;
+            padding: 1.25rem;
+            margin: 1rem;
+        }
+        .wrapper .content {padding: 1rem}
+        .close {
+            background-size: 1.25rem;
+            height: 2.5rem;
+            width: 2.5rem;
+        }
     }
     .profile-title:after {display: none}
 }
