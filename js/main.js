@@ -4,7 +4,7 @@
     const client = {
         mobile: /android|ios|iphone|ipad|mobile/i.test(navigator.userAgent.toLowerCase()),
         os: (/android|ios|windows|mac/i.exec(navigator.userAgent.toLowerCase()) || ["other"])[0],
-        supportsViewportUnits: CSS.supports("height", "100dvh"),
+        supportsViewportUnits: CSS.supports("height", "100dvh")
     };
     addEventListener("load", () => {
         $body.classList.remove("is-loading");
