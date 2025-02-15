@@ -366,11 +366,11 @@ dialog.clipboard .wrapper {
     border: 1px solid var(--border-color);
     cursor: pointer;
     font-family: inherit;
-    font-size: 21pt;
-    max-width: calc(100% - 4em);
-    min-width: 20em;
+    font-size: 18pt;
+    max-width: calc(100% - 2em);
+    min-width: min(20em, 90vw);
     opacity: 0;
-    padding: 1.5em;
+    padding: 1.25em;
     text-align: center;
     transform: translateY(0.75em);
     transition: opacity 0.2s ease, transform 0.2s ease;
@@ -385,8 +385,8 @@ dialog.clipboard .wrapper:after {
     color: var(--text-muted);
     content: "Click to copy";
     display: block;
-    font-size: 0.8em;
-    margin-top: 1.5em;
+    font-size: 0.75em;
+    margin-top: 1em;
 }
 
 dialog.clipboard .wrapper.copied:after {
@@ -400,15 +400,19 @@ dialog.clipboard .wrapper .content {
     color: var(--text-color);
     overflow-x: auto;
     overflow-y: hidden;
-    padding: 1.5em;
+    padding: 1.25em;
     position: relative;
     user-select: none;
-    white-space: nowrap;
+    word-break: break-all;
+    white-space: normal;
     width: 100%;
+    line-height: 1.4;
 }
 
 dialog.clipboard .wrapper.copied .content {
-    color: transparent;
+    color: var(--text-color);
+    opacity: 0.5;
+    transition: opacity 0.2s ease;
 }
 
 dialog.clipboard .close {
@@ -458,16 +462,18 @@ mark {
     }
 
     dialog.clipboard .wrapper {
-        font-size: 18pt;
-        max-width: 100%;
-        min-width: 0;
+        font-size: 14pt;
+        padding: 1em;
         margin: 1rem;
     }
 
-    dialog.clipboard .close {
-        background-size: 2rem;
-        height: 4rem;
-        width: 4rem;
+    dialog.clipboard .wrapper:after {
+        margin-top: 1em;
+        font-size: 0.75em;
+    }
+
+    dialog.clipboard .wrapper .content {
+        padding: 1em;
     }
 
     .profile-title:after {
