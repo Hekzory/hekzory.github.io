@@ -81,6 +81,7 @@ body:after {
     text-align: center;
     margin-bottom: 2rem;
     background: transparent;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
 .profile-image img {
@@ -114,7 +115,27 @@ body:after {
     background-clip: text;
     -webkit-text-fill-color: transparent;
     margin: 1.75rem 0;
-    width: calc(100% + .225rem);
+    width: auto;
+    display: inline-block;
+    position: relative;
+}
+
+.profile-title:after {
+    content: '';
+    position: absolute;
+    right: -8px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 0.5em;
+    height: 1.2em;
+    background: var(--primary-color);
+    opacity: 0.5;
+    animation: blink 1s step-end infinite;
+}
+
+@keyframes blink {
+    0%, 100% { opacity: 0.5; }
+    50% { opacity: 0; }
 }
 
 .profile-name {
@@ -154,10 +175,26 @@ body:after {
     text-decoration: none;
     position: relative;
     overflow: hidden;
+    box-shadow: 0 4px 15px rgba(45, 212, 191, 0.2);
+    z-index: 1;
 }
 
 .button:before {
-    display: none;
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, var(--secondary-color), var(--primary-color));
+    border-radius: 2.5rem;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    z-index: -1;
+}
+
+.button:hover:before {
+    opacity: 1;
 }
 
 .button:hover {
@@ -186,7 +223,7 @@ body:after {
     width: 2.5em;
     height: 2.5em;
     padding: 0;
-    border: none;
+    border: 1px solid transparent;
     background: var(--glass-background);
     backdrop-filter: var(--backdrop-blur);
     -webkit-backdrop-filter: var(--backdrop-blur);
@@ -201,8 +238,10 @@ body:after {
 }
 
 .social-button:hover {
-    background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
-    transform: scale(1.15);
+    background: var(--background-color);
+    border-color: var(--secondary-color);
+    transform: translateY(-3px);
+    box-shadow: 0 5px 15px rgba(139, 92, 246, 0.2);
 }
 
 .social-button svg {
@@ -210,6 +249,11 @@ body:after {
     height: 1.625em;
     fill: var(--text-color);
     display: block;
+    transition: transform 0.3s ease;
+}
+
+.social-button:hover svg {
+    transform: scale(1.1);
 }
 
 .social-button .label {
@@ -396,6 +440,10 @@ mark {
         background-size: 2rem;
         height: 4rem;
         width: 4rem;
+    }
+
+    .profile-title:after {
+        display: none;  /* Hide cursor on mobile/smaller screens */
     }
 }
 
