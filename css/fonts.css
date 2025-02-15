@@ -1,7 +1,7 @@
 @font-face {
     font-family: "Martian Mono";
     font-style: normal;
-    font-weight: 200 400;
+    font-weight: 200;
     font-stretch: 100%;
     font-display: swap;
     src: url(/css/martianmono.woff2) format("woff2");
