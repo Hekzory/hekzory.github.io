@@ -1,13 +1,13 @@
 :root {
-    --primary-color: #22c5b5;    /* Slightly muted teal */
-    --secondary-color: #8250df;   /* Richer purple */
-    --text-color: #f8fafc;       /* Softer white */
-    --text-muted: rgba(248, 250, 252, 0.65);
-    --border-color: rgba(248, 250, 252, 0.08);
-    --background-color: #0a1120; /* Deeper background */
-    --section-background: rgba(22, 32, 46, 0.5);
-    --glass-background: rgba(22, 32, 46, 0.6);
-    --backdrop-blur: blur(12px);
+    --primary: #22c5b5;
+    --secondary: #8250df;
+    --text: #f8fafc;
+    --text-muted: rgba(248,250,252,.65);
+    --border: rgba(248,250,252,.08);
+    --bg: #0a1120;
+    --section-bg: rgba(22,32,46,.5);
+    --glass-bg: rgba(22,32,46,.6);
+    --blur: blur(12px);
 }
 
 /* Base styles */
@@ -20,9 +20,9 @@
 body {
     min-height: 100vh;
     min-width: 320px;
-    background-color: var(--background-color);
+    background: var(--bg);
     font-family: "Martian Mono", monospace;
-    color: var(--text-color);
+    color: var(--text);
     overflow-x: hidden;
 }
 
@@ -30,38 +30,32 @@ body {
 body:before {
     content: "";
     position: fixed;
-    top: 0;
-    left: 0;
+    inset: 0;
     width: 100vw;
     height: 100vh;
     background: 
-        radial-gradient(circle at 50% 50%, var(--primary-color) 0%, transparent 70%),
-        radial-gradient(circle at 80% 20%, var(--secondary-color) 0%, transparent 50%),
-        radial-gradient(circle at 20% 80%, var(--secondary-color) 0%, transparent 45%);
-    opacity: 0.12;
+        radial-gradient(circle at 50% 50%, var(--primary) 0%, transparent 70%),
+        radial-gradient(circle at 80% 20%, var(--secondary) 0%, transparent 50%),
+        radial-gradient(circle at 20% 80%, var(--secondary) 0%, transparent 45%);
+    opacity: .12;
     z-index: -1;
     animation: gradientMove 20s ease-in-out infinite alternate;
 }
 
 @keyframes gradientMove {
-    0% {
-        transform: scale(1) rotate(0deg);
-    }
-    100% {
-        transform: scale(1.05) rotate(1deg);
-    }
+    0% {transform: scale(1) rotate(0)}
+    100% {transform: scale(1.05) rotate(1deg)}
 }
 
 /* Add subtle grain texture */
 body:after {
     content: "";
     position: fixed;
-    top: 0;
-    left: 0;
+    inset: 0;
     width: 100vw;
     height: 100vh;
     background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%' height='100%' filter='url(%23noise)' opacity='0.1'/%3E%3C/svg%3E");
-    opacity: 0.3;
+    opacity: .3;
     z-index: -1;
     pointer-events: none;
 }
@@ -72,71 +66,74 @@ body:after {
     margin: 2.5rem auto;
     padding: 2.5rem;
     border-radius: 2rem;
-    border: 1px solid var(--border-color);
-    background: var(--glass-background);
-    backdrop-filter: var(--backdrop-blur);
-    -webkit-backdrop-filter: var(--backdrop-blur);
-    box-shadow: 
-        0 8px 32px rgba(0, 0, 0, 0.12),
-        0 2px 8px rgba(0, 0, 0, 0.08);
+    border: 1px solid var(--border);
+    background: var(--glass-bg);
+    backdrop-filter: var(--blur);
+    -webkit-backdrop-filter: var(--blur);
+    box-shadow: 0 8px 32px rgba(0,0,0,.12), 0 2px 8px rgba(0,0,0,.08);
 }
 
 /* Profile section */
 .profile-section {
-    background-color: var(--section-background);
-    border: 1px solid var(--border-color);
+    background: var(--section-bg);
+    border: 1px solid var(--border);
     border-radius: 1.5rem;
     padding: 3.5rem;
     text-align: center;
     margin-bottom: 2rem;
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    transition: transform .4s cubic-bezier(.175,.885,.32,1.275), background-color .3s ease;
 }
 
 .profile-image img {
     width: 8rem;
     height: 8rem;
     border: 2px solid transparent;
-    background: linear-gradient(var(--background-color), var(--background-color)) padding-box,
-                linear-gradient(to right, var(--primary-color), var(--secondary-color)) border-box;
-    padding: 0.35rem;
+    background: linear-gradient(var(--bg),var(--bg)) padding-box,
+                linear-gradient(to right,var(--primary),var(--secondary)) border-box;
+    padding: .35rem;
     animation: float 8s ease-in-out infinite;
 }
 
 .profile-image {
-    transition: transform 0.5s ease-in-out;
+    transition: transform .5s ease-in-out;
     position: relative;
 }
 
 .speech-bubble {
     position: absolute;
-    background: var(--glass-background);
-    border: 1px solid var(--border-color);
-    padding: 0.5rem 1rem;
-    border-radius: 0.75rem;
+    background: var(--glass-bg);
+    border: 1px solid var(--border);
+    padding: .5rem 1rem;
+    border-radius: .75rem;
     top: -2.5rem;
     left: 50%;
     transform: translateX(-50%) scale(0);
-    transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275), opacity 0.3s ease;
-    backdrop-filter: var(--backdrop-blur);
-    -webkit-backdrop-filter: var(--backdrop-blur);
-    color: var(--text-color);
-    font-size: 0.875em;
+    transition: transform .4s cubic-bezier(.175,.885,.32,1.275), opacity .3s ease;
+    backdrop-filter: var(--blur);
+    -webkit-backdrop-filter: var(--blur);
+    color: var(--text);
+    font-size: .875em;
     white-space: nowrap;
     opacity: 0;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+    box-shadow: 0 2px 8px rgba(0,0,0,.08);
 }
 
 .speech-bubble:after {
     content: '';
     position: absolute;
-    bottom: -0.5rem;
+    bottom: -.5rem;
     left: 50%;
     transform: translateX(-50%) rotate(45deg);
     width: 1rem;
     height: 1rem;
-    background: var(--glass-background);
-    border-right: 1px solid var(--border-color);
-    border-bottom: 1px solid var(--border-color);
+    background: var(--glass-bg);
+    border-right: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+}
+
+.profile-image:hover {
+    transform: scale(1.05) translateY(-5px);
+    transition: transform .25s ease-in-out;
 }
 
 .profile-image:hover .speech-bubble {
@@ -144,23 +141,16 @@ body:after {
     opacity: 1;
 }
 
-.profile-image:hover {
-    transform: scale(1.05) translateY(-5px);
-    transition: transform 0.25s ease-in-out;
-}
-
 .profile-title {
     text-transform: uppercase;
-    color: var(--primary-color);
     font-size: 1em;
     font-weight: 200;
-    letter-spacing: 0.225rem;
-    background-image: linear-gradient(90deg, var(--secondary-color), var(--primary-color) 77%);
+    letter-spacing: .225rem;
+    background-image: linear-gradient(90deg,var(--secondary),var(--primary) 77%);
     -webkit-background-clip: text;
     background-clip: text;
     -webkit-text-fill-color: transparent;
     margin: 1.75rem 0;
-    width: auto;
     display: inline-block;
     position: relative;
 }
@@ -171,22 +161,17 @@ body:after {
     right: -8px;
     top: 50%;
     transform: translateY(-50%);
-    width: 0.5em;
+    width: .5em;
     height: 1.2em;
-    background: var(--primary-color);
-    opacity: 0.4;
+    background: var(--primary);
+    opacity: .4;
     animation: blink 1.2s step-end infinite;
-}
-
-@keyframes blink {
-    0%, 100% { opacity: 0.5; }
-    50% { opacity: 0; }
 }
 
 .profile-name {
     font-size: 2.75em;
     font-weight: 200;
-    letter-spacing: 0.025rem;
+    letter-spacing: .025rem;
     margin-bottom: 2.5rem;
 }
 
@@ -207,60 +192,51 @@ body:after {
     justify-content: center;
     width: 10.875rem;
     height: 3.625rem;
-    border: none;
+    border: 0;
     border-radius: 1.625rem;
-    background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
-    color: var(--text-color);
+    background: linear-gradient(135deg,var(--primary),var(--secondary));
+    color: var(--text);
     cursor: pointer;
-    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-    font-family: "Martian Mono", monospace;
-    font-size: 1em;
-    font-weight: 200;
+    transition: all .4s cubic-bezier(.175,.885,.32,1.275);
+    font: 200 1em "Martian Mono",monospace;
     text-decoration: none;
     position: relative;
     overflow: hidden;
-    box-shadow: 
-        0 4px 12px rgba(34, 197, 181, 0.15),
-        0 2px 4px rgba(34, 197, 181, 0.1);
+    box-shadow: 0 4px 12px rgba(34,197,181,.15), 0 2px 4px rgba(34,197,181,.1);
     z-index: 1;
 }
 
 .button:before {
     content: '';
     position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: linear-gradient(90deg, var(--secondary-color), var(--primary-color));
+    inset: 0;
+    background: linear-gradient(90deg,var(--secondary),var(--primary));
     border-radius: 2.5rem;
     opacity: 0;
-    transition: opacity 0.3s ease;
+    transition: opacity .3s ease;
     z-index: -1;
 }
 
-.button:hover:before {
-    opacity: 1;
-}
+.button:hover:before {opacity: 1}
 
 .button:hover {
     transform: scale(1.05) translateY(-3px);
-    box-shadow: 0 12px 30px rgba(45, 212, 191, 0.25),
-                0 4px 20px rgba(45, 212, 191, 0.15),
-                0 0 40px rgba(139, 92, 246, 0.1);
+    box-shadow: 0 12px 30px rgba(45,212,191,.25),
+                0 4px 20px rgba(45,212,191,.15),
+                0 0 40px rgba(139,92,246,.1);
 }
 
 .button svg {
     height: 1.25em;
     width: 1.25em;
-    fill: var(--text-color);
+    fill: var(--text);
     margin-right: 1rem;
 }
 
 .divider {
-    border: none;
+    border: 0;
     height: 1px;
-    background-color: var(--border-color);
+    background: var(--border);
     margin: 3rem 0;
 }
 
@@ -272,43 +248,36 @@ body:after {
     width: 2.5em;
     height: 2.5em;
     padding: 0;
-    border: 1px solid var(--border-color);
-    background: var(--section-background);
-    backdrop-filter: var(--backdrop-blur);
-    -webkit-backdrop-filter: var(--backdrop-blur);
+    border: 1px solid var(--border);
+    background: var(--section-bg);
+    backdrop-filter: var(--blur);
+    -webkit-backdrop-filter: var(--blur);
     cursor: pointer;
-    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    transition: all .4s cubic-bezier(.175,.885,.32,1.275);
     position: relative;
-    border-radius: 0.75rem;
+    border-radius: .75rem;
     text-decoration: none;
     font: inherit;
     margin: 0;
-    box-sizing: border-box;
 }
 
 .social-button:hover {
-    background: var(--background-color);
-    border-color: var(--secondary-color);
+    background: var(--bg);
+    border-color: var(--secondary);
     transform: translateY(-5px);
-    box-shadow: 0 8px 25px rgba(139, 92, 246, 0.25),
-                0 0 15px rgba(139, 92, 246, 0.1);
+    box-shadow: 0 8px 25px rgba(139,92,246,.25), 0 0 15px rgba(139,92,246,.1);
 }
 
 .social-button svg {
     width: 1.625em;
     height: 1.625em;
-    fill: var(--text-color);
+    fill: var(--text);
     display: block;
-    transition: transform 0.3s ease;
+    transition: transform .3s ease;
 }
 
-.social-button:hover svg {
-    transform: scale(1.1);
-}
-
-.social-button .label {
-    display: none;
-}
+.social-button:hover svg {transform: scale(1.1)}
+.social-button .label {display: none}
 
 .social-icons {
     display: flex;
@@ -318,23 +287,23 @@ body:after {
 
 /* Work info section */
 .work-info {
-    background-color: var(--section-background);
-    border: 1px solid var(--border-color);
+    background: var(--section-bg);
+    border: 1px solid var(--border);
     border-radius: 1.5rem;
     padding: 3rem;
     text-align: center;
     color: var(--text-muted);
     font-weight: 200;
-    transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275),
-                background-color 0.3s ease;
+    transition: transform .4s cubic-bezier(.175,.885,.32,1.275),
+                background-color .3s ease;
 }
 
 .work-info mark {
-    transition: color 0.3s ease;
+    transition: color .3s ease;
 }
 
 .work-info:hover mark {
-    color: var(--primary-color);
+    color: var(--primary);
 }
 
 /* Loading state */
@@ -345,7 +314,7 @@ body:after {
     left: 0;
     width: 100%;
     height: 100%;
-    background-color: var(--background-color);
+    background-color: var(--bg);
     z-index: 1000;
     transition: opacity 0.8s cubic-bezier(0.4, 0, 0.2, 1);
 }
@@ -376,36 +345,32 @@ dialog.clipboard[open] {
 }
 
 dialog.clipboard::backdrop {
-    background: rgba(10, 17, 32, 0.8);
+    background: rgba(10,17,32,.8);
     backdrop-filter: blur(8px);
     -webkit-backdrop-filter: blur(8px);
     opacity: 0;
-    transition: opacity 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+    transition: opacity .25s cubic-bezier(.4,0,.2,1);
 }
 
-dialog.clipboard.active::backdrop {
-    opacity: 1;
-}
+dialog.clipboard.active::backdrop {opacity: 1}
 
 dialog.clipboard .wrapper {
-    background: var(--section-background);
-    border: 1px solid var(--border-color);
+    background: var(--section-bg);
+    border: 1px solid var(--border);
     border-radius: 1.25rem;
-    box-shadow: 
-        0 8px 32px rgba(0, 0, 0, 0.16),
-        0 2px 8px rgba(0, 0, 0, 0.12);
+    box-shadow: 0 8px 32px rgba(0,0,0,.16), 0 2px 8px rgba(0,0,0,.12);
     cursor: pointer;
-    font-family: inherit;
+    font: inherit;
     font-size: 1.125rem;
-    max-width: min(32rem, calc(100% - 2rem));
-    min-width: min(20rem, 90vw);
+    max-width: min(32rem,calc(100% - 2rem));
+    min-width: min(20rem,90vw);
     opacity: 0;
     padding: 1.5rem;
     text-align: center;
     transform: translateY(1rem);
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    backdrop-filter: var(--backdrop-blur);
-    -webkit-backdrop-filter: var(--backdrop-blur);
+    transition: all .3s cubic-bezier(.4,0,.2,1);
+    backdrop-filter: var(--blur);
+    -webkit-backdrop-filter: var(--blur);
 }
 
 dialog.clipboard.active .wrapper {
@@ -417,24 +382,24 @@ dialog.clipboard .wrapper:after {
     color: var(--text-muted);
     content: "Click to copy";
     display: block;
-    font-size: 0.875rem;
+    font-size: .875rem;
     margin-top: 1rem;
     font-weight: 200;
-    letter-spacing: 0.02em;
-    transition: color 0.2s ease;
+    letter-spacing: .02em;
+    transition: color .2s ease;
 }
 
 dialog.clipboard .wrapper.copied:after {
     content: "Copied!";
-    color: var(--primary-color);
+    color: var(--primary);
 }
 
 dialog.clipboard .wrapper .content {
-    background: var(--background-color);
-    border: 1px solid var(--border-color);
-    border-radius: 0.75rem;
-    color: var(--text-color);
-    font-family: "Martian Mono", monospace;
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: .75rem;
+    color: var(--text);
+    font: inherit;
     overflow: hidden;
     padding: 1.25rem;
     position: relative;
@@ -443,97 +408,76 @@ dialog.clipboard .wrapper .content {
     white-space: normal;
     width: 100%;
     line-height: 1.4;
-    transition: all 0.2s ease;
+    transition: all .2s ease;
 }
 
 dialog.clipboard .wrapper.copied .content {
-    background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+    background: linear-gradient(135deg,var(--primary),var(--secondary));
     background-clip: text;
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
-    border-color: var(--primary-color);
+    border-color: var(--primary);
 }
 
 dialog.clipboard .close {
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='rgba(248, 250, 252, 0.65)' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cline x1='18' y1='6' x2='6' y2='18'%3E%3C/line%3E%3Cline x1='6' y1='6' x2='18' y2='18'%3E%3C/line%3E%3C/svg%3E");
-    background-position: center;
-    background-repeat: no-repeat;
-    background-size: 1.5rem;
-    border: none;
+    background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='rgba(248, 250, 252, 0.65)' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cline x1='18' y1='6' x2='6' y2='18'%3E%3C/line%3E%3Cline x1='6' y1='6' x2='18' y2='18'%3E%3C/line%3E%3C/svg%3E") center/1.5rem no-repeat;
+    border: 0;
     cursor: pointer;
     height: 6rem;
     opacity: 0;
     position: absolute;
-    right: 0.5rem;
-    top: 0.5rem;
-    transition: opacity 0.2s ease, transform 0.2s ease;
+    right: .5rem;
+    top: .5rem;
+    transition: opacity .2s ease,transform .2s ease;
     width: 3rem;
     background-color: transparent;
-    border-radius: 0.5rem;
+    border-radius: .5rem;
 }
 
-dialog.clipboard.active .close {
-    opacity: 0.5;
-}
+dialog.clipboard.active .close {opacity: .5}
 
 dialog.clipboard.active .close:hover {
     opacity: 1;
     transform: scale(1.1);
-    background-color: rgba(248, 250, 252, 0.05);
+    background-color: rgba(248,250,252,.05);
 }
 
 /* Remove yellow background from mark tags */
 mark {
-    background-color: transparent;
-    color: var(--text-color);
+    background: transparent;
+    color: var(--text);
 }
 
 /* Responsive adjustments */
 @media (max-width: 736px) {
-    #main {
-        margin: 1rem;
-        padding: 1rem;
-    }
-
-    .profile-section,
-    .work-info {
-        padding: 2.5rem;
-    }
-
-    .profile-name {
-        font-size: 2em;
-    }
-
+    #main {margin: 1rem; padding: 1rem}
+    .profile-section, .work-info {padding: 2.5rem}
+    .profile-name {font-size: 2em}
     dialog.clipboard .wrapper {
         font-size: 1.25rem;
         padding: 1.25rem;
         margin: 1rem;
     }
-
-    dialog.clipboard .wrapper .content {
-        padding: 1rem;
-    }
-
+    dialog.clipboard .wrapper .content {padding: 1rem}
     dialog.clipboard .close {
         background-size: 1.25rem;
         height: 2.5rem;
         width: 2.5rem;
     }
-
-    .profile-title:after {
-        display: none;  /* Hide cursor on mobile/smaller screens */
-    }
+    .profile-title:after {display: none}
 }
 
 @media (max-width: 480px) {
-    .profile-section,
-    .work-info {
-        padding: 1.875rem;
-    }
+    .profile-section, .work-info {padding: 1.875rem}
 }
 
 /* Add subtle floating animation to the profile image */
 @keyframes float {
-    0%, 100% { transform: translateY(0) rotate(0deg); }
-    50% { transform: translateY(-6px) rotate(2deg); }
+    0%, 100% {transform: translateY(0) rotate(0)}
+    50% {transform: translateY(-6px) rotate(2deg)}
+}
+
+@keyframes blink {
+    0%, 100% {opacity: .5}
+    50% {opacity: 0}
 }
