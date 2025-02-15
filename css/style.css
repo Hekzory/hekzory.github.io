@@ -1,13 +1,14 @@
 :root {
-    --primary: #22c5b5;
-    --secondary: #8250df;
-    --text: #f8fafc;
-    --text-muted: rgba(248,250,252,.65);
-    --border: rgba(248,250,252,.08);
+    --primary: #00f5d4;
+    --secondary: #7209b7;
+    --text: #e2e8f0;
+    --text-muted: rgba(226,232,240,.65);
+    --border: rgba(226,232,240,.12);
     --bg: #0a1120;
-    --section-bg: rgba(22,32,46,.5);
-    --glass-bg: rgba(22,32,46,.6);
-    --blur: blur(12px);
+    --section-bg: rgba(22,32,46,.7);
+    --glass-bg: rgba(22,32,46,.8);
+    --blur: blur(16px);
+    --glitch-intensity: 2s;
 }
 
 /* Base styles */
@@ -34,16 +35,23 @@ body:before {
     width: 100vw;
     height: 100vh;
     background: 
-        radial-gradient(circle at 50% 50%, var(--primary) 0%, transparent 70%),
-        radial-gradient(circle at 80% 20%, var(--secondary) 0%, transparent 50%),
-        radial-gradient(circle at 20% 80%, var(--secondary) 0%, transparent 45%);
-    opacity: .12;
+        radial-gradient(circle at 50% 50%, var(--primary) 0%, transparent 60%),
+        radial-gradient(circle at 80% 20%, var(--secondary) 0%, transparent 40%),
+        repeating-linear-gradient(0deg, 
+            transparent 0%, 
+            rgba(0,245,212,.03) 1px,
+            transparent 2px,
+            transparent 8px
+        );
+    opacity: .15;
     z-index: -1;
-    animation: gradientMove 20s ease-in-out infinite alternate;
+    animation: neuralPulse 8s ease-in-out infinite alternate;
 }
 
-@keyframes gradientMove {
-    to {transform: scale(1.05) rotate(1deg)}
+@keyframes neuralPulse {
+    0% { transform: scale(1) rotate(0deg); filter: hue-rotate(0deg); }
+    50% { transform: scale(1.1) rotate(1deg); filter: hue-rotate(90deg); }
+    100% { transform: scale(1) rotate(0deg); filter: hue-rotate(180deg); }
 }
 
 /* Add subtle grain texture */
@@ -181,6 +189,31 @@ body:after {
     font-weight: 200;
     letter-spacing: .025rem;
     margin-bottom: 2.5rem;
+    position: relative;
+    animation: textGlitch var(--glitch-intensity) infinite;
+}
+
+.profile-name:before,
+.profile-name:after {
+    content: attr(data-text);
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    clip: rect(0, 0, 0, 0);
+}
+
+.profile-name:before {
+    left: 2px;
+    text-shadow: -1px 0 var(--primary);
+    animation: glitchTop 2s infinite linear alternate-reverse;
+}
+
+.profile-name:after {
+    left: -2px;
+    text-shadow: 2px 0 var(--secondary);
+    animation: glitchBottom 3s infinite linear alternate-reverse;
 }
 
 .profile-username {
@@ -471,4 +504,34 @@ mark {
 @keyframes blink {
     0%, 100% {opacity: .5}
     50% {opacity: 0}
+}
+
+@keyframes textGlitch {
+    0% { transform: none; opacity: 1; }
+    7% { transform: skew(-0.3deg, -0.5deg); opacity: 0.8; }
+    10% { transform: none; opacity: 1; }
+    27% { transform: none; opacity: 1; }
+    30% { transform: skew(0.4deg, -0.1deg); opacity: 0.8; }
+    35% { transform: none; opacity: 1; }
+    52% { transform: none; opacity: 1; }
+    55% { transform: skew(-0.5deg, 0.1deg); opacity: 0.8; }
+    50% { transform: none; opacity: 1; }
+    72% { transform: none; opacity: 1; }
+    75% { transform: skew(0.2deg, 0.5deg); opacity: 0.8; }
+    80% { transform: none; opacity: 1; }
+    100% { transform: none; opacity: 1; }
+}
+
+@keyframes glitchTop {
+    0% { clip: rect(0, 0, 0, 0); }
+    2% { clip: rect(20px, 999px, 28px, 0); }
+    4% { clip: rect(52px, 999px, 58px, 0); }
+    6% { clip: rect(0, 0, 0, 0); }
+}
+
+@keyframes glitchBottom {
+    0% { clip: rect(0, 0, 0, 0); }
+    2% { clip: rect(15px, 999px, 25px, 0); }
+    4% { clip: rect(45px, 999px, 55px, 0); }
+    6% { clip: rect(0, 0, 0, 0); }
 }
