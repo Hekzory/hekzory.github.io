@@ -97,6 +97,43 @@ body:after {
 
 .profile-image {
     transition: transform 0.5s ease-in-out;
+    position: relative;
+}
+
+.speech-bubble {
+    position: absolute;
+    background: var(--glass-background);
+    border: 1px solid var(--border-color);
+    padding: 0.5rem 1rem;
+    border-radius: 1rem;
+    top: -3rem;
+    left: 50%;
+    transform: translateX(-50%) scale(0);
+    transition: transform 0.3s ease-in-out;
+    backdrop-filter: var(--backdrop-blur);
+    -webkit-backdrop-filter: var(--backdrop-blur);
+    color: var(--text-color);
+    font-size: 0.9em;
+    white-space: nowrap;
+    opacity: 0;
+}
+
+.speech-bubble:after {
+    content: '';
+    position: absolute;
+    bottom: -0.5rem;
+    left: 50%;
+    transform: translateX(-50%) rotate(45deg);
+    width: 1rem;
+    height: 1rem;
+    background: var(--glass-background);
+    border-right: 1px solid var(--border-color);
+    border-bottom: 1px solid var(--border-color);
+}
+
+.profile-image:hover .speech-bubble {
+    transform: translateX(-50%) scale(1);
+    opacity: 1;
 }
 
 .profile-image:hover {
