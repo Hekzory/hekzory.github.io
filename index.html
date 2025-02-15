@@ -15,86 +15,63 @@
         <link href="/css/style.css" rel="stylesheet" type="text/css" />
     </head>
     <body class="is-loading">
-        <div id="wrapper">
-            <main id="main">
-                <div class="inner">
-                    <div class="container">
-                        <div class="wrapper">
-                            <div class="inner">
-                                <div id="profile-image" class="image">
-                                    <span class="frame">
-                                        <img src="/photo.webp" alt="Howdy! It's my photo" width="100" height="100" />
-                                    </span>
-                                </div>
-                                <h2 id="profile-title">Software Engineer</h2>
-                                <h1 id="profile-name">Oleg Tsvetkov</h1>
-                                <p id="profile-username">
-                                    Username: <mark><strong>@Hekzo</strong></mark>
-                                </p>
-                                <div class="buttons">
-                                    <button id="ml-btn" class="button">
-                                        <svg aria-label="Email">
-                                            <use href="/css/icons.svg#i-ml"></use>
-                                        </svg>
-                                        <span class="label">Email</span>
-                                    </button>
-                                </div>
-                                <hr id="divider" class="full" />
-                                <div class="icons">
-                                    <a href="https://t.me/hekzory" class="icon-link">
-                                        <svg aria-label="Telegram">
-                                            <use href="/css/icons.svg#i-tg"></use>
-                                        </svg>
-                                        <span class="label">Telegram</span>
-                                    </a>
-                                    <a href="https://github.com/hekzory/" class="icon-link">
-                                        <svg aria-label="GitHub">
-                                            <use href="/css/icons.svg#i-gh"></use>
-                                        </svg>
-                                        <span class="label">GitHub</span>
-                                    </a>
-                                    <a href="https://vk.com/hekzo" class="icon-link">
-                                        <svg aria-label="VK">
-                                            <use href="/css/icons.svg#i-vk"></use>
-                                        </svg>
-                                        <span class="label">VK</span>
-                                    </a>
-                                    <a href="https://steamcommunity.com/id/hekzory/" class="icon-link">
-                                        <svg aria-label="Steam">
-                                            <use href="/css/icons.svg#i-st"></use>
-                                        </svg>
-                                        <span class="label">Steam</span>
-                                    </a>
-                                    <button id="ds-btn" class="icon-link">
-                                        <svg aria-label="Discord">
-                                            <use href="/css/icons.svg#i-ds"></use>
-                                        </svg>
-                                        <span class="label">Discord</span>
-                                    </button>
-                                    <button id="ya-btn" class="icon-link">
-                                        <svg aria-label="Yandex">
-                                            <use href="/css/icons.svg#i-ya"></use>
-                                        </svg>
-                                        <span class="label">Yandex</span>
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
+        <main id="main">
+            <div class="profile-section">
+                <div class="profile-header">
+                    <div class="profile-image">
+                        <img src="/photo.webp" alt="Howdy! It's my photo" width="100" height="100" />
                     </div>
-                    <div class="container">
-                        <div class="wrapper">
-                            <div class="inner">
-                                <p id="text01">
-                                    Currently working at <mark><strong>VK</strong></mark
-                                    ><!-- as the
-									<em>test automation software engineer</em>.-->
-                                </p>
-                            </div>
-                        </div>
-                    </div>
+                    <h2 class="profile-title">Software Engineer</h2>
+                    <h1 class="profile-name">Oleg Tsvetkov</h1>
+                    <p class="profile-username">
+                        Username: <mark><strong>@Hekzo</strong></mark>
+                    </p>
                 </div>
-            </main>
-        </div>
+
+                <div class="contact-buttons">
+                    <button id="ml-btn" class="button">
+                        <svg aria-label="Email">
+                            <use href="/css/icons.svg#i-ml"></use>
+                        </svg>
+                        <span class="label">Email</span>
+                    </button>
+                </div>
+
+                <hr class="divider" />
+
+                <div class="social-icons">
+                    <a href="https://t.me/hekzory" class="icon-link">
+                        <svg aria-label="Telegram"><use href="/css/icons.svg#i-tg"></use></svg>
+                        <span class="label">Telegram</span>
+                    </a>
+                    <a href="https://github.com/hekzory/" class="icon-link">
+                        <svg aria-label="GitHub"><use href="/css/icons.svg#i-gh"></use></svg>
+                        <span class="label">GitHub</span>
+                    </a>
+                    <a href="https://vk.com/hekzo" class="icon-link">
+                        <svg aria-label="VK"><use href="/css/icons.svg#i-vk"></use></svg>
+                        <span class="label">VK</span>
+                    </a>
+                    <a href="https://steamcommunity.com/id/hekzory/" class="icon-link">
+                        <svg aria-label="Steam"><use href="/css/icons.svg#i-st"></use></svg>
+                        <span class="label">Steam</span>
+                    </a>
+                    <button id="ds-btn" class="icon-link">
+                        <svg aria-label="Discord"><use href="/css/icons.svg#i-ds"></use></svg>
+                        <span class="label">Discord</span>
+                    </button>
+                    <button id="ya-btn" class="icon-link">
+                        <svg aria-label="Yandex"><use href="/css/icons.svg#i-ya"></use></svg>
+                        <span class="label">Yandex</span>
+                    </button>
+                </div>
+            </div>
+
+            <div class="work-info">
+                <p>Currently working at <mark><strong>VK</strong></mark></p>
+            </div>
+        </main>
+
         <script type="module" src="/js/main.js" defer></script>
         <script type="application/ld+json">
             {
