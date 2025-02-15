@@ -6,8 +6,8 @@
     --border-color: rgba(255, 255, 255, 0.1);
     --background-color: #0f172a;
     --section-background: rgba(30, 41, 59, 0.5);
-    --glass-background: rgba(30, 41, 59, 0.7);
-    --backdrop-blur: blur(12px);
+    --glass-background: rgba(30, 41, 59, 0.6);
+    --backdrop-blur: blur(16px);
 }
 
 /* Base styles */
@@ -35,10 +35,10 @@ body:before {
     width: 100vw;
     height: 100vh;
     background: 
-        radial-gradient(circle at 50% 50%, var(--primary-color) 0%, transparent 65%),
-        radial-gradient(circle at 80% 20%, var(--secondary-color) 0%, transparent 45%),
-        radial-gradient(circle at 20% 80%, var(--secondary-color) 0%, transparent 40%);
-    opacity: 0.2;
+        radial-gradient(circle at 50% 50%, var(--primary-color) 0%, transparent 75%),
+        radial-gradient(circle at 85% 15%, var(--secondary-color) 0%, transparent 55%),
+        radial-gradient(circle at 15% 85%, var(--secondary-color) 0%, transparent 50%);
+    opacity: 0.15;
     z-index: -1;
 }
 
@@ -107,7 +107,7 @@ body:after {
     top: -3rem;
     left: 50%;
     transform: translateX(-50%) scale(0);
-    transition: transform 0.3s ease-in-out;
+    transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275), opacity 0.3s ease;
     backdrop-filter: var(--backdrop-blur);
     -webkit-backdrop-filter: var(--backdrop-blur);
     color: var(--text-color);
@@ -130,7 +130,7 @@ body:after {
 }
 
 .profile-image:hover .speech-bubble {
-    transform: translateX(-50%) scale(1);
+    transform: translateX(-50%) scale(1.05);
     opacity: 1;
 }
 
@@ -202,7 +202,7 @@ body:after {
     background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
     color: var(--text-color);
     cursor: pointer;
-    transition: all 0.3s ease;
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
     font-family: "Martian Mono", monospace;
     font-size: 1em;
     font-weight: 200;
@@ -232,7 +232,8 @@ body:after {
 }
 
 .button:hover {
-    transform: scale(1.05);
+    transform: scale(1.05) translateY(-2px);
+    box-shadow: 0 8px 25px rgba(45, 212, 191, 0.3);
 }
 
 .button svg {
@@ -262,7 +263,7 @@ body:after {
     backdrop-filter: var(--backdrop-blur);
     -webkit-backdrop-filter: var(--backdrop-blur);
     cursor: pointer;
-    transition: all 0.3s ease;
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
     position: relative;
     border-radius: 12px;
     text-decoration: none;
@@ -274,8 +275,8 @@ body:after {
 .social-button:hover {
     background: var(--background-color);
     border-color: var(--secondary-color);
-    transform: translateY(-3px);
-    box-shadow: 0 5px 15px rgba(139, 92, 246, 0.2);
+    transform: translateY(-5px);
+    box-shadow: 0 8px 25px rgba(139, 92, 246, 0.25);
 }
 
 .social-button svg {
@@ -490,7 +491,7 @@ mark {
 
 /* Add subtle floating animation to the profile image */
 @keyframes float {
-    0% { transform: translateY(0px); }
-    50% { transform: translateY(-10px); }
-    100% { transform: translateY(0px); }
+    0% { transform: translateY(0px) rotate(0deg); }
+    50% { transform: translateY(-10px) rotate(2deg); }
+    100% { transform: translateY(0px) rotate(0deg); }
 }
