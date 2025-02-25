@@ -1,82 +1,150 @@
 (function () {
+    'use strict';
+
+    // DOM cache for better performance
     const $ = document.querySelector.bind(document);
-    const $body = document.body;
+    const $$ = (selector) => Array.from(document.querySelectorAll(selector));
+    
+    // Device and browser capability detection (simplified)
     const client = {
         mobile: /android|ios|iphone|ipad|mobile/i.test(navigator.userAgent.toLowerCase()),
-        os: (/android|ios|windows|mac/i.exec(navigator.userAgent.toLowerCase()) || ["other"])[0],
-        supportsViewportUnits: CSS.supports("height", "100dvh")
+        supportsViewportUnits: CSS.supports("height", "100dvh"),
+        prefersReducedMotion: window.matchMedia('(prefers-reduced-motion: reduce)').matches
     };
-    addEventListener("load", () => {
-        $body.classList.remove("is-loading");
-    });
+
+    // Mobile viewport height adjustments
     if (client.mobile) {
         const setVH = () => {
             const height = client.supportsViewportUnits ? "100svh" : `${window.innerHeight}px`;
-            const bgHeight = client.supportsViewportUnits ? "100lvh" : `${window.innerHeight + 250}px`;
-            Object.assign(document.documentElement.style, {
-                "--viewport-height": height,
-                "--background-height": bgHeight,
-            });
+            document.documentElement.style.setProperty('--viewport-height', height);
         };
-        !client.supportsViewportUnits && addEventListener("orientationchange", () => setTimeout(setVH, 100));
-        addEventListener("load", setVH);
-        $body.classList.add("is-touch");
+        
+        if (!client.supportsViewportUnits) {
+            window.addEventListener("resize", setVH, { passive: true });
+            window.addEventListener("orientationchange", () => setTimeout(setVH, 100), { passive: true });
+        }
+        
+        window.addEventListener("load", setVH, { passive: true });
+        document.body.classList.add("is-touch");
     }
-    if (client.os == "android") {
-        const adjustHeight = () => $body.style.height = `${Math.max(screen.width, screen.height)}px`;
-        ["load", "orientationchange", "touchmove"].forEach((e) => addEventListener(e, adjustHeight));
-    }
+
+    /**
+     * Clipboard Dialog Component
+     * Simplified and optimized for performance
+     */
     class ClipboardDialog {
         constructor() {
-            this.isLocked = false;
-            this.$dialog = this.createElement("dialog", "clipboard", document.body);
-            this.$contentWrapper = this.createElement("div", "wrapper", this.$dialog);
-            this.$content = this.createElement("p", "content", this.$contentWrapper, "-");
-            this.createElement("div", "close", this.$dialog).addEventListener("click", () => this.close());
-            this.$dialog.addEventListener("click", () => this.close());
-            this.$dialog.addEventListener("keydown", (e) => e.key === "Escape" && this.close());
-            this.$content.parentElement.addEventListener("click", (e) => {
+            // Initialize elements
+            this.$dialog = $('#clipboard-dialog');
+            this.$wrapper = this.$dialog.querySelector('.wrapper');
+            this.$content = this.$dialog.querySelector('.content');
+            this.$closeBtn = this.$dialog.querySelector('.close');
+            this.isAnimating = false;
+            
+            // Setup event listeners
+            this.setupEvents();
+        }
+
+        setupEvents() {
+            // Close dialog events
+            this.$closeBtn.addEventListener("click", () => this.close());
+            this.$dialog.addEventListener("click", e => {
+                if (e.target === this.$dialog) this.close();
+            });
+            
+            // Keyboard accessibility
+            this.$dialog.addEventListener("keydown", e => {
+                if (e.key === "Escape") this.close();
+            });
+
+            // Copy content on click
+            this.$wrapper.addEventListener("click", e => {
                 e.stopPropagation();
-                navigator.clipboard.writeText(this.$content.innerText);
-                this.$content.parentElement.classList.add("copied");
-                setTimeout(() => this.close(), 300);
+                this.copyContent();
+            });
+            
+            // Handle button clicks using event delegation
+            document.addEventListener('click', e => {
+                const btn = e.target.closest('#ml-btn, #ds-btn, #ya-btn');
+                if (!btn) return;
+                
+                e.preventDefault();
+                const content = btn.dataset.content;
+                if (content) this.open(content);
             });
         }
-        createElement(tag, className, parent, innerText = "") {
-            const el = document.createElement(tag);
-            el.classList.add(className);
-            el.innerText = innerText;
-            parent.appendChild(el);
-            return el;
+
+        async copyContent() {
+            try {
+                if (navigator.clipboard) {
+                    await navigator.clipboard.writeText(this.$content.textContent);
+                    this.$wrapper.classList.add("copied");
+                    setTimeout(() => this.close(), 800);
+                } else {
+                    this.fallbackCopy();
+                }
+            } catch (err) {
+                console.warn('Clipboard API failed, using fallback');
+                this.fallbackCopy();
+            }
         }
+
+        fallbackCopy() {
+            try {
+                const selection = window.getSelection();
+                const range = document.createRange();
+                range.selectNodeContents(this.$content);
+                selection.removeAllRanges();
+                selection.addRange(range);
+                document.execCommand('copy');
+                selection.removeAllRanges();
+                
+                this.$wrapper.classList.add("copied");
+                setTimeout(() => this.close(), 800);
+            } catch (err) {
+                console.error('Copy failed');
+                this.close();
+            }
+        }
+
         close() {
-            if (this.isLocked) return;
-            this.isLocked = true;
+            if (this.isAnimating) return;
+            
+            this.isAnimating = true;
             this.$dialog.classList.remove("active");
+            
             setTimeout(() => {
                 this.$dialog.close();
-                this.$content.parentElement.classList.remove("copied");
-                this.isLocked = false;
+                this.$wrapper.classList.remove("copied");
+                this.isAnimating = false;
             }, 200);
         }
+
         open(content) {
-            if (this.isLocked) return;
-            this.isLocked = true;
-            this.$content.textContent = decodeURIComponent(content);
+            if (this.isAnimating) return;
+            
+            this.isAnimating = true;
+            this.$content.textContent = content;
             this.$dialog.showModal();
+            
+            // Use requestAnimationFrame for smoother animation
             requestAnimationFrame(() => {
                 this.$dialog.classList.add("active");
-                setTimeout(() => (this.isLocked = false), 300);
+                setTimeout(() => this.isAnimating = false, 300);
             });
         }
     }
-    const clipboardDialog = new ClipboardDialog();
-    const showClipboard = (e, content) => {
-        e.preventDefault();
-        clipboardDialog.open(content);
-        return false;
-    };
-    $("#ml-btn").addEventListener("click", (event) => showClipboard(event, "oleg@tsv.one"));
-    $("#ds-btn").addEventListener("click", (event) => showClipboard(event, "Hekzory"));
-    $("#ya-btn").addEventListener("click", (event) => showClipboard(event, "oleg-tsv@yandex.ru"));
+
+    // Initialize dialog
+    new ClipboardDialog();
+    
+    // Add keyboard accessibility to social buttons
+    $$('.social-button').forEach(button => {
+        button.addEventListener('keydown', e => {
+            if (e.key === 'Enter' || e.key === ' ') {
+                e.preventDefault();
+                button.click();
+            }
+        });
+    });
 })();
