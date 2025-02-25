@@ -9,67 +9,74 @@
         <link rel="manifest" href="/site.webmanifest" />
         <link rel="preload" href="/css/martianmono.woff2" as="font" type="font/woff2" crossorigin />
         <link rel="prefetch" href="/css/icons.svg" />
-        <link href="/css/fonts.css" rel="stylesheet" type="text/css" />
-        <link href="/css/style.css" rel="stylesheet" type="text/css" />
+        <link href="/css/fonts.css" rel="stylesheet" />
+        <link href="/css/style.css" rel="stylesheet" />
     </head>
-    <body class="is-loading">
-        <main id="main">
-            <div class="profile-section">
-                <div class="profile-header">
+    <body>
+        <main id="main" aria-label="Profile information">
+            <section class="profile-section">
+                <header class="profile-header">
                     <div class="profile-image">
-                        <img src="/photo.webp" alt="Howdy!" width="100" height="100" />
-                        <div class="speech-bubble">Howdy!</div>
+                        <img src="/photo.webp" alt="Howdy!" width="128" height="128" loading="eager" fetchpriority="high" />
+                        <div class="speech-bubble" aria-hidden="true">Howdy!</div>
                     </div>
-                    <h2 class="profile-title">Software Engineer</h2>
-                    <h1 class="profile-name">Oleg Tsvetkov</h1>
+                    <p class="profile-title">Software Engineer</p>
+                    <h1 class="profile-name" data-text="Oleg Tsvetkov">Oleg Tsvetkov</h1>
                     <p class="profile-username">
                         Username: <mark><strong>@Hekzo</strong></mark>
                     </p>
-                </div>
+                </header>
 
                 <div class="contact-buttons">
-                    <button id="ml-btn" class="button">
-                        <svg aria-label="Email">
+                    <button id="ml-btn" class="button" aria-label="Show email address" data-content="oleg@tsv.one">
+                        <svg aria-hidden="true" focusable="false">
                             <use href="/css/icons.svg#i-ml"></use>
                         </svg>
                         <span class="label">Email</span>
                     </button>
                 </div>
 
-                <hr class="divider" />
+                <hr class="divider" aria-hidden="true" />
 
-                <div class="social-icons">
-                    <a href="https://t.me/hekzory" class="social-button">
-                        <svg aria-label="Telegram"><use href="/css/icons.svg#i-tg"></use></svg>
+                <nav class="social-icons" aria-label="Social media links">
+                    <a href="https://t.me/hekzory" class="social-button" aria-label="Telegram profile">
+                        <svg aria-hidden="true" focusable="false"><use href="/css/icons.svg#i-tg"></use></svg>
                         <span class="label">Telegram</span>
                     </a>
-                    <a href="https://github.com/hekzory/" class="social-button">
-                        <svg aria-label="GitHub"><use href="/css/icons.svg#i-gh"></use></svg>
+                    <a href="https://github.com/hekzory/" class="social-button" aria-label="GitHub profile">
+                        <svg aria-hidden="true" focusable="false"><use href="/css/icons.svg#i-gh"></use></svg>
                         <span class="label">GitHub</span>
                     </a>
-                    <a href="https://vk.com/hekzo" class="social-button">
-                        <svg aria-label="VK"><use href="/css/icons.svg#i-vk"></use></svg>
+                    <a href="https://vk.com/hekzo" class="social-button" aria-label="VK profile">
+                        <svg aria-hidden="true" focusable="false"><use href="/css/icons.svg#i-vk"></use></svg>
                         <span class="label">VK</span>
                     </a>
-                    <a href="https://steamcommunity.com/id/hekzory/" class="social-button">
-                        <svg aria-label="Steam"><use href="/css/icons.svg#i-st"></use></svg>
+                    <a href="https://steamcommunity.com/id/hekzory/" class="social-button" aria-label="Steam profile">
+                        <svg aria-hidden="true" focusable="false"><use href="/css/icons.svg#i-st"></use></svg>
                         <span class="label">Steam</span>
                     </a>
-                    <button id="ds-btn" class="social-button">
-                        <svg aria-label="Discord"><use href="/css/icons.svg#i-ds"></use></svg>
+                    <button id="ds-btn" class="social-button" aria-label="Show Discord username" data-content="Hekzory">
+                        <svg aria-hidden="true" focusable="false"><use href="/css/icons.svg#i-ds"></use></svg>
                         <span class="label">Discord</span>
                     </button>
-                    <button id="ya-btn" class="social-button">
-                        <svg aria-label="Yandex"><use href="/css/icons.svg#i-ya"></use></svg>
+                    <button id="ya-btn" class="social-button" aria-label="Show Yandex email" data-content="oleg-tsv@yandex.ru">
+                        <svg aria-hidden="true" focusable="false"><use href="/css/icons.svg#i-ya"></use></svg>
                         <span class="label">Yandex</span>
                     </button>
-                </div>
-            </div>
+                </nav>
+            </section>
 
-            <div class="work-info">
+            <section class="work-info">
                 <p>Currently working at <mark><strong>VK</strong></mark></p>
-            </div>
+            </section>
         </main>
+
+        <dialog id="clipboard-dialog" class="clipboard" aria-labelledby="clipboard-content">
+            <div class="wrapper">
+                <p id="clipboard-content" class="content">-</p>
+            </div>
+            <button class="close" aria-label="Close dialog"></button>
+        </dialog>
 
         <script type="module" src="/js/main.js" defer></script>
         <script type="application/ld+json">
