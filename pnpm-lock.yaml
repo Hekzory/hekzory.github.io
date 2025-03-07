@@ -9,8 +9,8 @@ importers:
   .:
     devDependencies:
       happy-dom:
-        specifier: ^17.2.2
-        version: 17.2.2
+        specifier: ^17.3.0
+        version: 17.3.0
       terser:
         specifier: ^5.39.0
         version: 5.39.0
@@ -471,8 +471,8 @@ packages:
   graceful-fs@4.2.11:
     resolution: {integrity: sha512-RbJ5/jmFcNNCcDV5o9eTnBLJ/HszWV0P73bc+Ff4nS/rJj+YaS6IGyiOL0VoBYX+l1Wrl3k63h/KrH+nhJ0XvQ==}
 
-  happy-dom@17.2.2:
-    resolution: {integrity: sha512-3I1/CrNi780sdOhuhUnFtgTWhloSc3quSZwsylI41jycx8o97M6Y4aQAu0phSexGusT7+59BxATh4L4xiY0HcA==}
+  happy-dom@17.3.0:
+    resolution: {integrity: sha512-dTwlpUHrhE0usQOd1Df9k461SOYQUWNl0G31mXCDj+N9//oPcDb+cchrSJzrXN6qxZ5sZSrLf5AfY702Zvddfw==}
     engines: {node: '>=18.0.0'}
 
   has-flag@4.0.0:
@@ -1092,7 +1092,7 @@ snapshots:
 
   graceful-fs@4.2.11: {}
 
-  happy-dom@17.2.2:
+  happy-dom@17.3.0:
     dependencies:
       webidl-conversions: 7.0.0
       whatwg-mimetype: 3.0.0
