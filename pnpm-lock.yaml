@@ -15,14 +15,14 @@ importers:
         specifier: ^5.39.0
         version: 5.39.0
       vite:
-        specifier: ^6.2.5
-        version: 6.2.5(lightningcss@1.29.1)(terser@5.39.0)
+        specifier: ^6.2.6
+        version: 6.2.6(lightningcss@1.29.1)(terser@5.39.0)
       vite-plugin-compression2:
         specifier: ^1.3.3
-        version: 1.3.3(rollup@4.39.0)(vite@6.2.5(lightningcss@1.29.1)(terser@5.39.0))
+        version: 1.3.3(rollup@4.39.0)(vite@6.2.6(lightningcss@1.29.1)(terser@5.39.0))
       vite-plugin-html:
         specifier: ^3.2.2
-        version: 3.2.2(vite@6.2.5(lightningcss@1.29.1)(terser@5.39.0))
+        version: 3.2.2(vite@6.2.6(lightningcss@1.29.1)(terser@5.39.0))
 
 packages:
 
@@ -699,8 +699,8 @@ packages:
     peerDependencies:
       vite: '>=2.0.0'
 
-  vite@6.2.5:
-    resolution: {integrity: sha512-j023J/hCAa4pRIUH6J9HemwYfjB5llR2Ps0CWeikOtdR8+pAURAk0DoJC5/mm9kd+UgdnIy7d6HE4EAvlYhPhA==}
+  vite@6.2.6:
+    resolution: {integrity: sha512-9xpjNl3kR4rVDZgPNdTL0/c6ao4km69a/2ihNQbcANz8RuCOK3hQBmLSJf3bRKVQjVMda+YvizNE8AwvogcPbw==}
     engines: {node: ^18.0.0 || ^20.0.0 || >=22.0.0}
     hasBin: true
     peerDependencies:
@@ -1316,15 +1316,15 @@ snapshots:
 
   universalify@2.0.1: {}
 
-  vite-plugin-compression2@1.3.3(rollup@4.39.0)(vite@6.2.5(lightningcss@1.29.1)(terser@5.39.0)):
+  vite-plugin-compression2@1.3.3(rollup@4.39.0)(vite@6.2.6(lightningcss@1.29.1)(terser@5.39.0)):
     dependencies:
       '@rollup/pluginutils': 5.1.4(rollup@4.39.0)
       tar-mini: 0.2.0
-      vite: 6.2.5(lightningcss@1.29.1)(terser@5.39.0)
+      vite: 6.2.6(lightningcss@1.29.1)(terser@5.39.0)
     transitivePeerDependencies:
       - rollup
 
-  vite-plugin-html@3.2.2(vite@6.2.5(lightningcss@1.29.1)(terser@5.39.0)):
+  vite-plugin-html@3.2.2(vite@6.2.6(lightningcss@1.29.1)(terser@5.39.0)):
     dependencies:
       '@rollup/pluginutils': 4.2.1
       colorette: 2.0.20
@@ -1338,9 +1338,9 @@ snapshots:
       html-minifier-terser: 6.1.0
       node-html-parser: 5.4.2
       pathe: 0.2.0
-      vite: 6.2.5(lightningcss@1.29.1)(terser@5.39.0)
+      vite: 6.2.6(lightningcss@1.29.1)(terser@5.39.0)
 
-  vite@6.2.5(lightningcss@1.29.1)(terser@5.39.0):
+  vite@6.2.6(lightningcss@1.29.1)(terser@5.39.0):
     dependencies:
       esbuild: 0.25.2
       postcss: 8.5.3
