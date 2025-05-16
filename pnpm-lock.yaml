@@ -12,17 +12,17 @@ importers:
         specifier: ^17.4.7
         version: 17.4.7
       terser:
-        specifier: ^5.39.1
-        version: 5.39.1
+        specifier: ^5.39.2
+        version: 5.39.2
       vite:
         specifier: ^6.3.5
-        version: 6.3.5(lightningcss@1.29.1)(terser@5.39.1)
+        version: 6.3.5(lightningcss@1.29.1)(terser@5.39.2)
       vite-plugin-compression2:
         specifier: ^1.3.3
-        version: 1.3.3(rollup@4.40.2)(vite@6.3.5(lightningcss@1.29.1)(terser@5.39.1))
+        version: 1.3.3(rollup@4.40.2)(vite@6.3.5(lightningcss@1.29.1)(terser@5.39.2))
       vite-plugin-html:
         specifier: ^3.2.2
-        version: 3.2.2(vite@6.3.5(lightningcss@1.29.1)(terser@5.39.1))
+        version: 3.2.2(vite@6.3.5(lightningcss@1.29.1)(terser@5.39.2))
 
 packages:
 
@@ -678,8 +678,8 @@ packages:
   tar-mini@0.2.0:
     resolution: {integrity: sha512-+qfUHz700DWnRutdUsxRRVZ38G1Qr27OetwaMYTdg8hcPxf46U0S1Zf76dQMWRBmusOt2ZCK5kbIaiLkoGO7WQ==}
 
-  terser@5.39.1:
-    resolution: {integrity: sha512-Mm6+uad0ZuDtcV8/4uOZQDQ8RuiC5Pu+iZRedJtF7yA/27sPL7d++In/AJKpWZlU3SYMPPkVfwetn6sgZ66pUA==}
+  terser@5.39.2:
+    resolution: {integrity: sha512-yEPUmWve+VA78bI71BW70Dh0TuV4HHd+I5SHOAfS1+QBOmvmCiiffgjR8ryyEd3KIfvPGFqoADt8LdQ6XpXIvg==}
     engines: {node: '>=10'}
     hasBin: true
 
@@ -1133,7 +1133,7 @@ snapshots:
       he: 1.2.0
       param-case: 3.0.4
       relateurl: 0.2.7
-      terser: 5.39.1
+      terser: 5.39.2
 
   is-extglob@2.1.1: {}
 
@@ -1312,7 +1312,7 @@ snapshots:
 
   tar-mini@0.2.0: {}
 
-  terser@5.39.1:
+  terser@5.39.2:
     dependencies:
       '@jridgewell/source-map': 0.3.6
       acorn: 8.14.1
@@ -1332,15 +1332,15 @@ snapshots:
 
   universalify@2.0.1: {}
 
-  vite-plugin-compression2@1.3.3(rollup@4.40.2)(vite@6.3.5(lightningcss@1.29.1)(terser@5.39.1)):
+  vite-plugin-compression2@1.3.3(rollup@4.40.2)(vite@6.3.5(lightningcss@1.29.1)(terser@5.39.2)):
     dependencies:
       '@rollup/pluginutils': 5.1.4(rollup@4.40.2)
       tar-mini: 0.2.0
-      vite: 6.3.5(lightningcss@1.29.1)(terser@5.39.1)
+      vite: 6.3.5(lightningcss@1.29.1)(terser@5.39.2)
     transitivePeerDependencies:
       - rollup
 
-  vite-plugin-html@3.2.2(vite@6.3.5(lightningcss@1.29.1)(terser@5.39.1)):
+  vite-plugin-html@3.2.2(vite@6.3.5(lightningcss@1.29.1)(terser@5.39.2)):
     dependencies:
       '@rollup/pluginutils': 4.2.1
       colorette: 2.0.20
@@ -1354,9 +1354,9 @@ snapshots:
       html-minifier-terser: 6.1.0
       node-html-parser: 5.4.2
       pathe: 0.2.0
-      vite: 6.3.5(lightningcss@1.29.1)(terser@5.39.1)
+      vite: 6.3.5(lightningcss@1.29.1)(terser@5.39.2)
 
-  vite@6.3.5(lightningcss@1.29.1)(terser@5.39.1):
+  vite@6.3.5(lightningcss@1.29.1)(terser@5.39.2):
     dependencies:
       esbuild: 0.25.4
       fdir: 6.4.4(picomatch@4.0.2)
@@ -1367,7 +1367,7 @@ snapshots:
     optionalDependencies:
       fsevents: 2.3.3
       lightningcss: 1.29.1
-      terser: 5.39.1
+      terser: 5.39.2
 
   webidl-conversions@7.0.0: {}
 
