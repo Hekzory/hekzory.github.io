@@ -1,9 +1,9 @@
 :root {
     /* Core colors */
-    --primary: #00f5d4;
+    --primary: #00FFC8;
     --primary-dim: rgba(0, 245, 212, 0.8);
     --primary-light: #20ffde;
-    --secondary: #7209b7;
+    --secondary: #6A07A9;
     --secondary-light: #8a1fd0;
     
     /* Text colors */
@@ -106,19 +106,19 @@ body:after {
     max-width: 44rem;
     margin: 1.5rem auto;
     padding: var(--space-xl);
-    border-radius: 2rem;
+    border-radius: 1rem;
     border: 1px solid var(--border);
     background: var(--glass-bg);
     backdrop-filter: var(--blur);
     -webkit-backdrop-filter: var(--blur);
-    box-shadow: var(--shadow-md);
+    box-shadow: 0 0 15px rgba(0,0,0,.2), 0 2px 5px rgba(0,0,0,.15);
 }
 
 /* Profile section */
 .profile-section, .work-info {
     background: var(--section-bg);
     border: 1px solid var(--border);
-    border-radius: 1.5rem;
+    border-radius: 0.75rem;
     text-align: center;
     transition: all var(--transition-normal);
     contain: content;
@@ -130,24 +130,26 @@ body:after {
 }
 
 .work-info {
-    padding: 3rem;
+    padding: 2.5rem;
     color: var(--text-muted);
-    font-weight: 200;
+    font-weight: 300;
+    letter-spacing: 0.025em;
 }
 
 .profile-image img {
     width: 8rem;
     height: 8rem;
     border: 2px solid transparent;
-    background: linear-gradient(var(--bg),var(--bg)) padding-box,
-                linear-gradient(to right,var(--primary),var(--secondary)) border-box;
-    padding: .35rem;
+    background: linear-gradient(var(--bg), var(--bg)) padding-box,
+                linear-gradient(45deg, var(--primary), var(--secondary)) border-box;
+    padding: .25rem;
     object-fit: cover;
 }
 
 .profile-image {
     transition: transform var(--transition-normal);
     position: relative;
+    will-change: transform;
 }
 
 .speech-bubble {
@@ -194,24 +196,25 @@ body:after {
 .profile-title {
     text-transform: uppercase;
     font-size: 1em;
-    font-weight: 200;
+    font-weight: 300;
     letter-spacing: .225rem;
-    background-image: linear-gradient(90deg,var(--secondary),var(--primary) 77%);
+    background-image: linear-gradient(90deg, var(--secondary), var(--primary) 90%);
     -webkit-background-clip: text;
     background-clip: text;
     -webkit-text-fill-color: transparent;
-    margin: 1.75rem 0;
+    margin: 2rem 0;
     display: inline-block;
     position: relative;
 }
 
 .profile-name {
-    font-size: 2.75em;
-    font-weight: 300;
-    letter-spacing: 0.02em;
+    font-size: 2.5em;
+    font-weight: 400;
+    letter-spacing: 0.05em;
     margin-bottom: 2.5rem;
     position: relative;
     color: var(--text-high-contrast);
+    text-shadow: 0 0 3px var(--primary-dim), 0 0 7px rgba(0, 255, 200, 0.1);
 }
 
 .profile-username {
@@ -240,77 +243,85 @@ body:after {
 .button {
     width: 11rem;
     height: 3.75rem;
-    border: 0;
-    border-radius: 1.875rem;
-    background: linear-gradient(135deg, var(--primary), var(--secondary));
-    color: var(--text-high-contrast);
+    border: 1px solid var(--primary-dim);
+    border-radius: 0.5rem;
+    background: transparent;
+    color: var(--primary-light);
     overflow: hidden;
-    box-shadow: var(--shadow-sm);
+    box-shadow: none;
     z-index: 1;
     font-weight: 400;
-    letter-spacing: 0.03em;
+    letter-spacing: 0.05em;
+    will-change: transform, box-shadow;
 }
 
 .button:before {
     content: '';
     position: absolute;
-    inset: 0;
-    background: linear-gradient(90deg,var(--secondary),var(--primary));
-    border: 0;
-    border-radius: 2.5rem;
+    inset: -1px;
+    background: linear-gradient(135deg, var(--primary), var(--secondary));
+    border-radius: 0.5rem;
     opacity: 0;
     transition: all var(--transition-normal);
     z-index: -1;
 }
 
-.button:hover:before {opacity: 1}
-
 .button:hover {
-    transform: scale(1.05) translateY(-3px);
-    box-shadow: var(--shadow-lg);
+    color: var(--text-high-contrast);
+    transform: scale(1.03) translateY(-2px);
+    box-shadow: 0 0 10px var(--primary-dim);
 }
+
+.button:hover:before {opacity: 1}
 
 .button:focus-visible {
     outline: 2px solid var(--primary-light);
-    outline-offset: 2px;
+    outline-offset: 3px;
 }
 
 .button:active {
-    transform: scale(0.98);
+    transform: scale(0.97);
     transition: transform 0.1s;
 }
 
 .button svg {
     height: 1.25em;
     width: 1.25em;
-    fill: var(--text);
+    fill: var(--primary-light);
     margin-right: 1rem;
+    transition: fill var(--transition-normal);
+}
+
+.button:hover svg {
+    fill: var(--text-high-contrast);
 }
 
 .divider {
     border: 0;
-    height: 1px;
-    background: var(--border);
+    height: 2px;
+    background-image: linear-gradient(to right, transparent, var(--primary-dim), transparent);
     margin: 3rem 0;
+    opacity: 0.5;
 }
 
 .social-button {
-    width: 3rem;
-    height: 3rem;
-    border-radius: 1rem;
-    background: var(--glass-bg);
+    width: 2.75rem;
+    height: 2.75rem;
+    border-radius: 0.5rem;
+    background: transparent;
     padding: 0;
     border: 1px solid var(--border);
     color: var(--text-muted);
     transition: all var(--transition-normal);
+    will-change: transform;
 }
 
 .social-button:hover {
-    transform: translateY(-2px);
+    transform: translateY(-3px) scale(1.025);
     background: var(--glass-hover);
-    border-color: var(--border-hover);
-    color: var(--text-high-contrast);
-    box-shadow: var(--shadow-sm);
+    border-color: var(--text);
+    color: var(--secondary-light);
+    box-shadow: 0 0 10px rgba(0, 255, 200, 0.3);
 }
 
 .social-button:focus-visible {
@@ -319,20 +330,21 @@ body:after {
 }
 
 .social-button:active {
-    transform: translateY(-2px);
+    transform: translateY(-1px) scale(0.98);
     transition: transform 0.1s;
 }
 
 .social-button svg {
-    width: 1.625em;
-    height: 1.625em;
+    width: 1.375em;
+    height: 1.375em;
     fill: var(--text);
     display: block;
-    transition: transform var(--transition-normal);
+    transition: fill var(--transition-normal), transform var(--transition-normal);
+    will-change: transform;
 }
 
 .social-button:hover svg {
-    transform: scale(1.1);
+    transform: scale(1.05);
     fill: var(--secondary-light);
 }
 
@@ -344,18 +356,19 @@ body:after {
     gap: 1.75rem;
     flex-wrap: wrap;
     overflow: visible;
-    contain: content;
     margin: 0 auto;
     padding: 0 var(--space-md);
 }
 
 /* Work info section */
 .work-info mark {
-    transition: color .3s ease;
+    transition: color .5s ease, text-shadow .5s ease;
+    font-weight: 400;
 }
 
 .work-info:hover mark {
-    color: var(--primary);
+    color: var(--primary-light);
+    text-shadow: 0 0 8px var(--secondary-light);
 }
 
 /* Clipboard Dialog */
@@ -392,20 +405,21 @@ dialog.clipboard.active::backdrop {opacity: 1}
 dialog.clipboard .wrapper {
     background: var(--section-bg);
     border: 1px solid var(--border);
-    border-radius: 1.25rem;
-    box-shadow: var(--shadow-md);
+    border-radius: 0.5rem;
+    box-shadow: 0 0 5px rgba(0, 255, 200, 0.15);
     cursor: pointer;
     font: inherit;
     font-size: 1.125rem;
     max-width: min(32rem,calc(100% - 2rem));
     min-width: min(20rem,90vw);
     opacity: 0;
-    padding: 1.5rem;
+    padding: 2rem;
     text-align: center;
     transform: translateY(1rem);
     transition: all var(--transition-normal);
-    backdrop-filter: var(--blur);
-    -webkit-backdrop-filter: var(--blur);
+    backdrop-filter: blur(5px);
+    -webkit-backdrop-filter: blur(5px);
+    will-change: transform, opacity;
 }
 
 dialog.clipboard.active .wrapper {
@@ -415,24 +429,24 @@ dialog.clipboard.active .wrapper {
 
 dialog.clipboard .wrapper:after {
     color: var(--text-muted);
-    content: "Click to copy";
+    content: "Initiate Copy";
     display: block;
     font-size: .875rem;
     margin-top: 1rem;
     font-weight: 200;
-    letter-spacing: .02em;
+    letter-spacing: .05em;
     transition: color var(--transition-fast);
 }
 
 dialog.clipboard .wrapper.copied:after {
-    content: "Copied!";
-    color: var(--primary);
+    content: "Copy Complete >_<";
+    border-color: var(--secondary);
 }
 
 dialog.clipboard .wrapper .content {
     background: var(--bg);
     border: 1px solid var(--border);
-    border-radius: .75rem;
+    border-radius: .5rem;
     color: var(--text);
     font: inherit;
     overflow: hidden;
@@ -451,7 +465,8 @@ dialog.clipboard .wrapper.copied .content {
     background-clip: text;
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
-    border-color: var(--primary);
+    border-color: var(--secondary-light);
+    box-shadow: 0 0 10px var(--secondary-light) /* Glow for copied content box */
 }
 
 dialog.clipboard .close {
@@ -467,6 +482,7 @@ dialog.clipboard .close {
     transition: opacity var(--transition-fast), transform var(--transition-fast);
     background-color: transparent;
     border-radius: 0.5rem;
+    will-change: transform, opacity;
 }
 
 dialog.clipboard.active .close {opacity: .7}
