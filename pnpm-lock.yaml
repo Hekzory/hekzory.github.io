@@ -18,8 +18,8 @@ importers:
         specifier: ^6.3.5
         version: 6.3.5(lightningcss@1.29.1)(terser@5.39.2)
       vite-plugin-compression2:
-        specifier: ^1.3.3
-        version: 1.3.3(rollup@4.41.0)(vite@6.3.5(lightningcss@1.29.1)(terser@5.39.2))
+        specifier: ^1.4.0
+        version: 1.4.0(rollup@4.41.0)(vite@6.3.5(lightningcss@1.29.1)(terser@5.39.2))
       vite-plugin-html:
         specifier: ^3.2.2
         version: 3.2.2(vite@6.3.5(lightningcss@1.29.1)(terser@5.39.2))
@@ -698,8 +698,8 @@ packages:
     resolution: {integrity: sha512-gptHNQghINnc/vTGIk0SOFGFNXw7JVrlRUtConJRlvaw6DuX0wO5Jeko9sWrMBhh+PsYAZ7oXAiOnf/UKogyiw==}
     engines: {node: '>= 10.0.0'}
 
-  vite-plugin-compression2@1.3.3:
-    resolution: {integrity: sha512-Mb+xi/C5b68awtF4fNwRBPtoZiyUHU3I0SaBOAGlerlR31kusq1si6qG31lsjJH8T7QNg/p3IJY2HY9O9SvsfQ==}
+  vite-plugin-compression2@1.4.0:
+    resolution: {integrity: sha512-UEk0Bq1IkkwqbDLoLOHZ8WTmN1QbvR28fvNl2liB88/6SG1oLrTVkxfjqW3pdla/rKQ6QXn+pJpv3GBbl+k56g==}
     peerDependencies:
       vite: ^2.0.0||^3.0.0||^4.0.0||^5.0.0 ||^6.0.0
 
@@ -1332,7 +1332,7 @@ snapshots:
 
   universalify@2.0.1: {}
 
-  vite-plugin-compression2@1.3.3(rollup@4.41.0)(vite@6.3.5(lightningcss@1.29.1)(terser@5.39.2)):
+  vite-plugin-compression2@1.4.0(rollup@4.41.0)(vite@6.3.5(lightningcss@1.29.1)(terser@5.39.2)):
     dependencies:
       '@rollup/pluginutils': 5.1.4(rollup@4.41.0)
       tar-mini: 0.2.0
