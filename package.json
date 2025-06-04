@@ -9,7 +9,7 @@
         "preview": "pnpm exec vite preview"
     },
     "devDependencies": {
-        "happy-dom": "^17.4.7",
+        "happy-dom": "^17.6.3",
         "terser": "^5.40.0",
         "vite": "^6.3.5",
         "vite-plugin-compression2": "^1.4.0",
