@@ -9,20 +9,20 @@ importers:
   .:
     devDependencies:
       happy-dom:
-        specifier: ^17.4.7
-        version: 17.5.6
+        specifier: ^18.0.1
+        version: 18.0.1
       terser:
         specifier: ^5.43.1
         version: 5.43.1
       vite:
         specifier: ^6.3.5
-        version: 6.3.5(lightningcss@1.29.1)(terser@5.43.1)
+        version: 6.3.5(@types/node@20.19.1)(lightningcss@1.29.1)(terser@5.43.1)
       vite-plugin-compression2:
         specifier: ^2.2.0
         version: 2.2.0(rollup@4.41.0)
       vite-plugin-html:
         specifier: ^3.2.2
-        version: 3.2.2(vite@6.3.5(lightningcss@1.29.1)(terser@5.43.1))
+        version: 3.2.2(vite@6.3.5(@types/node@20.19.1)(lightningcss@1.29.1)(terser@5.43.1))
 
 packages:
 
@@ -328,6 +328,12 @@ packages:
   '@types/estree@1.0.8':
     resolution: {integrity: sha512-dWHzHa2WqEXI/O1E9OjrocMTKJl2mSrEolh1Iomrv6U+JuNwaHXsXx9bLu5gG7BUWFIN0skIQJQ/L1rIex4X6w==}
 
+  '@types/node@20.19.1':
+    resolution: {integrity: sha512-jJD50LtlD2dodAEO653i3YF04NWak6jN3ky+Ri3Em3mGR39/glWiboM/IePaRbgwSfqM1TpGXfAg8ohn/4dTgA==}
+
+  '@types/whatwg-mimetype@3.0.2':
+    resolution: {integrity: sha512-c2AKvDT8ToxLIOUlN51gTiHXflsfIFisS4pO7pDPoKouJCESkhZnEy623gwP9laCy5lnLDAw1vAzu2vM2YLOrA==}
+
   acorn@8.15.0:
     resolution: {integrity: sha512-NZyJarBfL7nWwIq+FDL6Zp/yHEhePMNnnJ0y3qfieCrmNvYct8uvtiV41UvlSe6apAfk0fY1FbWx+NwfmpvtTg==}
     engines: {node: '>=0.4.0'}
@@ -487,9 +493,9 @@ packages:
   graceful-fs@4.2.11:
     resolution: {integrity: sha512-RbJ5/jmFcNNCcDV5o9eTnBLJ/HszWV0P73bc+Ff4nS/rJj+YaS6IGyiOL0VoBYX+l1Wrl3k63h/KrH+nhJ0XvQ==}
 
-  happy-dom@17.5.6:
-    resolution: {integrity: sha512-B4U6jKuiizwCJ2WP0YreQmRdeBrHKOXhpz7YUbbwdSAKfWEhdG4UfWZOZTZ5Oejs/9yJtk7xmbfp8YdVL9LVFA==}
-    engines: {node: '>=18.0.0'}
+  happy-dom@18.0.1:
+    resolution: {integrity: sha512-qn+rKOW7KWpVTtgIUi6RVmTBZJSe2k0Db0vh1f7CWrWclkkc7/Q+FrOfkZIb2eiErLyqu5AXEzE7XthO9JVxRA==}
+    engines: {node: '>=20.0.0'}
 
   has-flag@4.0.0:
     resolution: {integrity: sha512-EykJT/Q1KjTWctppgIAgfSO0tKVuZUjhgMr17kqTumMl6Afv3EISleU7qZUzoXDFTAHTDC4NOoG/ZxU3EvlMPQ==}
@@ -697,6 +703,9 @@ packages:
   tslib@2.8.1:
     resolution: {integrity: sha512-oJFu94HQb+KVduSUQL7wnpmqnfmLsOA/nAh6b6EH0wCEoK0/mPeXU6c3wKDV83MkOuHPRHtSXKKU99IBazS/2w==}
 
+  undici-types@6.21.0:
+    resolution: {integrity: sha512-iwDZqg0QAGrg9Rav5H4n0M64c3mkR59cJ6wQp+7C4nI0gsmExaedaYLNO44eT4AtBBwjbTiGPMlt2Md0T9H9JQ==}
+
   universalify@2.0.1:
     resolution: {integrity: sha512-gptHNQghINnc/vTGIk0SOFGFNXw7JVrlRUtConJRlvaw6DuX0wO5Jeko9sWrMBhh+PsYAZ7oXAiOnf/UKogyiw==}
     engines: {node: '>= 10.0.0'}
@@ -748,10 +757,6 @@ packages:
         optional: true
       yaml:
         optional: true
-
-  webidl-conversions@7.0.0:
-    resolution: {integrity: sha512-VwddBukDzu71offAQR975unBIGqfKZpM+8ZX6ySk8nYhVoo5CYaZyzt3YBvYtRtO+aoGlqxPg/B87NGVZ/fu6g==}
-    engines: {node: '>=12'}
 
   whatwg-mimetype@3.0.0:
     resolution: {integrity: sha512-nt+N2dzIutVRxARx1nghPKGv1xHikU7HKdfafKkLNLindmPU/ch3U31NOCGGA/dmPcmb1VlofO0vnKAcsm0o/Q==}
@@ -945,6 +950,12 @@ snapshots:
 
   '@types/estree@1.0.8': {}
 
+  '@types/node@20.19.1':
+    dependencies:
+      undici-types: 6.21.0
+
+  '@types/whatwg-mimetype@3.0.2': {}
+
   acorn@8.15.0: {}
 
   ansi-styles@4.3.0:
@@ -1119,9 +1130,10 @@ snapshots:
 
   graceful-fs@4.2.11: {}
 
-  happy-dom@17.5.6:
+  happy-dom@18.0.1:
     dependencies:
-      webidl-conversions: 7.0.0
+      '@types/node': 20.19.1
+      '@types/whatwg-mimetype': 3.0.2
       whatwg-mimetype: 3.0.0
 
   has-flag@4.0.0: {}
@@ -1333,6 +1345,8 @@ snapshots:
 
   tslib@2.8.1: {}
 
+  undici-types@6.21.0: {}
+
   universalify@2.0.1: {}
 
   vite-plugin-compression2@2.2.0(rollup@4.41.0):
@@ -1342,7 +1356,7 @@ snapshots:
     transitivePeerDependencies:
       - rollup
 
-  vite-plugin-html@3.2.2(vite@6.3.5(lightningcss@1.29.1)(terser@5.43.1)):
+  vite-plugin-html@3.2.2(vite@6.3.5(@types/node@20.19.1)(lightningcss@1.29.1)(terser@5.43.1)):
     dependencies:
       '@rollup/pluginutils': 4.2.1
       colorette: 2.0.20
@@ -1356,9 +1370,9 @@ snapshots:
       html-minifier-terser: 6.1.0
       node-html-parser: 5.4.2
       pathe: 0.2.0
-      vite: 6.3.5(lightningcss@1.29.1)(terser@5.43.1)
+      vite: 6.3.5(@types/node@20.19.1)(lightningcss@1.29.1)(terser@5.43.1)
 
-  vite@6.3.5(lightningcss@1.29.1)(terser@5.43.1):
+  vite@6.3.5(@types/node@20.19.1)(lightningcss@1.29.1)(terser@5.43.1):
     dependencies:
       esbuild: 0.25.4
       fdir: 6.4.4(picomatch@4.0.2)
@@ -1367,10 +1381,9 @@ snapshots:
       rollup: 4.41.0
       tinyglobby: 0.2.13
     optionalDependencies:
+      '@types/node': 20.19.1
       fsevents: 2.3.3
       lightningcss: 1.29.1
       terser: 5.43.1
-
-  webidl-conversions@7.0.0: {}
 
   whatwg-mimetype@3.0.0: {}
