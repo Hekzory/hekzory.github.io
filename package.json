@@ -11,7 +11,7 @@
     "devDependencies": {
         "happy-dom": "^18.0.1",
         "terser": "^5.43.1",
-        "vite": "^7.0.1",
+        "vite": "^7.0.4",
         "vite-plugin-compression2": "^2.2.0",
         "vite-plugin-html": "^3.2.2"
     }
