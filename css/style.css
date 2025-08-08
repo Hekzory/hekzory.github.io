@@ -5,12 +5,13 @@
     --primary-light: #20ffde;
     --secondary: #6A07A9;
     --secondary-light: #8a1fd0;
-    
+    --accent-gradient: linear-gradient(135deg, var(--primary), var(--secondary));
+
     /* Text colors */
     --text: #e2e8f0;
     --text-muted: rgba(226,232,240,.75);
     --text-high-contrast: #ffffff;
-    
+
     /* Background & borders */
     --border: rgba(226,232,240,.15);
     --border-hover: rgba(226,232,240,.25);
@@ -18,24 +19,27 @@
     --section-bg: rgba(22,32,46,.7);
     --glass-bg: rgba(22,32,46,.8);
     --glass-hover: rgba(26,38,55,.9);
-    
+
     /* Effects */
     --blur: blur(20px);
     --transition-fast: 0.2s cubic-bezier(0.4, 0, 0.2, 1);
     --transition-normal: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     --transition-slow: 0.4s cubic-bezier(0.16, 1, 0.3, 1);
-    
+
     /* Spacing */
     --space-xs: 0.5rem;
     --space-sm: 1rem;
     --space-md: 1.5rem;
     --space-lg: 2rem;
     --space-xl: 2.5rem;
-    
+
     /* Shadows */
     --shadow-sm: 0 2px 8px rgba(0,0,0,.12);
     --shadow-md: 0 8px 24px rgba(0,0,0,.16);
     --shadow-lg: 0 12px 30px rgba(45,212,191,.2);
+
+    /* Color scheme hint */
+    color-scheme: dark;
 }
 
 /* Base styles */
@@ -48,6 +52,8 @@
 html {
     scrollbar-width: thin;
     scrollbar-color: var(--primary-dim) var(--bg);
+    -webkit-text-size-adjust: 100%;
+    text-rendering: optimizeLegibility;
 }
 
 body {
@@ -57,6 +63,8 @@ body {
     font-family: "Martian Mono", monospace;
     color: var(--text);
     overflow-x: hidden;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
 }
 
 /* Improve text selection contrast */
@@ -70,11 +78,11 @@ body:before {
     content: "";
     position: fixed;
     inset: 0;
-    background: 
+    background:
         radial-gradient(circle at 50% 50%, var(--primary) 0%, transparent 60%),
         radial-gradient(circle at 80% 20%, var(--secondary) 0%, transparent 40%),
-        repeating-linear-gradient(0deg, 
-            transparent 0%, 
+        repeating-linear-gradient(0deg,
+            transparent 0%,
             rgba(0,245,212,.03) 1px,
             transparent 2px,
             transparent 8px
@@ -88,7 +96,7 @@ body:before {
     body:before {
         animation: neuralPulse 8s ease-in-out infinite alternate;
     }
-    
+
     @keyframes neuralPulse {
         0% { transform: scale(1) rotate(0deg); filter: hue-rotate(0deg); }
         50% { transform: scale(1.1) rotate(1deg); filter: hue-rotate(90deg); }
@@ -102,7 +110,7 @@ body:after {
     position: fixed;
     inset: 0;
     background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%' height='100%' filter='url(%23noise)' opacity='0.1'/%3E%3C/svg%3E");
-    opacity: .3;
+    opacity: .22;
     z-index: -1;
     pointer-events: none;
 }
@@ -126,7 +134,11 @@ body:after {
     border: 1px solid var(--border);
     border-radius: 0.75rem;
     text-align: center;
-    transition: all var(--transition-normal);
+    transition:
+        background-color var(--transition-normal),
+        border-color var(--transition-normal),
+        transform var(--transition-normal),
+        box-shadow var(--transition-normal);
     contain: content;
 }
 
@@ -147,9 +159,11 @@ body:after {
     height: 8rem;
     border: 2px solid transparent;
     background: linear-gradient(var(--bg), var(--bg)) padding-box,
-                linear-gradient(45deg, var(--primary), var(--secondary)) border-box;
+                var(--accent-gradient) border-box;
     padding: .25rem;
     object-fit: cover;
+    border-radius: 0.5rem;
+    outline: none;
 }
 
 .profile-image {
@@ -193,10 +207,17 @@ body:after {
 .profile-image:hover {
     transform: scale(1.05) translateY(-5px);
 }
-
 .profile-image:hover .speech-bubble {
     transform: translateX(-50%) scale(1.05);
     opacity: 1;
+}
+/* Keyboard accessibility for bubble */
+.profile-image:focus-within .speech-bubble {
+    transform: translateX(-50%) scale(1);
+    opacity: 1;
+}
+.profile-image:focus-within {
+    transform: scale(1.03) translateY(-2px);
 }
 
 .profile-title {
@@ -214,19 +235,27 @@ body:after {
 }
 
 .profile-name {
-    font-size: 2.5em;
     font-weight: 400;
     letter-spacing: 0.05em;
     margin-bottom: 2.5rem;
     position: relative;
     color: var(--text-high-contrast);
-    text-shadow: 0 0 3px var(--primary-dim), 0 0 7px rgba(0, 255, 200, 0.1);
+    text-shadow: 0 0 2px var(--primary-dim), 0 0 4px rgba(0, 255, 200, 0.08);
+    text-wrap: balance;
+    font-size: clamp(1.75rem, 5vw, 2.75rem);
 }
 
 .profile-username {
     color: var(--text-muted);
     font-weight: 200;
     margin-bottom: 2.5rem;
+    display: inline-block;
+    padding: .35rem .6rem;
+    border-radius: .5rem;
+    border: 1px solid var(--border);
+    background:
+        linear-gradient(var(--bg), var(--bg)) padding-box,
+        radial-gradient(120% 120% at 100% 0, rgba(32,255,222,.18), transparent 60%) border-box;
 }
 
 /* Buttons and icons */
@@ -242,8 +271,8 @@ body:after {
     position: relative;
     text-decoration: none;
     font: inherit;
-    transition: all var(--transition-slow);
     outline: none;
+    touch-action: manipulation;
 }
 
 .button {
@@ -259,16 +288,23 @@ body:after {
     font-weight: 400;
     letter-spacing: 0.05em;
     will-change: transform, box-shadow;
+    transition:
+        transform var(--transition-slow),
+        box-shadow var(--transition-normal),
+        color var(--transition-normal),
+        border-color var(--transition-normal),
+        background-color var(--transition-normal),
+        filter var(--transition-normal);
 }
 
 .button:before {
     content: '';
     position: absolute;
     inset: -1px;
-    background: linear-gradient(135deg, var(--primary), var(--secondary));
+    background: var(--accent-gradient);
     border-radius: 0.5rem;
     opacity: 0;
-    transition: all var(--transition-normal);
+    transition: opacity var(--transition-normal);
     z-index: -1;
 }
 
@@ -278,7 +314,7 @@ body:after {
     box-shadow: 0 0 10px var(--primary-dim);
 }
 
-.button:hover:before {opacity: 1}
+.button:hover:before { opacity: 1 }
 
 .button:focus-visible {
     outline: 2px solid var(--primary-light);
@@ -318,8 +354,13 @@ body:after {
     padding: 0;
     border: 1px solid var(--border);
     color: var(--text-muted);
-    transition: all var(--transition-normal);
     will-change: transform;
+    transition:
+        transform var(--transition-normal),
+        background-color var(--transition-normal),
+        border-color var(--transition-normal),
+        color var(--transition-normal),
+        box-shadow var(--transition-normal);
 }
 
 .social-button:hover {
@@ -459,7 +500,11 @@ dialog.clipboard .wrapper {
     padding: 2rem;
     text-align: center;
     transform: translateY(1rem);
-    transition: all var(--transition-normal);
+    transition:
+        opacity var(--transition-normal),
+        transform var(--transition-normal),
+        box-shadow var(--transition-normal),
+        border-color var(--transition-normal);
     backdrop-filter: blur(5px);
     -webkit-backdrop-filter: blur(5px);
     will-change: transform, opacity;
@@ -500,16 +545,20 @@ dialog.clipboard .wrapper .content {
     white-space: normal;
     width: 100%;
     line-height: 1.4;
-    transition: all var(--transition-fast);
+    transition:
+        color var(--transition-fast),
+        background-color var(--transition-fast),
+        border-color var(--transition-fast),
+        box-shadow var(--transition-fast);
 }
 
 dialog.clipboard .wrapper.copied .content {
-    background: linear-gradient(135deg,var(--primary),var(--secondary));
+    background: var(--accent-gradient);
     background-clip: text;
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     border-color: var(--secondary-light);
-    box-shadow: 0 0 10px var(--secondary-light) /* Glow for copied content box */
+    box-shadow: 0 0 10px var(--secondary-light);
 }
 
 dialog.clipboard .close {
@@ -522,7 +571,7 @@ dialog.clipboard .close {
     position: absolute;
     right: 0.5rem;
     top: 0.5rem;
-    transition: opacity var(--transition-fast), transform var(--transition-fast);
+    transition: opacity var(--transition-fast), transform var(--transition-fast), background-color var(--transition-fast);
     background-color: transparent;
     border-radius: 0.5rem;
     will-change: transform, opacity;
@@ -547,15 +596,35 @@ mark {
     color: var(--primary-light);
 }
 
+/* Screen-reader-only helper */
+.sr-only {
+    position: absolute !important;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0 0 0 0);
+    white-space: nowrap;
+    border: 0;
+}
+
 /* Animations - Only load if motion is allowed */
 @media (prefers-reduced-motion: no-preference) {
     .profile-image img {
         animation: float 8s ease-in-out infinite;
     }
-    
     @keyframes float {
         0%, 100% {transform: translateY(0) rotate(0)}
         50% {transform: translateY(-6px) rotate(2deg)}
+    }
+}
+
+/* High contrast preference */
+@media (prefers-contrast: more) {
+    :root { --border: rgba(226,232,240,.45); }
+    .button, .social-button {
+        border-color: var(--border) !important;
     }
 }
 
@@ -564,35 +633,35 @@ mark {
     :root {
         --space-xl: 1.5rem;
     }
-    
+
     #main {
         margin: 1rem;
         padding: var(--space-lg);
         border-radius: 1.5rem;
     }
-    
+
     .profile-section, .work-info {
         padding: 2.5rem;
     }
-    
+
     .profile-name {
-        font-size: 2em;
+        font-size: clamp(1.5rem, 6vw, 2rem);
     }
-    
+
     .social-icons {
         gap: 1.25rem;
     }
-    
+
     dialog.clipboard .wrapper {
         font-size: 1rem;
         padding: 1.25rem;
         margin: 1rem;
     }
-    
+
     dialog.clipboard .wrapper .content {
         padding: 1rem;
     }
-    
+
     dialog.clipboard .close {
         background-size: 1.25rem;
     }
@@ -603,52 +672,52 @@ mark {
         margin: 0.5rem;
         padding: var(--space-md);
     }
-    
+
     .profile-section, .work-info {
         padding: 1.875rem;
     }
-    
+
     .profile-image img {
         width: 6rem;
         height: 6rem;
     }
-    
+
     .profile-title {
         font-size: 0.9em;
     }
-    
+
     .profile-name {
         font-size: 1.75em;
         margin-bottom: 1.5rem;
     }
-    
+
     .profile-username {
         margin-bottom: 1.5rem;
     }
-    
+
     .contact-buttons {
         margin-bottom: 1.5rem;
     }
-    
+
     .button {
         width: 100%;
         max-width: 16rem;
     }
-    
+
     .divider {
         margin: 1.5rem 0;
     }
-    
+
     .social-icons {
         gap: 1rem;
     }
-    
+
     .speech-bubble {
         display: none;
     }
 }
 
-/* Add reduced motion support for users who prefer it */
+/* Reduced motion support */
 @media (prefers-reduced-motion: reduce) {
     *, ::before, ::after {
         animation-duration: 0.01ms !important;
@@ -656,17 +725,17 @@ mark {
         transition-duration: 0.01ms !important;
         scroll-behavior: auto !important;
     }
-    
+
     .profile-image img {
         animation: none !important;
     }
-    
+
     .profile-name:before,
     .profile-name:after,
     .profile-title:after {
         display: none !important;
     }
-    
+
     body:before {
         animation: none !important;
     }

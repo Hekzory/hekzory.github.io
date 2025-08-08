@@ -4,7 +4,7 @@
     // DOM cache for better performance
     const $ = document.querySelector.bind(document);
     const $$ = (selector) => Array.from(document.querySelectorAll(selector));
-    
+
     // Device and browser capability detection (simplified)
     const client = {
         mobile: /android|ios|iphone|ipad|mobile/i.test(navigator.userAgent.toLowerCase()),
@@ -18,12 +18,12 @@
             const height = client.supportsViewportUnits ? "100svh" : `${window.innerHeight}px`;
             document.documentElement.style.setProperty('--viewport-height', height);
         };
-        
+
         if (!client.supportsViewportUnits) {
             window.addEventListener("resize", setVH, { passive: true });
             window.addEventListener("orientationchange", () => setTimeout(setVH, 100), { passive: true });
         }
-        
+
         window.addEventListener("load", setVH, { passive: true });
         document.body.classList.add("is-touch");
     }

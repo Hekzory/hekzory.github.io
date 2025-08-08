@@ -56,6 +56,16 @@ export default function htmlMetaPlugin(options = {}) {
             insertMetaTag(document, "og:type", meta.type, true);
             insertMetaTag(document, "theme-color", meta.themeColor);
 
+            // Color scheme hint (helps UA pick native UI colors)
+            insertMetaTag(document, "color-scheme", meta.colorScheme || "dark");
+
+            // Twitter card (uses same meta values by default)
+            insertMetaTag(document, "twitter:card", meta.twitterCard || "summary_large_image");
+            insertMetaTag(document, "twitter:title", meta.title);
+            insertMetaTag(document, "twitter:description", meta.description);
+            insertMetaTag(document, "twitter:image", meta.image);
+            insertMetaTag(document, "twitter:site", meta.twitterSite || meta.url);
+
             // Update or create canonical link
             let canonical = document.head.querySelector('link[rel="canonical"]');
             if (!canonical) {
