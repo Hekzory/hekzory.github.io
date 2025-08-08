@@ -4,5 +4,6 @@
     "url": "https://tsv.one/",
     "image": "https://tsv.one/preview.png",
     "themeColor": "#242329",
-    "type": "website"
+    "type": "website",
+    "colorScheme": "dark"
 }
