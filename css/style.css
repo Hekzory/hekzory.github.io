@@ -59,6 +59,12 @@ body {
     overflow-x: hidden;
 }
 
+/* Improve text selection contrast */
+::selection {
+    background: rgba(32, 255, 222, 0.25);
+    color: var(--text-high-contrast);
+}
+
 /* Background animation - optimized for performance */
 body:before {
     content: "";
@@ -348,7 +354,44 @@ body:after {
     fill: var(--secondary-light);
 }
 
-.social-button .label {display: none}
+/* Lightweight tooltip for icon labels (shown on hover/focus) */
+.social-button .label {
+    position: absolute;
+    left: 50%;
+    bottom: calc(100% + 8px);
+    transform: translate(-50%, 6px) scale(.98);
+    background: var(--glass-bg);
+    border: 1px solid var(--border);
+    border-radius: 0.4rem;
+    color: var(--text);
+    font-size: .75rem;
+    line-height: 1;
+    padding: .4rem .5rem;
+    white-space: nowrap;
+    box-shadow: var(--shadow-sm);
+    opacity: 0;
+    pointer-events: none;
+    transition: transform var(--transition-fast), opacity var(--transition-fast), background var(--transition-fast);
+}
+
+.social-button .label::after {
+    content: "";
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    width: 8px;
+    height: 8px;
+    transform: translateX(-50%) rotate(45deg);
+    background: var(--glass-bg);
+    border-right: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+}
+
+.social-button:hover .label,
+.social-button:focus-visible .label {
+    opacity: 1;
+    transform: translate(-50%, -2px) scale(1);
+}
 
 .social-icons {
     display: flex;
