@@ -23,6 +23,7 @@ export default defineConfig({
         stringify: true,
     },
     build: {
+        modulePreload: { polyfill: false },
         rollupOptions: {
             input: {
                 main: resolve(__dirname, "index.html"),
