@@ -751,3 +751,7 @@ mark {
         animation: none !important;
     }
 }
+
+.d-n-d {
+    display: none;
+}
