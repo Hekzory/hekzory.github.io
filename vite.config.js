@@ -1,8 +1,9 @@
 import { defineConfig } from "vite";
 import { resolve } from "path";
-import { compression } from "vite-plugin-compression2";
+import { compression, defineAlgorithm } from "vite-plugin-compression2";
 import { createHtmlPlugin } from "vite-plugin-html";
 import htmlMetaPlugin from "./vite-plugin-html-meta";
+import zlib from "node:zlib";
 
 export default defineConfig({
     appType: "mpa",
@@ -12,11 +13,14 @@ export default defineConfig({
             minify: true,
         }),
         compression({
-            algorithm: "brotliCompress",
+            algorithms: [
+              defineAlgorithm('brotliCompress', {
+                params: {
+                    [zlib.constants.BROTLI_PARAM_QUALITY]: 12
+                  }
+              }), 
+              defineAlgorithm('gzip', { level: 9 })],
             exclude: [/\.(br)$/, /\.(gz)$/],
-            compressionOptions: {
-                level: 9,
-            },
         }),
     ],
     json: {
@@ -36,7 +40,7 @@ export default defineConfig({
             compress: {
                 drop_console: true,
                 drop_debugger: true,
-                passes: 3,
+                passes: 5,
                 ecma: 2021,
                 module: true,
                 toplevel: true,
