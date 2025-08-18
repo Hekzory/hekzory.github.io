@@ -34,16 +34,22 @@ export default defineConfig({
                 notfoundpage: resolve(__dirname, "404.html"),
             },
         },
-        target: "es2021",
+        target: "baseline-widely-available",
         minify: "terser",
+        cssMinify: "esbuild",
         terserOptions: {
             compress: {
                 drop_console: true,
                 drop_debugger: true,
                 passes: 5,
-                ecma: 2021,
+                ecma: 2023,
                 module: true,
                 toplevel: true,
+                keep_fargs: false,
+                booleans_as_integers: true,
+                unsafe_arrows: true,
+                unsafe_comps: true,
+                unsafe_math: true,
             },
             mangle: {
                 toplevel: true,
@@ -51,7 +57,7 @@ export default defineConfig({
             },
             format: {
                 comments: false,
-                ecma: 2021,
+                ecma: 2023,
             },
         },
     },
