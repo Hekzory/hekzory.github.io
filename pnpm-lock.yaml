@@ -9,20 +9,20 @@ importers:
   .:
     devDependencies:
       happy-dom:
-        specifier: ^18.0.1
-        version: 18.0.1
+        specifier: ^20.0.4
+        version: 20.0.4
       terser:
         specifier: ^5.44.0
         version: 5.44.0
       vite:
         specifier: ^7.1.7
-        version: 7.1.7(@types/node@20.19.18)(lightningcss@1.29.1)(terser@5.44.0)
+        version: 7.1.7(@types/node@20.19.22)(lightningcss@1.29.1)(terser@5.44.0)
       vite-plugin-compression2:
         specifier: ^2.2.1
         version: 2.2.1(rollup@4.52.3)
       vite-plugin-html:
         specifier: ^3.2.2
-        version: 3.2.2(vite@7.1.7(@types/node@20.19.18)(lightningcss@1.29.1)(terser@5.44.0))
+        version: 3.2.2(vite@7.1.7(@types/node@20.19.22)(lightningcss@1.29.1)(terser@5.44.0))
 
 packages:
 
@@ -336,8 +336,8 @@ packages:
   '@types/estree@1.0.8':
     resolution: {integrity: sha512-dWHzHa2WqEXI/O1E9OjrocMTKJl2mSrEolh1Iomrv6U+JuNwaHXsXx9bLu5gG7BUWFIN0skIQJQ/L1rIex4X6w==}
 
-  '@types/node@20.19.18':
-    resolution: {integrity: sha512-KeYVbfnbsBCyKG8e3gmUqAfyZNcoj/qpEbHRkQkfZdKOBrU7QQ+BsTdfqLSWX9/m1ytYreMhpKvp+EZi3UFYAg==}
+  '@types/node@20.19.22':
+    resolution: {integrity: sha512-hRnu+5qggKDSyWHlnmThnUqg62l29Aj/6vcYgUaSFL9oc7DVjeWEQN3PRgdSc6F8d9QRMWkf36CLMch1Do/+RQ==}
 
   '@types/whatwg-mimetype@3.0.2':
     resolution: {integrity: sha512-c2AKvDT8ToxLIOUlN51gTiHXflsfIFisS4pO7pDPoKouJCESkhZnEy623gwP9laCy5lnLDAw1vAzu2vM2YLOrA==}
@@ -481,8 +481,8 @@ packages:
   graceful-fs@4.2.11:
     resolution: {integrity: sha512-RbJ5/jmFcNNCcDV5o9eTnBLJ/HszWV0P73bc+Ff4nS/rJj+YaS6IGyiOL0VoBYX+l1Wrl3k63h/KrH+nhJ0XvQ==}
 
-  happy-dom@18.0.1:
-    resolution: {integrity: sha512-qn+rKOW7KWpVTtgIUi6RVmTBZJSe2k0Db0vh1f7CWrWclkkc7/Q+FrOfkZIb2eiErLyqu5AXEzE7XthO9JVxRA==}
+  happy-dom@20.0.4:
+    resolution: {integrity: sha512-WxFtvnij6G64/MtMimnZhF0nKx3LUQKc20zjATD6tKiqOykUwQkd+2FW/DZBAFNjk4oWh0xdv/HBleGJmSY/Iw==}
     engines: {node: '>=20.0.0'}
 
   he@1.2.0:
@@ -931,7 +931,7 @@ snapshots:
 
   '@types/estree@1.0.8': {}
 
-  '@types/node@20.19.18':
+  '@types/node@20.19.22':
     dependencies:
       undici-types: 6.21.0
 
@@ -1090,9 +1090,9 @@ snapshots:
 
   graceful-fs@4.2.11: {}
 
-  happy-dom@18.0.1:
+  happy-dom@20.0.4:
     dependencies:
-      '@types/node': 20.19.18
+      '@types/node': 20.19.22
       '@types/whatwg-mimetype': 3.0.2
       whatwg-mimetype: 3.0.0
 
@@ -1307,7 +1307,7 @@ snapshots:
     transitivePeerDependencies:
       - rollup
 
-  vite-plugin-html@3.2.2(vite@7.1.7(@types/node@20.19.18)(lightningcss@1.29.1)(terser@5.44.0)):
+  vite-plugin-html@3.2.2(vite@7.1.7(@types/node@20.19.22)(lightningcss@1.29.1)(terser@5.44.0)):
     dependencies:
       '@rollup/pluginutils': 4.2.1
       colorette: 2.0.20
@@ -1321,9 +1321,9 @@ snapshots:
       html-minifier-terser: 6.1.0
       node-html-parser: 5.4.2
       pathe: 0.2.0
-      vite: 7.1.7(@types/node@20.19.18)(lightningcss@1.29.1)(terser@5.44.0)
+      vite: 7.1.7(@types/node@20.19.22)(lightningcss@1.29.1)(terser@5.44.0)
 
-  vite@7.1.7(@types/node@20.19.18)(lightningcss@1.29.1)(terser@5.44.0):
+  vite@7.1.7(@types/node@20.19.22)(lightningcss@1.29.1)(terser@5.44.0):
     dependencies:
       esbuild: 0.25.10
       fdir: 6.5.0(picomatch@4.0.3)
@@ -1332,7 +1332,7 @@ snapshots:
       rollup: 4.52.3
       tinyglobby: 0.2.15
     optionalDependencies:
-      '@types/node': 20.19.18
+      '@types/node': 20.19.22
       fsevents: 2.3.3
       lightningcss: 1.29.1
       terser: 5.44.0
