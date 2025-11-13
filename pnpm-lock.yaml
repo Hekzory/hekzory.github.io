@@ -12,17 +12,17 @@ importers:
         specifier: ^20.0.10
         version: 20.0.10
       terser:
-        specifier: ^5.44.0
-        version: 5.44.0
+        specifier: ^5.44.1
+        version: 5.44.1
       vite:
         specifier: ^7.2.2
-        version: 7.2.2(@types/node@20.19.24)(lightningcss@1.29.1)(terser@5.44.0)
+        version: 7.2.2(@types/node@20.19.24)(lightningcss@1.29.1)(terser@5.44.1)
       vite-plugin-compression2:
         specifier: ^2.3.1
         version: 2.3.1(rollup@4.53.1)
       vite-plugin-html:
         specifier: ^3.2.2
-        version: 3.2.2(vite@7.2.2(@types/node@20.19.24)(lightningcss@1.29.1)(terser@5.44.0))
+        version: 3.2.2(vite@7.2.2(@types/node@20.19.24)(lightningcss@1.29.1)(terser@5.44.1))
 
 packages:
 
@@ -664,8 +664,8 @@ packages:
   tar-mini@0.2.0:
     resolution: {integrity: sha512-+qfUHz700DWnRutdUsxRRVZ38G1Qr27OetwaMYTdg8hcPxf46U0S1Zf76dQMWRBmusOt2ZCK5kbIaiLkoGO7WQ==}
 
-  terser@5.44.0:
-    resolution: {integrity: sha512-nIVck8DK+GM/0Frwd+nIhZ84pR/BX7rmXMfYwyg+Sri5oGVE99/E3KvXqpC2xHFxyqXyGHTKBSioxxplrO4I4w==}
+  terser@5.44.1:
+    resolution: {integrity: sha512-t/R3R/n0MSwnnazuPpPNVO60LX0SKL45pyl9YlvxIdkH0Of7D5qM2EVe+yASRIlY5pZ73nclYJfNANGWPwFDZw==}
     engines: {node: '>=10'}
     hasBin: true
 
@@ -1106,7 +1106,7 @@ snapshots:
       he: 1.2.0
       param-case: 3.0.4
       relateurl: 0.2.7
-      terser: 5.44.0
+      terser: 5.44.1
 
   is-extglob@2.1.1: {}
 
@@ -1278,7 +1278,7 @@ snapshots:
 
   tar-mini@0.2.0: {}
 
-  terser@5.44.0:
+  terser@5.44.1:
     dependencies:
       '@jridgewell/source-map': 0.3.11
       acorn: 8.15.0
@@ -1307,7 +1307,7 @@ snapshots:
     transitivePeerDependencies:
       - rollup
 
-  vite-plugin-html@3.2.2(vite@7.2.2(@types/node@20.19.24)(lightningcss@1.29.1)(terser@5.44.0)):
+  vite-plugin-html@3.2.2(vite@7.2.2(@types/node@20.19.24)(lightningcss@1.29.1)(terser@5.44.1)):
     dependencies:
       '@rollup/pluginutils': 4.2.1
       colorette: 2.0.20
@@ -1321,9 +1321,9 @@ snapshots:
       html-minifier-terser: 6.1.0
       node-html-parser: 5.4.2
       pathe: 0.2.0
-      vite: 7.2.2(@types/node@20.19.24)(lightningcss@1.29.1)(terser@5.44.0)
+      vite: 7.2.2(@types/node@20.19.24)(lightningcss@1.29.1)(terser@5.44.1)
 
-  vite@7.2.2(@types/node@20.19.24)(lightningcss@1.29.1)(terser@5.44.0):
+  vite@7.2.2(@types/node@20.19.24)(lightningcss@1.29.1)(terser@5.44.1):
     dependencies:
       esbuild: 0.25.12
       fdir: 6.5.0(picomatch@4.0.3)
@@ -1335,6 +1335,6 @@ snapshots:
       '@types/node': 20.19.24
       fsevents: 2.3.3
       lightningcss: 1.29.1
-      terser: 5.44.0
+      terser: 5.44.1
 
   whatwg-mimetype@3.0.0: {}
