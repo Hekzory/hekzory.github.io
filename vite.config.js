@@ -3,23 +3,25 @@ import { resolve } from "path";
 import { compression, defineAlgorithm } from "vite-plugin-compression2";
 import { createHtmlPlugin } from "vite-plugin-html";
 import htmlMetaPlugin from "./vite-plugin-html-meta";
+import injectHtml from "vite-plugin-html-inject";
 import zlib from "node:zlib";
 
 export default defineConfig({
     appType: "mpa",
     plugins: [
         htmlMetaPlugin(),
+        injectHtml(),
         createHtmlPlugin({
             minify: true,
         }),
         compression({
             algorithms: [
-              defineAlgorithm('brotliCompress', {
-                params: {
-                    [zlib.constants.BROTLI_PARAM_QUALITY]: 12
-                  }
-              }), 
-              defineAlgorithm('gzip', { level: 9 })],
+                defineAlgorithm('brotliCompress', {
+                    params: {
+                        [zlib.constants.BROTLI_PARAM_QUALITY]: 12
+                    }
+                }),
+                defineAlgorithm('gzip', { level: 9 })],
             exclude: [/\.(br)$/, /\.(gz)$/],
         }),
     ],
