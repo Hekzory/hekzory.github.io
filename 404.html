@@ -1,31 +1,143 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
-    <head>
-        <base target="_blank" />
-        <link rel="icon" href="/favicon.svg" sizes="any" type="image/svg+xml" />
-        <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
-        <link rel="icon" href="/favicon.ico" sizes="48x48" />
-        <link rel="mask-icon" href="/safari-pinned-tab.svg" color="#507db0" />
-        <link rel="manifest" href="/site.webmanifest" />
-        <link rel="preload" href="/css/martianmono.woff2" as="font" type="font/woff2" crossorigin />
-        <link href="/css/style.css" rel="stylesheet" type="text/css" />
-    </head>
-    <body>
-        <main id="main">
-            <div class="profile-section">
-                <div class="profile-header">
-                    <h2 class="profile-title">ERROR 404</h2>
-                    <h1 class="profile-name">Page not found</h1>
-                </div>
 
-                <div class="contact-buttons">
-                    <a href="/" class="button" target="_self">
-                        <span class="label">Go back</span>
-                    </a>
+<head>
+    <base target="_blank" />
+    <link rel="icon" href="/favicon.svg" sizes="any" type="image/svg+xml" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+    <link rel="icon" href="/favicon.ico" sizes="48x48" />
+    <link rel="mask-icon" href="/safari-pinned-tab.svg" color="#7aa2f7" />
+    <link rel="manifest" href="/site.webmanifest" />
+    <link rel="preload" href="/css/martianmono.woff2" as="font" type="font/woff2" crossorigin />
+    <link href="/css/style.css" rel="stylesheet" />
+    <title>Hekzory ~ 404</title>
+    <meta name="description" content="Page not found." />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+</head>
+
+<body>
+    <load src="./components/icons.html" />
+
+    <!-- Top Bar (Waybar style) -->
+    <header class="waybar">
+        <div class="waybar-left">
+            <div class="module workspace active">
+                <svg class="icon">
+                    <use href="#i-home"></use>
+                </svg>
+                <span class="label">404</span>
+            </div>
+        </div>
+
+        <div class="waybar-center">
+            <div class="module window-title">
+                <svg class="icon">
+                    <use href="#i-win"></use>
+                </svg>
+                <span id="window-title">~ / 404 / not-found</span>
+            </div>
+        </div>
+
+        <div class="waybar-right">
+
+            <div class="module clock">
+                <svg class="icon">
+                    <use href="#i-clk"></use>
+                </svg>
+                <span id="clock" class="label">00:00</span>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Grid Layout -->
+    <main class="grid-container">
+
+        <!-- Profile Tile -->
+        <article class="tile profile-tile">
+            <div class="profile-banner"></div>
+            <div class="profile-content">
+                <div class="profile-image-container">
+                    <div class="profile-img"
+                        style="display: flex; align-items: center; justify-content: center; font-size: 4rem; font-weight: bold; color: var(--red);">
+                        404</div>
+                    <div class="status-indicator offline"></div>
+                </div>
+                <div class="profile-details">
+                    <h1 class="name-shimmer" data-text="Page Not Found">Page Not Found</h1>
+                    <h2 class="role">The requested page does not exist</h2>
+                    <p class="location" style="color: var(--fg-dim); font-size: 0.85rem; margin-top: 8px;">📍 Lost in
+                        cyberspace</p>
                 </div>
             </div>
-        </main>
+        </article>
 
-        <script type="module" src="/js/main.js" defer></script>
-    </body>
+        <!-- About / Work Tile -->
+        <article class="tile work-tile">
+            <div class="tile-header">
+                <svg class="tile-icon">
+                    <use href="#i-sys"></use>
+                </svg>
+                <span class="tile-title">Error Details</span>
+            </div>
+            <div class="tile-content">
+                <div class="info-row">
+                    <span class="key">Status:</span>
+                    <span class="value">404</span>
+                </div>
+                <div class="info-row">
+                    <span class="key">Reason:</span>
+                    <span class="value">Not Found</span>
+                </div>
+                <div class="info-row">
+                    <span class="key">Method:</span>
+                    <span class="value">GET</span>
+                </div>
+                <div class="info-row highlight">
+                    <span class="key">Suggestion:</span>
+                    <span class="value">Check the URL or go home</span>
+                </div>
+            </div>
+        </article>
+
+        <!-- Connections Tile -->
+        <article class="tile connections-tile">
+            <div class="tile-header">
+                <span class="tile-title">Navigation</span>
+            </div>
+            <div class="tile-content connections-grid">
+                <!-- Navigation Links -->
+                <a href="/" class="connection-item" target="_self" title="Home">
+                    <svg class="conn-icon">
+                        <use href="#i-home"></use>
+                    </svg>
+                    <span class="conn-label">Home</span>
+                </a>
+                <button class="connection-item contact-btn" data-content="oleg@tsv.one" title="Email">
+                    <svg class="conn-icon">
+                        <use href="#i-ml"></use>
+                    </svg>
+                    <span class="conn-label">Email</span>
+                </button>
+            </div>
+        </article>
+
+    </main>
+
+    <dialog id="clipboard-dialog" class="clipboard">
+        <div class="wrapper">
+            <div class="dialog-header">
+                <span class="dialog-title">Clipboard Manager</span>
+                <button class="close-btn">×</button>
+            </div>
+            <div class="dialog-body">
+                <p>Copied to clipboard:</p>
+                <div id="clipboard-content" class="code-block"></div>
+            </div>
+        </div>
+    </dialog>
+
+    <script type="module" src="/js/main.js" defer></script>
+    <load src="./components/schema.html" />
+</body>
+
 </html>
