@@ -6,92 +6,191 @@
     <link rel="icon" href="/favicon.svg" sizes="any" type="image/svg+xml" />
     <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
     <link rel="icon" href="/favicon.ico" sizes="48x48" />
-    <link rel="mask-icon" href="/safari-pinned-tab.svg" color="#507db0" />
+    <link rel="mask-icon" href="/safari-pinned-tab.svg" color="#7aa2f7" />
     <link rel="manifest" href="/site.webmanifest" />
     <link rel="preload" href="/css/martianmono.woff2" as="font" type="font/woff2" crossorigin />
     <link href="/css/style.css" rel="stylesheet" />
+    <title>Hekzory ~ Home</title>
+    <meta name="description" content="Personal website of Oleg Tsvetkov, Software Engineer." />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 </head>
 
 <body>
     <load src="./components/icons.html" />
-    <main id="main" aria-label="Profile information">
-        <section class="profile-section">
-            <header class="profile-header">
-                <div class="profile-image">
-                    <img src="/photo.webp" alt="Photo of Oleg Tsvetkov" width="128" height="128" loading="eager"
-                        decoding="async" fetchpriority="high" tabindex="0" />
-                    <div class="speech-bubble" aria-hidden="true">Howdy!</div>
-                </div>
-                <p class="profile-title">Software Engineer</p>
-                <h1 class="profile-name" data-text="Oleg Tsvetkov">Oleg Tsvetkov</h1>
-                <p class="profile-username">
-                    Username: <mark><strong>@Hekzo</strong></mark>
-                </p>
-            </header>
 
-            <div class="contact-buttons">
-                <button id="ml-btn" class="button" aria-label="Show email address" data-content="oleg@tsv.one">
-                    <svg aria-hidden="true" focusable="false">
-                        <use href="#i-ml"></use>
-                    </svg>
-                    <span class="label">Email</span>
-                </button>
+    <!-- Top Bar (Waybar style) -->
+    <header class="waybar">
+        <div class="waybar-left">
+            <div class="module workspace active">
+                <svg class="icon">
+                    <use href="#i-home"></use>
+                </svg>
+                <span class="label">HOME</span>
             </div>
+        </div>
 
-            <hr class="divider" aria-hidden="true" />
+        <div class="waybar-center">
+            <div class="module window-title">
+                <svg class="icon">
+                    <use href="#i-win"></use>
+                </svg>
+                <span id="window-title">~ / home / oleg / hekzory.github.io</span>
+            </div>
+        </div>
 
-            <nav class="social-icons" aria-label="Social media links">
-                <a href="https://t.me/hekzory" class="social-button" aria-label="Telegram profile" rel="me">
-                    <svg aria-hidden="true" focusable="false">
+        <div class="waybar-right">
+
+            <div class="module clock">
+                <svg class="icon">
+                    <use href="#i-clk"></use>
+                </svg>
+                <span id="clock" class="label">00:00</span>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Grid Layout -->
+    <main class="grid-container">
+
+        <!-- Profile Tile -->
+        <article class="tile profile-tile">
+            <div class="profile-banner"></div>
+            <div class="profile-content">
+                <div class="profile-image-container">
+                    <img src="/profile.png" alt="Oleg Tsvetkov" class="profile-img" loading="eager" />
+                    <div class="status-indicator online"></div>
+                </div>
+                <div class="profile-details">
+                    <h1 class="name-shimmer" data-text="Oleg Tsvetkov">Oleg Tsvetkov</h1>
+                    <h2 class="role">Software Engineer</h2>
+                    <p class="location" style="color: var(--fg-dim); font-size: 0.85rem; margin-top: 8px;">📍 Moscow,
+                        Russia</p>
+                </div>
+            </div>
+        </article>
+
+        <!-- About / Work Tile -->
+        <article class="tile work-tile">
+            <div class="tile-header">
+                <svg class="tile-icon">
+                    <use href="#i-sys"></use>
+                </svg>
+                <span class="tile-title">System Info</span>
+            </div>
+            <div class="tile-content">
+                <div class="info-row">
+                    <span class="key">OS:</span>
+                    <span class="value">Arch Linux</span>
+                </div>
+                <div class="info-row">
+                    <span class="key">Host:</span>
+                    <span class="value">Hekzory</span>
+                </div>
+                <div class="info-row">
+                    <span class="key">Kernel:</span>
+                    <span class="value">6.18-arch1-1</span>
+                </div>
+                <div class="info-row">
+                    <span class="key">Uptime:</span>
+                    <span class="value" id="uptime-value">Loading...</span>
+                </div>
+                <div class="info-row highlight">
+                    <span class="key">Current Quest:</span>
+                    <span class="value">Software Engineer @ <mark>VK</mark></span>
+                </div>
+            </div>
+        </article>
+
+        <!-- Connections Tile -->
+        <article class="tile connections-tile">
+            <div class="tile-header">
+                <span class="tile-title">Connections</span>
+            </div>
+            <div class="tile-content connections-grid">
+                <!-- Social Links -->
+                <a href="https://t.me/hekzory" class="connection-item" rel="me" title="Telegram">
+                    <svg class="conn-icon">
                         <use href="#i-tg"></use>
                     </svg>
-                    <span class="label">Telegram</span>
+                    <span class="conn-label">Telegram</span>
                 </a>
-                <a href="https://github.com/hekzory/" class="social-button" aria-label="GitHub profile" rel="me">
-                    <svg aria-hidden="true" focusable="false">
+                <a href="https://github.com/hekzory/" class="connection-item" rel="me" title="GitHub">
+                    <svg class="conn-icon">
                         <use href="#i-gh"></use>
                     </svg>
-                    <span class="label">GitHub</span>
+                    <span class="conn-label">GitHub</span>
                 </a>
-                <a href="https://vk.com/hekzo" class="social-button" aria-label="VK profile" rel="me">
-                    <svg aria-hidden="true" focusable="false">
+                <a href="https://vk.com/hekzo" class="connection-item" rel="me" title="VK">
+                    <svg class="conn-icon">
                         <use href="#i-vk"></use>
                     </svg>
-                    <span class="label">VK</span>
+                    <span class="conn-label">VK</span>
                 </a>
-                <a href="https://steamcommunity.com/id/hekzory/" class="social-button" aria-label="Steam profile"
-                    rel="me">
-                    <svg aria-hidden="true" focusable="false">
+                <a href="https://steamcommunity.com/id/hekzory/" class="connection-item" rel="me" title="Steam">
+                    <svg class="conn-icon">
                         <use href="#i-st"></use>
                     </svg>
-                    <span class="label">Steam</span>
+                    <span class="conn-label">Steam</span>
                 </a>
-                <button id="ds-btn" class="social-button" aria-label="Show Discord username" data-content="Hekzory">
-                    <svg aria-hidden="true" focusable="false">
+
+                <!-- Contact Buttons -->
+                <button class="connection-item contact-btn" data-content="oleg@tsv.one" title="Email">
+                    <svg class="conn-icon">
+                        <use href="#i-ml"></use>
+                    </svg>
+                    <span class="conn-label">Email</span>
+                </button>
+                <button class="connection-item contact-btn" data-content="Hekzory" title="Discord">
+                    <svg class="conn-icon">
                         <use href="#i-ds"></use>
                     </svg>
-                    <span class="label">Discord</span>
+                    <span class="conn-label">Discord</span>
                 </button>
-                <button id="ya-btn" class="social-button" aria-label="Show Yandex email"
-                    data-content="oleg-tsv@yandex.ru">
-                    <svg aria-hidden="true" focusable="false">
+                <button class="connection-item contact-btn" data-content="oleg-tsv@yandex.ru" title="Yandex">
+                    <svg class="conn-icon">
                         <use href="#i-ya"></use>
                     </svg>
-                    <span class="label">Yandex</span>
+                    <span class="conn-label">Yandex</span>
                 </button>
-            </nav>
-        </section>
+            </div>
+        </article>
 
-        <section class="work-info">
-            <p>Currently working at <mark><strong>VK</strong></mark></p>
-        </section>
+        <!-- Terminal Toggle Tile -->
+        <div class="tile terminal-toggle-tile" id="terminal-toggle-tile">
+            <svg class="icon">
+                <use href="#i-term"></use>
+            </svg>
+            <span>Open Terminal System</span>
+        </div>
+
+        <!-- Terminal / Footer Tile -->
+        <article class="tile terminal-tile">
+            <div class="terminal-header">
+                <span>Terminal</span>
+                <button id="terminal-close" class="icon-btn" aria-label="Close Terminal">
+                    <svg class="icon">
+                        <use href="#i-win"></use>
+                    </svg>
+                </button>
+            </div>
+            <div class="tile-content terminal-output" id="terminal-output">
+                <!-- Terminal content will be generated by JS -->
+            </div>
+        </article>
+
     </main>
 
-    <dialog id="clipboard-dialog" class="clipboard" aria-labelledby="clipboard-content">
+    <dialog id="clipboard-dialog" class="clipboard">
         <div class="wrapper">
-            <p id="clipboard-content" class="content">-</p>
+            <div class="dialog-header">
+                <span class="dialog-title">Clipboard Manager</span>
+                <button class="close-btn">×</button>
+            </div>
+            <div class="dialog-body">
+                <p>Copied to clipboard:</p>
+                <div id="clipboard-content" class="code-block"></div>
+            </div>
         </div>
-        <button class="close" aria-label="Close dialog"></button>
     </dialog>
 
     <script type="module" src="/js/main.js" defer></script>
