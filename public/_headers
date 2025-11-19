@@ -1,6 +1,6 @@
 https://copysiper.pages.dev/*
   X-Robots-Tag: noindex
 /*
-  Content-Security-Policy: default-src 'self' *.tsv.one; img-src * data:; object-src 'none'; base-uri 'self'; frame-ancestors 'self' *.tsv.one;
+  Content-Security-Policy: default-src 'self' *.tsv.one; script-src 'self' *.tsv.one https://static.cloudflareinsights.com; style-src 'self' *.tsv.one 'unsafe-inline'; img-src * data:; object-src 'none'; base-uri 'self'; frame-ancestors 'self' *.tsv.one;
   X-Frame-Options: SAMEORIGIN
   X-Content-Type-Options: nosniff
