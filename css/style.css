@@ -305,6 +305,12 @@ body {
     display: inline-block;
 }
 
+.profile-details .location {
+    color: var(--fg-dim);
+    font-size: 0.85rem;
+    margin-top: 8px;
+}
+
 /* Icon Sizing */
 .icon,
 .tile-icon {
@@ -349,7 +355,6 @@ body {
 .info-row .value {
     color: var(--accent);
     text-align: right;
-    font-family: "Martian Mono", monospace;
 }
 
 .info-row.highlight .value {
@@ -398,10 +403,7 @@ mark {
 .connection-item::before {
     content: '';
     position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
+    inset: 0;
     background: linear-gradient(45deg, transparent, rgba(122, 162, 247, 0.1), transparent);
     transform: translateX(-100%);
     transition: transform 0.5s;
@@ -450,9 +452,7 @@ mark {
 /* Terminal Tile (Drawer) */
 .terminal-tile {
     position: fixed;
-    bottom: 0;
-    left: 0;
-    right: 0;
+    inset: auto 0 0 0;
     height: 40vh;
     z-index: 1000;
     transform: translateY(100%);
@@ -471,10 +471,7 @@ mark {
     content: " ";
     display: block;
     position: absolute;
-    top: 0;
-    left: 0;
-    bottom: 0;
-    right: 0;
+    inset: 0;
     background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.1) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.03), rgba(0, 255, 0, 0.01), rgba(0, 0, 255, 0.03));
     z-index: 2;
     background-size: 100% 2px, 3px 100%;
@@ -514,7 +511,7 @@ mark {
 .terminal-toggle-tile {
     grid-column: 2 / 12;
     grid-row: 6 / 7;
-    height: 60px;
+    height: 80px;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -540,11 +537,10 @@ mark {
 }
 
 .terminal-toggle-tile.hidden {
-    display: none;
+    visibility: hidden;
 }
 
 .terminal-output {
-    font-family: "Martian Mono", monospace;
     font-size: 0.95rem;
     line-height: 1.6;
     height: 100%;
@@ -591,20 +587,32 @@ mark {
     background: rgba(0, 0, 0, 0.6);
     backdrop-filter: blur(4px);
     border: none;
-    width: 100%;
-    height: 100%;
+    width: 100vw;
+    height: 100vh;
+    max-width: none;
+    max-height: none;
+    margin: 0;
     display: flex;
     align-items: center;
     justify-content: center;
     opacity: 0;
     pointer-events: none;
     transition: opacity 0.2s;
-    z-index: 1000;
+    z-index: 1001;
+}
+
+.clipboard::backdrop {
+    background: transparent;
 }
 
 .clipboard[open] {
     opacity: 1;
     pointer-events: auto;
+}
+
+.clipboard.closing {
+    opacity: 0;
+    pointer-events: none;
 }
 
 .clipboard .wrapper {
@@ -620,6 +628,10 @@ mark {
 
 .clipboard[open] .wrapper {
     transform: scale(1);
+}
+
+.clipboard.closing .wrapper {
+    transform: scale(0.95);
 }
 
 .dialog-header {
@@ -701,6 +713,10 @@ mark {
         /* Ensure profile is at top */
     }
 
+    .terminal-toggle-tile {
+        min-height: 80px;
+    }
+
     .profile-image-container {
         width: 120px;
         height: 120px;
@@ -720,10 +736,6 @@ mark {
 }
 
 @media (max-width: 768px) {
-    .profile-tile {
-        /* Ensure it stacks properly */
-    }
-
     .waybar {
         padding: 0 8px;
     }

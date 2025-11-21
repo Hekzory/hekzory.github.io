@@ -256,6 +256,7 @@
             this.$wrapper = this.$dialog.querySelector('.wrapper');
             this.$content = document.getElementById('clipboard-content');
             this.$closeBtn = this.$dialog.querySelector('.close-btn');
+            this.closeTimeout = null;
             this.setupEvents();
         }
 
@@ -306,15 +307,23 @@
         }
 
         open(text) {
+            if (this.closeTimeout) {
+                clearTimeout(this.closeTimeout);
+                this.closeTimeout = null;
+            }
             this.$content.textContent = text;
-            this.$dialog.setAttribute('open', '');
-            this.$dialog.showModal();
+            if (!this.$dialog.open) {
+                this.$dialog.showModal();
+            }
         }
 
         close() {
-            this.$dialog.removeAttribute('open');
-            setTimeout(() => {
-                if (this.$dialog.open) this.$dialog.close();
+            this.$dialog.classList.add('closing');
+            if (this.closeTimeout) clearTimeout(this.closeTimeout);
+            this.closeTimeout = setTimeout(() => {
+                this.$dialog.close();
+                this.$dialog.classList.remove('closing');
+                this.closeTimeout = null;
             }, 300);
         }
     }
