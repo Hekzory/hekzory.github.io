@@ -15,14 +15,14 @@ importers:
         specifier: ^5.44.1
         version: 5.44.1
       vite:
-        specifier: ^7.2.2
-        version: 7.2.2(@types/node@20.19.25)(lightningcss@1.29.1)(terser@5.44.1)
+        specifier: ^7.2.4
+        version: 7.2.4(@types/node@20.19.25)(lightningcss@1.29.1)(terser@5.44.1)
       vite-plugin-compression2:
         specifier: ^2.3.1
         version: 2.3.1(rollup@4.53.3)
       vite-plugin-html:
         specifier: ^3.2.2
-        version: 3.2.2(vite@7.2.2(@types/node@20.19.25)(lightningcss@1.29.1)(terser@5.44.1))
+        version: 3.2.2(vite@7.2.4(@types/node@20.19.25)(lightningcss@1.29.1)(terser@5.44.1))
       vite-plugin-html-inject:
         specifier: ^1.1.2
         version: 1.1.2
@@ -701,8 +701,8 @@ packages:
     peerDependencies:
       vite: '>=2.0.0'
 
-  vite@7.2.2:
-    resolution: {integrity: sha512-BxAKBWmIbrDgrokdGZH1IgkIk/5mMHDreLDmCJ0qpyJaAteP8NvMhkwr/ZCQNqNH97bw/dANTE9PDzqwJghfMQ==}
+  vite@7.2.4:
+    resolution: {integrity: sha512-NL8jTlbo0Tn4dUEXEsUg8KeyG/Lkmc4Fnzb8JXN/Ykm9G4HNImjtABMJgkQoVjOBN/j2WAwDTRytdqJbZsah7w==}
     engines: {node: ^20.19.0 || >=22.12.0}
     hasBin: true
     peerDependencies:
@@ -1315,7 +1315,7 @@ snapshots:
 
   vite-plugin-html-inject@1.1.2: {}
 
-  vite-plugin-html@3.2.2(vite@7.2.2(@types/node@20.19.25)(lightningcss@1.29.1)(terser@5.44.1)):
+  vite-plugin-html@3.2.2(vite@7.2.4(@types/node@20.19.25)(lightningcss@1.29.1)(terser@5.44.1)):
     dependencies:
       '@rollup/pluginutils': 4.2.1
       colorette: 2.0.20
@@ -1329,9 +1329,9 @@ snapshots:
       html-minifier-terser: 6.1.0
       node-html-parser: 5.4.2
       pathe: 0.2.0
-      vite: 7.2.2(@types/node@20.19.25)(lightningcss@1.29.1)(terser@5.44.1)
+      vite: 7.2.4(@types/node@20.19.25)(lightningcss@1.29.1)(terser@5.44.1)
 
-  vite@7.2.2(@types/node@20.19.25)(lightningcss@1.29.1)(terser@5.44.1):
+  vite@7.2.4(@types/node@20.19.25)(lightningcss@1.29.1)(terser@5.44.1):
     dependencies:
       esbuild: 0.25.12
       fdir: 6.5.0(picomatch@4.0.3)
