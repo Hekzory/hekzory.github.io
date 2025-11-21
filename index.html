@@ -57,8 +57,8 @@
             <div class="profile-banner"></div>
             <div class="profile-content">
                 <div class="profile-image-container">
-                    <img src="/profile.png" fetchpriority="high" alt="Oleg Tsvetkov" class="profile-img"
-                        loading="eager" />
+                    <img src="/profile400x400.png" fetchpriority="high" alt="Oleg Tsvetkov" class="profile-img"
+                        width="200" height="200" loading="eager" />
                     <div class="status-indicator online"></div>
                 </div>
                 <div class="profile-details">
@@ -135,19 +135,22 @@
                 </a>
 
                 <!-- Contact Buttons -->
-                <button class="connection-item contact-btn" data-content="oleg@tsv.one" title="Email">
+                <button class="connection-item contact-btn" data-content="oleg@tsv.one" title="Email"
+                    aria-label="Copy Email">
                     <svg class="conn-icon">
                         <use href="#i-ml"></use>
                     </svg>
                     <span class="conn-label">Email</span>
                 </button>
-                <button class="connection-item contact-btn" data-content="Hekzory" title="Discord">
+                <button class="connection-item contact-btn" data-content="Hekzory" title="Discord"
+                    aria-label="Copy Discord Username">
                     <svg class="conn-icon">
                         <use href="#i-ds"></use>
                     </svg>
                     <span class="conn-label">Discord</span>
                 </button>
-                <button class="connection-item contact-btn" data-content="oleg-tsv@yandex.ru" title="Yandex">
+                <button class="connection-item contact-btn" data-content="oleg-tsv@yandex.ru" title="Yandex"
+                    aria-label="Copy Yandex Email">
                     <svg class="conn-icon">
                         <use href="#i-ya"></use>
                     </svg>
@@ -157,7 +160,8 @@
         </article>
 
         <!-- Terminal Toggle Tile -->
-        <div class="tile terminal-toggle-tile" id="terminal-toggle-tile">
+        <div class="tile terminal-toggle-tile" id="terminal-toggle-tile" role="button" tabindex="0"
+            aria-label="Open Terminal System">
             <svg class="icon">
                 <use href="#i-term"></use>
             </svg>
