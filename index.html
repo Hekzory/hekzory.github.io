@@ -93,7 +93,7 @@
                     <span class="key">Uptime:</span>
                     <span class="value" id="uptime-value">Loading...</span>
                 </div>
-                <div class="info-row highlight">
+                <div class="info-row">
                     <span class="key">Current Quest:</span>
                     <span class="value">Software Engineer @ <mark>VK</mark></span>
                 </div>
@@ -103,29 +103,34 @@
         <!-- Connections Tile -->
         <article class="tile connections-tile">
             <div class="tile-header">
+                <svg class="tile-icon">
+                    <use href="#i-conn"></use>
+                </svg>
                 <span class="tile-title">Connections</span>
             </div>
             <div class="tile-content connections-grid">
                 <!-- Social Links -->
-                <a href="https://t.me/hekzory" class="connection-item" rel="me" title="Telegram">
+                <a href="https://t.me/hekzory" class="connection-item" rel="me" title="Telegram" data-brand="telegram">
                     <svg class="conn-icon">
                         <use href="#i-tg"></use>
                     </svg>
                     <span class="conn-label">Telegram</span>
                 </a>
-                <a href="https://github.com/hekzory/" class="connection-item" rel="me" title="GitHub">
+                <a href="https://github.com/hekzory/" class="connection-item" rel="me" title="GitHub"
+                    data-brand="github">
                     <svg class="conn-icon">
                         <use href="#i-gh"></use>
                     </svg>
                     <span class="conn-label">GitHub</span>
                 </a>
-                <a href="https://vk.com/hekzo" class="connection-item" rel="me" title="VK">
+                <a href="https://vk.com/hekzo" class="connection-item" rel="me" title="VK" data-brand="vk">
                     <svg class="conn-icon">
                         <use href="#i-vk"></use>
                     </svg>
                     <span class="conn-label">VK</span>
                 </a>
-                <a href="https://steamcommunity.com/id/hekzory/" class="connection-item" rel="me" title="Steam">
+                <a href="https://steamcommunity.com/id/hekzory/" class="connection-item" rel="me" title="Steam"
+                    data-brand="steam">
                     <svg class="conn-icon">
                         <use href="#i-st"></use>
                     </svg>
@@ -134,21 +139,21 @@
 
                 <!-- Contact Buttons -->
                 <button class="connection-item contact-btn" data-content="Hekzory" title="Discord"
-                    aria-label="Copy Discord Username">
+                    aria-label="Copy Discord Username" data-brand="discord">
                     <svg class="conn-icon">
                         <use href="#i-ds"></use>
                     </svg>
                     <span class="conn-label">Discord</span>
                 </button>
                 <button class="connection-item contact-btn" data-content="oleg-tsv@yandex.ru" title="Yandex"
-                    aria-label="Copy Yandex Email">
+                    aria-label="Copy Yandex Email" data-brand="yandex">
                     <svg class="conn-icon">
                         <use href="#i-ya"></use>
                     </svg>
                     <span class="conn-label">Yandex</span>
                 </button>
                 <button class="connection-item contact-btn" data-content="oleg@tsv.one" title="Email"
-                    aria-label="Copy Email">
+                    aria-label="Copy Email" data-brand="email">
                     <svg class="conn-icon">
                         <use href="#i-ml"></use>
                     </svg>

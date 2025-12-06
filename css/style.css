@@ -238,9 +238,20 @@ body {
 
 .profile-banner {
     height: 100px;
-    background: linear-gradient(135deg, rgba(122, 162, 247, 0.3), rgba(187, 154, 247, 0.3));
+    background:
+        linear-gradient(135deg, rgba(122, 162, 247, 0.4) 0%, rgba(187, 154, 247, 0.3) 50%, rgba(125, 207, 255, 0.2) 100%);
     width: 100%;
     position: relative;
+    overflow: hidden;
+}
+
+.profile-banner::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background:
+        radial-gradient(ellipse 80% 50% at 20% 40%, rgba(122, 162, 247, 0.3) 0%, transparent 50%),
+        radial-gradient(ellipse 60% 40% at 80% 60%, rgba(187, 154, 247, 0.25) 0%, transparent 50%);
 }
 
 .profile-banner::after {
@@ -248,8 +259,8 @@ body {
     position: absolute;
     inset: 0;
     background-image: radial-gradient(circle at 50% 50%, rgba(255, 255, 255, 0.1) 1px, transparent 1px);
-    background-size: 10px 10px;
-    opacity: 0.5;
+    background-size: 12px 12px;
+    opacity: 0.4;
 }
 
 .profile-content {
@@ -376,10 +387,12 @@ body {
 }
 
 mark {
-    background: transparent;
+    background: rgba(122, 162, 247, 0.2);
     color: var(--primary);
     font-weight: bold;
     text-shadow: 0 0 10px rgba(122, 162, 247, 0.4);
+    padding: 2px 8px;
+    border-radius: 4px;
 }
 
 /* Connections Tile (Compact 2-Column Design) */
@@ -464,6 +477,53 @@ mark {
 
 .connection-item:hover .conn-label {
     color: var(--fg);
+}
+
+/* Brand-specific hover colors */
+.connection-item[data-brand="telegram"]:hover {
+    --brand-color: #7dcfff;
+    /* Tokyo Night cyan - matches Telegram */
+}
+
+.connection-item[data-brand="github"]:hover {
+    --brand-color: #bb9af7;
+    /* Tokyo Night purple */
+}
+
+.connection-item[data-brand="vk"]:hover {
+    --brand-color: #7aa2f7;
+    /* Tokyo Night blue */
+}
+
+.connection-item[data-brand="steam"]:hover {
+    --brand-color: #7dcfff;
+    /* Tokyo Night cyan */
+}
+
+.connection-item[data-brand="discord"]:hover {
+    --brand-color: #bb9af7;
+    /* Tokyo Night purple - matches Discord */
+}
+
+.connection-item[data-brand="yandex"]:hover {
+    --brand-color: #f7768e;
+    /* Tokyo Night red/pink */
+}
+
+.connection-item[data-brand="email"]:hover {
+    --brand-color: #9ece6a;
+    /* Tokyo Night green */
+}
+
+/* Apply brand color to border and icon */
+.connection-item[data-brand]:hover {
+    border-color: var(--brand-color, var(--primary));
+    box-shadow: 0 6px 20px color-mix(in srgb, var(--brand-color, var(--primary)) 25%, transparent);
+}
+
+.connection-item[data-brand]:hover .conn-icon {
+    fill: var(--brand-color, var(--primary));
+    filter: drop-shadow(0 0 8px var(--brand-color, var(--primary)));
 }
 
 
