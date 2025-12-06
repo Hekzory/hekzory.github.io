@@ -12,6 +12,10 @@
 
         const clockEl = document.getElementById('clock');
         if (clockEl) {
+            if (clockEl.textContent !== timeString) {
+                clockEl.classList.add('clock-tick');
+                setTimeout(() => clockEl.classList.remove('clock-tick'), 200);
+            }
             clockEl.textContent = timeString;
         }
     }
