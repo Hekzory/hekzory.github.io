@@ -19,35 +19,7 @@
     <load src="./components/icons.html" />
 
     <!-- Top Bar (Waybar style) -->
-    <header class="waybar">
-        <div class="waybar-left">
-            <div class="module workspace active">
-                <svg class="icon">
-                    <use href="#i-home"></use>
-                </svg>
-                <span class="label">404</span>
-            </div>
-        </div>
-
-        <div class="waybar-center">
-            <div class="module window-title">
-                <svg class="icon">
-                    <use href="#i-win"></use>
-                </svg>
-                <span id="window-title">~ / 404 / not-found</span>
-            </div>
-        </div>
-
-        <div class="waybar-right">
-
-            <div class="module clock">
-                <svg class="icon">
-                    <use href="#i-clk"></use>
-                </svg>
-                <span id="clock" class="label">00:00</span>
-            </div>
-        </div>
-    </header>
+    <load src="./components/waybar.html" home_active="" resume_active="" window_title="~ / 404 / not-found" />
 
     <!-- Main Grid Layout -->
     <main class="grid-container">

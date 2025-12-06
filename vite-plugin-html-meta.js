@@ -23,8 +23,16 @@ export default function htmlMetaPlugin(options = {}) {
 
     return {
         name: "vite-plugin-html-meta",
-        async transformIndexHtml(html) {
-            const meta = JSON.parse(await fs.readFile(path.resolve(metaFile), encoding));
+        async transformIndexHtml(html, ctx) {
+            const metaData = JSON.parse(await fs.readFile(path.resolve(metaFile), encoding));
+
+            // Extract page name from the file path (e.g., "resume" from "/path/to/resume.html")
+            const fileName = ctx.filename ? path.basename(ctx.filename, '.html') : 'index';
+            const pageName = fileName === 'index' ? null : fileName;
+
+            // Merge page-specific overrides if they exist
+            const pageOverrides = pageName && metaData.pages?.[pageName] ? metaData.pages[pageName] : {};
+            const meta = { ...metaData, ...pageOverrides };
 
             const window = new Window();
             const document = window.document;
@@ -48,23 +56,23 @@ export default function htmlMetaPlugin(options = {}) {
 
             // Basic metatags for proper presentation on the web
             insertMetaTag(document, "description", meta.description);
-            insertMetaTag(document, "og:site_name", meta.title, true);
+            insertMetaTag(document, "og:site_name", metaData.title, true); // Always use base site name
             insertMetaTag(document, "og:title", meta.title, true);
             insertMetaTag(document, "og:description", meta.description, true);
             insertMetaTag(document, "og:url", meta.url, true);
-            insertMetaTag(document, "og:image", meta.image, true);
-            insertMetaTag(document, "og:type", meta.type, true);
-            insertMetaTag(document, "theme-color", meta.themeColor);
+            insertMetaTag(document, "og:image", meta.image || metaData.image, true);
+            insertMetaTag(document, "og:type", meta.type || metaData.type, true);
+            insertMetaTag(document, "theme-color", meta.themeColor || metaData.themeColor);
 
             // Color scheme hint (helps UA pick native UI colors)
-            insertMetaTag(document, "color-scheme", meta.colorScheme || "dark");
+            insertMetaTag(document, "color-scheme", meta.colorScheme || metaData.colorScheme || "dark");
 
             // Twitter card (uses same meta values by default)
-            insertMetaTag(document, "twitter:card", meta.twitterCard || "summary_large_image");
+            insertMetaTag(document, "twitter:card", meta.twitterCard || metaData.twitterCard || "summary_large_image");
             insertMetaTag(document, "twitter:title", meta.title);
             insertMetaTag(document, "twitter:description", meta.description);
-            insertMetaTag(document, "twitter:image", meta.image);
-            insertMetaTag(document, "twitter:site", meta.twitterSite || meta.url);
+            insertMetaTag(document, "twitter:image", meta.image || metaData.image);
+            insertMetaTag(document, "twitter:site", meta.twitterSite || metaData.twitterSite || meta.url);
 
             // Update or create canonical link
             let canonical = document.head.querySelector('link[rel="canonical"]');

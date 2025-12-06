@@ -257,6 +257,8 @@
     class ClipboardDialog {
         constructor() {
             this.$dialog = $('#clipboard-dialog');
+            if (!this.$dialog) return;
+
             this.$wrapper = this.$dialog.querySelector('.wrapper');
             this.$content = document.getElementById('clipboard-content');
             this.$closeBtn = this.$dialog.querySelector('.close-btn');

@@ -1,0 +1,34 @@
+<header class="waybar">
+    <div class="waybar-left">
+        <a href="/" class="module workspace {=$home_active}" target="_self">
+            <svg class="icon">
+                <use href="#i-home"></use>
+            </svg>
+            <span class="label">HOME</span>
+        </a>
+        <a href="/resume" class="module workspace {=$resume_active}" target="_self">
+            <svg class="icon">
+                <use href="#i-resume"></use>
+            </svg>
+            <span class="label">RESUME</span>
+        </a>
+    </div>
+
+    <div class="waybar-center">
+        <div class="module window-title">
+            <svg class="icon">
+                <use href="#i-win"></use>
+            </svg>
+            <span id="window-title">{=$window_title}</span>
+        </div>
+    </div>
+
+    <div class="waybar-right">
+        <div class="module clock">
+            <svg class="icon">
+                <use href="#i-clk"></use>
+            </svg>
+            <span id="clock" class="label">00:00</span>
+        </div>
+    </div>
+</header>

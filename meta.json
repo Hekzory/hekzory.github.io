@@ -5,5 +5,12 @@
     "image": "https://tsv.one/preview.png",
     "themeColor": "#242329",
     "type": "website",
-    "colorScheme": "dark"
+    "colorScheme": "dark",
+    "pages": {
+        "resume": {
+            "title": "Oleg Tsvetkov | Resume | Software Engineer",
+            "description": "Resume of Oleg Tsvetkov - Middle Software Engineer at VK with expertise in DevOps, CI/CD, Python, and infrastructure. View work experience, skills, and education.",
+            "url": "https://tsv.one/resume"
+        }
+    }
 }

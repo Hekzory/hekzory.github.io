@@ -19,35 +19,8 @@
     <load src="./components/icons.html" />
 
     <!-- Top Bar (Waybar style) -->
-    <header class="waybar">
-        <div class="waybar-left">
-            <div class="module workspace active">
-                <svg class="icon">
-                    <use href="#i-home"></use>
-                </svg>
-                <span class="label">HOME</span>
-            </div>
-        </div>
-
-        <div class="waybar-center">
-            <div class="module window-title">
-                <svg class="icon">
-                    <use href="#i-win"></use>
-                </svg>
-                <span id="window-title">~ / home / oleg / hekzory.github.io</span>
-            </div>
-        </div>
-
-        <div class="waybar-right">
-
-            <div class="module clock">
-                <svg class="icon">
-                    <use href="#i-clk"></use>
-                </svg>
-                <span id="clock" class="label">00:00</span>
-            </div>
-        </div>
-    </header>
+    <load src="./components/waybar.html" home_active="active" resume_active=""
+        window_title="~ / home / oleg / hekzory.github.io" />
 
     <!-- Main Grid Layout -->
     <main class="grid-container">
@@ -64,6 +37,12 @@
                     <h1 class="name-shimmer" data-text="Oleg Tsvetkov">Oleg Tsvetkov</h1>
                     <h2 class="role">Software Engineer</h2>
                     <p class="location">📍 Moscow, Russia</p>
+                    <a href="/resume" class="resume-btn" target="_self">
+                        <svg class="icon">
+                            <use href="#i-resume"></use>
+                        </svg>
+                        <span>View Resume</span>
+                    </a>
                 </div>
             </div>
         </article>

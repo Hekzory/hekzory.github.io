@@ -28,11 +28,22 @@ export default defineConfig({
     json: {
         stringify: true,
     },
+    server: {
+        configureServer(server) {
+            server.middlewares.use((req, res, next) => {
+                if (req.url === '/resume') {
+                    req.url = '/resume.html';
+                }
+                next();
+            });
+        }
+    },
     build: {
         modulePreload: { polyfill: false },
         rollupOptions: {
             input: {
                 main: resolve(__dirname, "index.html"),
+                resume: resolve(__dirname, "resume.html"),
                 notfoundpage: resolve(__dirname, "404.html"),
             },
         },

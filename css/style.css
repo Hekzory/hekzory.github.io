@@ -48,18 +48,24 @@
     box-sizing: border-box;
 }
 
+html {
+    scrollbar-gutter: stable;
+    width: 100vw;
+    overflow-x: hidden;
+}
+
 body {
     background-color: var(--bg);
     color: var(--fg);
     font-family: "Martian Mono", monospace;
-    height: 100vh;
-    overflow: hidden;
+    min-height: 100vh;
     /* Tiling WM feel */
     display: flex;
     flex-direction: column;
     background-image:
         radial-gradient(circle at 10% 20%, rgba(122, 162, 247, 0.05) 0%, transparent 40%),
         radial-gradient(circle at 90% 80%, rgba(187, 154, 247, 0.05) 0%, transparent 40%);
+    background-attachment: fixed;
 }
 
 /* Selection */
@@ -103,6 +109,7 @@ body {
     font-size: 0.85rem;
     z-index: 100;
     user-select: none;
+    flex-shrink: 0;
 }
 
 .waybar-left,
@@ -919,4 +926,494 @@ mark {
 .terminal-toggle-tile:focus-visible {
     outline: 2px solid var(--primary);
     outline-offset: 2px;
+}
+
+/* ========================================
+   RESUME PAGE STYLES
+   ======================================== */
+
+/* Resume Button in Profile Tile */
+.resume-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    margin-top: 16px;
+    padding: 10px 20px;
+    background: rgba(122, 162, 247, 0.15);
+    border: 1px solid var(--primary);
+    border-radius: 25px;
+    color: var(--primary);
+    text-decoration: none;
+    font-size: 0.85rem;
+    font-weight: 600;
+    transition: all 0.3s var(--ease);
+    cursor: pointer;
+}
+
+.resume-btn:hover {
+    background: var(--primary);
+    color: var(--bg);
+    box-shadow: 0 0 20px rgba(122, 162, 247, 0.4);
+    transform: translateY(-2px);
+}
+
+.resume-btn .icon {
+    width: 1em;
+    height: 1em;
+}
+
+/* Resume Page Body - Inherits standard scrolling from html/body now */
+.resume-page {
+    /* No overrides needed */
+}
+
+/* Resume Container */
+.resume-container {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: var(--gap);
+    min-height: calc(100vh - var(--bar-height));
+}
+
+/* Resume Header */
+.resume-header {
+    padding: 0;
+    margin-bottom: var(--gap);
+    /* Background handled by .tile and .profile-banner */
+}
+
+
+
+
+
+.resume-contact {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 16px 24px;
+}
+
+.contact-item {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    color: var(--fg-dim);
+    text-decoration: none;
+    font-size: 0.9rem;
+    transition: color 0.2s;
+}
+
+.contact-item:hover {
+    color: var(--primary);
+}
+
+.contact-item .conn-icon {
+    width: 18px;
+    height: 18px;
+    fill: currentColor;
+}
+
+.contact-icon {
+    font-size: 1em;
+}
+
+/* Resume Grid Layout */
+.resume-grid {
+    display: grid;
+    grid-template-columns: 1fr 380px;
+    gap: var(--gap);
+    align-items: start;
+}
+
+/* Resume Sections */
+.resume-section {
+    padding: 24px;
+    margin-bottom: var(--gap);
+}
+
+.resume-section:last-child {
+    margin-bottom: 0;
+}
+
+.section-title {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-size: 1.1rem;
+    color: var(--primary);
+    margin-bottom: 20px;
+    padding-bottom: 12px;
+    border-bottom: 1px solid var(--border);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.section-icon {
+    font-size: 1.2em;
+}
+
+/* Experience Timeline */
+.experience-timeline {
+    position: relative;
+    padding-left: 20px;
+}
+
+.experience-timeline::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 8px;
+    bottom: 8px;
+    width: 2px;
+    background: linear-gradient(180deg, var(--primary) 0%, var(--secondary) 50%, var(--accent) 100%);
+    border-radius: 1px;
+}
+
+.experience-item {
+    position: relative;
+    padding-bottom: 28px;
+    margin-bottom: 0;
+}
+
+.experience-item:last-child {
+    padding-bottom: 0;
+}
+
+.experience-item::before {
+    content: '';
+    position: absolute;
+    left: -24px;
+    top: 8px;
+    width: 10px;
+    height: 10px;
+    background: var(--primary);
+    border: 2px solid var(--bg);
+    border-radius: 50%;
+    box-shadow: 0 0 10px rgba(122, 162, 247, 0.5);
+}
+
+.experience-header {
+    margin-bottom: 12px;
+}
+
+.experience-title-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 6px;
+}
+
+.experience-role {
+    font-size: 1.05rem;
+    color: var(--fg);
+    font-weight: 600;
+}
+
+.experience-date {
+    font-size: 0.85rem;
+    color: var(--fg-dim);
+    white-space: nowrap;
+}
+
+.experience-company {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px 16px;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.company-name {
+    color: var(--accent);
+    font-weight: 600;
+    font-size: 0.95rem;
+}
+
+.company-team {
+    color: var(--secondary);
+    font-size: 0.85rem;
+    padding: 2px 8px;
+    background: rgba(187, 154, 247, 0.15);
+    border-radius: 4px;
+}
+
+.company-location {
+    color: var(--fg-dim);
+    font-size: 0.85rem;
+}
+
+.tech-stack {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-bottom: 4px;
+}
+
+.tech-tag {
+    font-size: 0.75rem;
+    padding: 3px 10px;
+    background: rgba(125, 207, 255, 0.1);
+    color: var(--accent);
+    border: 1px solid rgba(125, 207, 255, 0.3);
+    border-radius: 12px;
+    font-weight: 500;
+}
+
+.experience-details {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.experience-details li {
+    position: relative;
+    padding-left: 16px;
+    margin-bottom: 8px;
+    font-size: 0.9rem;
+    color: var(--fg-dark);
+    line-height: 1.6;
+}
+
+.experience-details li::before {
+    content: '▸';
+    position: absolute;
+    left: 0;
+    color: var(--primary);
+}
+
+/* Education */
+.education-item {
+    padding: 16px;
+    background: rgba(36, 40, 59, 0.4);
+    border-radius: 8px;
+    border-left: 3px solid var(--primary);
+}
+
+.education-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 8px;
+}
+
+.education-degree {
+    font-size: 1rem;
+    color: var(--fg);
+    font-weight: 600;
+}
+
+.education-date {
+    font-size: 0.85rem;
+    color: var(--fg-dim);
+}
+
+.education-school {
+    color: var(--accent);
+    font-size: 0.9rem;
+    margin-bottom: 4px;
+}
+
+.education-location {
+    color: var(--fg-dim);
+    font-size: 0.85rem;
+}
+
+/* Skills */
+.skills-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.skill-category {
+    padding: 12px 16px;
+    background: rgba(36, 40, 59, 0.3);
+    border-radius: 8px;
+    border: 1px solid rgba(65, 72, 104, 0.3);
+    transition: border-color 0.2s;
+}
+
+.skill-category:hover {
+    border-color: var(--primary);
+}
+
+.skill-category-title {
+    font-size: 0.85rem;
+    color: var(--fg-dim);
+    margin-bottom: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    font-weight: 500;
+}
+
+.skill-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+}
+
+.skill-tag {
+    font-size: 0.8rem;
+    padding: 4px 10px;
+    background: rgba(122, 162, 247, 0.1);
+    color: var(--fg);
+    border-radius: 4px;
+    border: 1px solid rgba(122, 162, 247, 0.2);
+    transition: all 0.2s;
+}
+
+.skill-tag:hover {
+    background: rgba(122, 162, 247, 0.2);
+    border-color: var(--primary);
+}
+
+.skill-tag.primary {
+    background: rgba(122, 162, 247, 0.25);
+    color: var(--primary);
+    font-weight: 600;
+    border-color: var(--primary);
+}
+
+/* Languages */
+.language-list {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.language-item {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 8px;
+    padding: 12px 16px;
+    background: rgba(36, 40, 59, 0.3);
+    border-radius: 8px;
+    border: 1px solid rgba(65, 72, 104, 0.3);
+}
+
+.language-name {
+    font-weight: 600;
+    color: var(--fg);
+    flex: 1;
+}
+
+.language-level {
+    font-size: 0.85rem;
+    padding: 3px 10px;
+    background: rgba(158, 206, 106, 0.15);
+    color: var(--success);
+    border-radius: 12px;
+    font-weight: 500;
+}
+
+.language-cert {
+    font-size: 0.8rem;
+    color: var(--fg-dim);
+    width: 100%;
+    margin-top: 4px;
+}
+
+/* Soft Skills */
+.soft-skills-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 12px;
+}
+
+.soft-skill-tag {
+    font-size: 0.85rem;
+    padding: 6px 14px;
+    background: rgba(187, 154, 247, 0.1);
+    color: var(--secondary);
+    border-radius: 20px;
+    border: 1px solid rgba(187, 154, 247, 0.25);
+    transition: all 0.2s;
+}
+
+.soft-skill-tag:hover {
+    background: rgba(187, 154, 247, 0.2);
+    border-color: var(--secondary);
+}
+
+.soft-skill-note {
+    font-size: 0.8rem;
+    color: var(--fg-dim);
+    font-style: italic;
+    padding-top: 8px;
+    border-top: 1px solid rgba(65, 72, 104, 0.3);
+}
+
+/* Resume Responsive */
+@media (max-width: 1024px) {
+    .resume-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .resume-sidebar {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: var(--gap);
+    }
+
+    .resume-sidebar .resume-section {
+        margin-bottom: 0;
+    }
+}
+
+@media (max-width: 768px) {
+    .resume-header {
+        padding: 24px 20px;
+    }
+
+    .resume-name {
+        font-size: 1.8rem;
+    }
+
+    .resume-contact {
+        flex-direction: column;
+        gap: 12px;
+    }
+
+    .contact-item {
+        justify-content: center;
+    }
+
+    .resume-section {
+        padding: 20px 16px;
+    }
+
+    .experience-title-row {
+        flex-direction: column;
+    }
+
+    .resume-sidebar {
+        grid-template-columns: 1fr;
+    }
+
+    .experience-timeline {
+        padding-left: 16px;
+    }
+
+    .experience-item::before {
+        left: -20px;
+        width: 8px;
+        height: 8px;
+    }
+}
+
+/* Waybar link styling for resume page */
+.waybar .module.workspace[href] {
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.waybar .module.workspace[href]:hover {
+    background: var(--border);
+    border-color: var(--fg-dim);
 }
