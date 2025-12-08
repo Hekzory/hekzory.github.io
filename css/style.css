@@ -97,6 +97,11 @@ body {
     display: none !important;
 }
 
+.resume-link {
+    color: var(--primary);
+    text-decoration: none;
+}
+
 /* --- Waybar --- */
 .waybar {
     height: var(--bar-height);
@@ -172,7 +177,9 @@ body {
     display: grid;
     grid-template-columns: repeat(12, 1fr);
     grid-template-rows: repeat(12, auto);
-    align-content: center;
+    align-content: start;
+    padding-top: 12vh;
+    /* Desktop spacer to center content */
     gap: var(--gap);
     max-width: 1920px;
     margin: 0 auto;
@@ -772,6 +779,11 @@ mark {
         height: auto;
         padding-bottom: 80px;
         /* Space for terminal toggle */
+        padding-top: var(--gap);
+    }
+
+    .resume-container {
+        padding-top: var(--gap);
     }
 
     body {
@@ -963,22 +975,28 @@ mark {
 }
 
 /* Resume Page Body - Inherits standard scrolling from html/body now */
-.resume-page {
-    /* No overrides needed */
-}
+/* Resume Page Body - Inherits standard scrolling from html/body now */
+/* .resume-page { } - removed empty rule */
 
 /* Resume Container */
 .resume-container {
-    max-width: 1400px;
-    margin: 0 auto;
     padding: var(--gap);
     min-height: calc(100vh - var(--bar-height));
+    /* Align with index.html grid */
+    display: grid;
+    grid-template-columns: repeat(12, 1fr);
+    gap: var(--gap);
+    max-width: 1920px;
+    margin: 0 auto;
+    width: 100%;
+    align-content: start;
+    padding-top: 12vh;
+    /* Match .grid-container top spacing */
 }
 
 /* Resume Header */
 .resume-header {
     padding: 0;
-    margin-bottom: var(--gap);
     /* Background handled by .tile and .profile-banner */
 }
 
@@ -1017,13 +1035,35 @@ mark {
     font-size: 1em;
 }
 
-/* Resume Grid Layout */
-.resume-grid {
-    display: grid;
-    grid-template-columns: 1fr 380px;
+/* Resume Grid Major Layout */
+
+/* Left Major Column (Cols 2-9) */
+.resume-major-left {
+    grid-column: 2 / 9;
+    display: flex;
+    flex-direction: column;
     gap: var(--gap);
-    align-items: start;
 }
+
+/* Right Major Column (Cols 9-12) */
+.resume-major-right {
+    grid-column: 9 / 12;
+    display: flex;
+    flex-direction: column;
+    gap: var(--gap);
+}
+
+/* Header Row - REMOVED (Profile now full width) */
+
+/* Section overrides for specific placement */
+.id-1-languages {
+    /* Standard tile behavior now */
+}
+
+.id-2-profile {
+    margin-bottom: 0;
+}
+
 
 /* Resume Sections */
 .resume-section {
@@ -1349,10 +1389,16 @@ mark {
     border-top: 1px solid rgba(65, 72, 104, 0.3);
 }
 
-/* Resume Responsive */
 @media (max-width: 1024px) {
-    .resume-grid {
-        grid-template-columns: 1fr;
+    .resume-container {
+        display: flex;
+        flex-direction: column;
+        max-width: 1400px;
+    }
+
+    .resume-major-left,
+    .resume-major-right {
+        grid-column: 1 / -1;
     }
 
     .resume-sidebar {
