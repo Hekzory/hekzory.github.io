@@ -118,11 +118,17 @@ body {
 }
 
 .waybar-left,
-.waybar-center,
 .waybar-right {
     display: flex;
     gap: 8px;
     align-items: center;
+}
+
+.waybar-left .window-title {
+    background: transparent;
+    color: var(--fg-dark);
+    margin-left: 16px;
+    /* Extra gap before path */
 }
 
 .module {
@@ -151,11 +157,6 @@ body {
     font-family: "Martian Mono", monospace;
     /* Fallback if no nerd font */
     font-size: 1.1em;
-}
-
-.waybar-center .window-title {
-    background: transparent;
-    color: var(--fg-dark);
 }
 
 .waybar-right .module {
@@ -848,19 +849,13 @@ mark {
         display: none;
     }
 
-    .waybar-center {
-        display: flex;
+    .waybar-left .window-title {
         flex: 1;
-        justify-content: center;
-        overflow: hidden;
-    }
-
-    .waybar-center .window-title {
         white-space: nowrap;
         overflow: hidden;
         text-overflow: ellipsis;
-        max-width: 100%;
         font-size: 0.8rem;
+        margin-left: 4px;
     }
 
     .connections-grid {
