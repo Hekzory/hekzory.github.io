@@ -850,12 +850,7 @@ mark {
     }
 
     .waybar-left .window-title {
-        flex: 1;
-        white-space: nowrap;
-        overflow: hidden;
-        text-overflow: ellipsis;
-        font-size: 0.8rem;
-        margin-left: 4px;
+        display: none;
     }
 
     .connections-grid {
