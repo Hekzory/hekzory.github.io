@@ -17,7 +17,8 @@
 </head>
 
 <body class="resume-page">
-    <load src="./components/icons.html" />
+    <load src="./components/icons_common.html" />
+    <load src="./components/icons_cv.html" />
 
     <!-- Top Bar (Waybar style) -->
     <load src="./components/waybar.html" home_active="" resume_active="active"
@@ -45,121 +46,129 @@
 
             <!-- Work Experience (4) -->
             <section class="resume-section tile id-4-work">
-                <h2 class="section-title">
-                    <span class="section-icon">💼</span>
-                    Work Experience
-                </h2>
+                <div class="tile-header">
+                    <svg class="tile-icon">
+                        <use href="#i-briefcase"></use>
+                    </svg>
+                    <h2 class="tile-title">Work Experience</h2>
+                </div>
 
-                <div class="experience-timeline">
-                    <!-- Middle Software Engineer -->
-                    <article class="experience-item">
-                        <div class="experience-header">
-                            <div class="experience-title-row">
-                                <h3 class="experience-role">Middle Software Engineer</h3>
-                                <span class="experience-date">September 2025 — Present</span>
+                <div class="tile-content">
+                    <div class="experience-timeline">
+                        <!-- Middle Software Engineer -->
+                        <article class="experience-item">
+                            <div class="experience-header">
+                                <div class="experience-title-row">
+                                    <h3 class="experience-role">Middle Software Engineer</h3>
+                                    <span class="experience-date">September 2025 — Present</span>
+                                </div>
+                                <div class="experience-company">
+                                    <span class="company-name">VK Ads</span>
+                                    <span class="company-team">DevExp Team</span>
+                                    <span class="company-location">Moscow, Russia</span>
+                                </div>
+                                <div class="tech-stack">
+                                    <span class="tech-tag">TeamCity</span>
+                                    <span class="tech-tag">Jenkins</span>
+                                    <span class="tech-tag">Consul Service Mesh</span>
+                                    <span class="tech-tag">Python</span>
+                                    <span class="tech-tag">Docker</span>
+                                    <span class="tech-tag">GitLab CI/CD</span>
+                                </div>
                             </div>
-                            <div class="experience-company">
-                                <span class="company-name">VK Ads</span>
-                                <span class="company-team">DevExp Team</span>
-                                <span class="company-location">Moscow, Russia</span>
-                            </div>
-                            <div class="tech-stack">
-                                <span class="tech-tag">TeamCity</span>
-                                <span class="tech-tag">Jenkins</span>
-                                <span class="tech-tag">Consul Service Mesh</span>
-                                <span class="tech-tag">Python</span>
-                                <span class="tech-tag">Docker</span>
-                                <span class="tech-tag">GitLab CI/CD</span>
-                            </div>
-                        </div>
-                        <ul class="experience-details">
-                            <li>Executed large-scale migration of VK Ads microservices infrastructure to Consul
-                                service mesh, successfully migrating 100+ microservices and improving service
-                                discovery, observability, and inter-service communication reliability</li>
-                            <li>Designed and maintained metrics collection service with TeamCity REST API
-                                integration, enabling automated data import and analytics; implemented modular
-                                architecture supporting multiple data sources</li>
-                            <li>Enhanced developer experience through modernization of release and test pipelines,
-                                implementing GitOps principles for cloud deployments</li>
-                        </ul>
-                    </article>
+                            <ul class="experience-details">
+                                <li>Executed large-scale migration of VK Ads microservices infrastructure to Consul
+                                    service mesh, successfully migrating 100+ microservices and improving service
+                                    discovery, observability, and inter-service communication reliability</li>
+                                <li>Designed and maintained metrics collection service with TeamCity REST API
+                                    integration, enabling automated data import and analytics; implemented modular
+                                    architecture supporting multiple data sources</li>
+                                <li>Enhanced developer experience through modernization of release and test pipelines,
+                                    implementing GitOps principles for cloud deployments</li>
+                            </ul>
+                        </article>
 
-                    <!-- Junior SDET -->
-                    <article class="experience-item">
-                        <div class="experience-header">
-                            <div class="experience-title-row">
-                                <h3 class="experience-role">Junior Software Development Engineer in Test</h3>
-                                <span class="experience-date">November 2024 — August 2025</span>
+                        <!-- Junior SDET -->
+                        <article class="experience-item">
+                            <div class="experience-header">
+                                <div class="experience-title-row">
+                                    <h3 class="experience-role">Junior Software Development Engineer in Test</h3>
+                                    <span class="experience-date">November 2024 — August 2025</span>
+                                </div>
+                                <div class="experience-company">
+                                    <span class="company-name">VK Ads</span>
+                                    <span class="company-location">Moscow, Russia</span>
+                                </div>
+                                <div class="tech-stack">
+                                    <span class="tech-tag">Jenkins</span>
+                                    <span class="tech-tag">GitLab CI/CD</span>
+                                    <span class="tech-tag">Docker</span>
+                                    <span class="tech-tag">Python</span>
+                                    <span class="tech-tag">pytest</span>
+                                </div>
                             </div>
-                            <div class="experience-company">
-                                <span class="company-name">VK Ads</span>
-                                <span class="company-location">Moscow, Russia</span>
-                            </div>
-                            <div class="tech-stack">
-                                <span class="tech-tag">Jenkins</span>
-                                <span class="tech-tag">GitLab CI/CD</span>
-                                <span class="tech-tag">Docker</span>
-                                <span class="tech-tag">Python</span>
-                                <span class="tech-tag">pytest</span>
-                            </div>
-                        </div>
-                        <ul class="experience-details">
-                            <li>Engineered thread-level test isolation and multi-machine parallel execution
-                                framework, achieving 50% reduction in test failure rates</li>
-                            <li>Led migration of multiple critical CI/CD pipelines from Jenkins to GitLab CI/CD,
-                                modernized legacy Jenkins jobs to declarative Pipelines</li>
-                            <li>Optimized CI/CD pipelines by implementing stage separation (build & test), enabling
-                                parallel execution and reducing resource contention</li>
-                        </ul>
-                    </article>
+                            <ul class="experience-details">
+                                <li>Engineered thread-level test isolation and multi-machine parallel execution
+                                    framework, achieving 50% reduction in test failure rates</li>
+                                <li>Led migration of multiple critical CI/CD pipelines from Jenkins to GitLab CI/CD,
+                                    modernized legacy Jenkins jobs to declarative Pipelines</li>
+                                <li>Optimized CI/CD pipelines by implementing stage separation (build & test), enabling
+                                    parallel execution and reducing resource contention</li>
+                            </ul>
+                        </article>
 
-                    <!-- Intern SDET -->
-                    <article class="experience-item">
-                        <div class="experience-header">
-                            <div class="experience-title-row">
-                                <h3 class="experience-role">Intern, Software Development Engineer in Test</h3>
-                                <span class="experience-date">May 2024 — October 2024</span>
+                        <!-- Intern SDET -->
+                        <article class="experience-item">
+                            <div class="experience-header">
+                                <div class="experience-title-row">
+                                    <h3 class="experience-role">Intern, Software Development Engineer in Test</h3>
+                                    <span class="experience-date">May 2024 — October 2024</span>
+                                </div>
+                                <div class="experience-company">
+                                    <span class="company-name">VK Ads</span>
+                                    <span class="company-location">Moscow, Russia</span>
+                                </div>
+                                <div class="tech-stack">
+                                    <span class="tech-tag">Python</span>
+                                    <span class="tech-tag">pytest</span>
+                                    <span class="tech-tag">Docker</span>
+                                    <span class="tech-tag">GitLab CI/CD</span>
+                                    <span class="tech-tag">ClickHouse</span>
+                                </div>
                             </div>
-                            <div class="experience-company">
-                                <span class="company-name">VK Ads</span>
-                                <span class="company-location">Moscow, Russia</span>
-                            </div>
-                            <div class="tech-stack">
-                                <span class="tech-tag">Python</span>
-                                <span class="tech-tag">pytest</span>
-                                <span class="tech-tag">Docker</span>
-                                <span class="tech-tag">GitLab CI/CD</span>
-                                <span class="tech-tag">ClickHouse</span>
-                            </div>
-                        </div>
-                        <ul class="experience-details">
-                            <li>Optimized test execution workflows through parallelization, achieving 30% reduction
-                                in overall test runtime</li>
-                            <li>Implemented Redash dashboard with ClickHouse backend for real-time test statistics
-                                and quality metrics</li>
-                            <li>Developed robust Python integration tests for complex microservices ecosystem
-                                involving Kafka, MySQL, ClickHouse, and Milvus</li>
-                            <li>Reduced Docker build times by 40% through migration from pip to uv for dependency
-                                resolution and multi-stage builds</li>
-                        </ul>
-                    </article>
+                            <ul class="experience-details">
+                                <li>Optimized test execution workflows through parallelization, achieving 30% reduction
+                                    in overall test runtime</li>
+                                <li>Implemented Redash dashboard with ClickHouse backend for real-time test statistics
+                                    and quality metrics</li>
+                                <li>Developed robust Python integration tests for complex microservices ecosystem
+                                    involving Kafka, MySQL, ClickHouse, and Milvus</li>
+                                <li>Reduced Docker build times by 40% through migration from pip to uv for dependency
+                                    resolution and multi-stage builds</li>
+                            </ul>
+                        </article>
+                    </div>
                 </div>
             </section>
 
             <!-- Education -->
             <section class="resume-section tile id-4-education">
-                <h2 class="section-title">
-                    <span class="section-icon">🎓</span>
-                    Education
-                </h2>
-                <article class="education-item">
-                    <div class="education-header">
-                        <h3 class="education-degree">Bachelor of Software Engineering</h3>
-                        <span class="education-date">2022 — Present</span>
-                    </div>
-                    <p class="education-school">RTU MIREA — Institution of Information Technology</p>
-                    <p class="education-location">Moscow, Russia</p>
-                </article>
+                <div class="tile-header">
+                    <svg class="tile-icon">
+                        <use href="#i-school"></use>
+                    </svg>
+                    <h2 class="tile-title">Education</h2>
+                </div>
+                <div class="tile-content">
+                    <article class="education-item">
+                        <div class="education-header">
+                            <h3 class="education-degree">Bachelor of Software Engineering</h3>
+                            <span class="education-date">2022 — Present</span>
+                        </div>
+                        <p class="education-school">RTU MIREA — Institution of Information Technology</p>
+                        <p class="education-location">Moscow, Russia</p>
+                    </article>
+                </div>
             </section>
         </div>
 
@@ -167,63 +176,67 @@
         <div class="resume-major-right">
             <!-- Technical Skills (3) -->
             <section class="resume-section tile id-3-skills">
-                <h2 class="section-title">
-                    <span class="section-icon">💻</span>
-                    Technical Skills
-                </h2>
-                <div class="skills-grid">
-                    <div class="skill-category">
-                        <h3 class="skill-category-title">Languages</h3>
-                        <div class="skill-tags">
-                            <span class="skill-tag">Python</span>
-                            <span class="skill-tag">Go</span>
-                            <span class="skill-tag">SQL</span>
+                <div class="tile-header">
+                    <svg class="tile-icon">
+                        <use href="#i-code"></use>
+                    </svg>
+                    <h2 class="tile-title">Technical Skills</h2>
+                </div>
+                <div class="tile-content">
+                    <div class="skills-grid">
+                        <div class="skill-category">
+                            <h3 class="skill-category-title">Languages</h3>
+                            <div class="skill-tags">
+                                <span class="skill-tag">Python</span>
+                                <span class="skill-tag">Go</span>
+                                <span class="skill-tag">SQL</span>
+                            </div>
                         </div>
-                    </div>
-                    <div class="skill-category">
-                        <h3 class="skill-category-title">DevOps & CI/CD</h3>
-                        <div class="skill-tags">
-                            <span class="skill-tag">Docker</span>
-                            <span class="skill-tag">Podman</span>
-                            <span class="skill-tag">Jenkins</span>
-                            <span class="skill-tag">GitLab CI/CD</span>
-                            <span class="skill-tag">TeamCity</span>
-                            <span class="skill-tag">Kubernetes</span>
+                        <div class="skill-category">
+                            <h3 class="skill-category-title">DevOps & CI/CD</h3>
+                            <div class="skill-tags">
+                                <span class="skill-tag">Docker</span>
+                                <span class="skill-tag">Podman</span>
+                                <span class="skill-tag">Jenkins</span>
+                                <span class="skill-tag">GitLab CI/CD</span>
+                                <span class="skill-tag">TeamCity</span>
+                                <span class="skill-tag">Kubernetes</span>
+                            </div>
                         </div>
-                    </div>
-                    <div class="skill-category">
-                        <h3 class="skill-category-title">Infrastructure</h3>
-                        <div class="skill-tags">
-                            <span class="skill-tag">Consul Service Mesh</span>
-                            <span class="skill-tag">Nginx</span>
-                            <span class="skill-tag">Kafka</span>
-                            <span class="skill-tag">Linux</span>
+                        <div class="skill-category">
+                            <h3 class="skill-category-title">Infrastructure</h3>
+                            <div class="skill-tags">
+                                <span class="skill-tag">Consul Service Mesh</span>
+                                <span class="skill-tag">Nginx</span>
+                                <span class="skill-tag">Kafka</span>
+                                <span class="skill-tag">Linux</span>
+                            </div>
                         </div>
-                    </div>
-                    <div class="skill-category">
-                        <h3 class="skill-category-title">Testing</h3>
-                        <div class="skill-tags">
-                            <span class="skill-tag">pytest</span>
-                            <span class="skill-tag">Unit Testing</span>
-                            <span class="skill-tag">Integration Testing</span>
-                            <span class="skill-tag">E2E Testing</span>
+                        <div class="skill-category">
+                            <h3 class="skill-category-title">Testing</h3>
+                            <div class="skill-tags">
+                                <span class="skill-tag">pytest</span>
+                                <span class="skill-tag">Unit Testing</span>
+                                <span class="skill-tag">Integration Testing</span>
+                                <span class="skill-tag">E2E Testing</span>
+                            </div>
                         </div>
-                    </div>
-                    <div class="skill-category">
-                        <h3 class="skill-category-title">Databases</h3>
-                        <div class="skill-tags">
-                            <span class="skill-tag">MySQL</span>
-                            <span class="skill-tag">PostgreSQL</span>
-                            <span class="skill-tag">ClickHouse</span>
-                            <span class="skill-tag">Redis</span>
+                        <div class="skill-category">
+                            <h3 class="skill-category-title">Databases</h3>
+                            <div class="skill-tags">
+                                <span class="skill-tag">MySQL</span>
+                                <span class="skill-tag">PostgreSQL</span>
+                                <span class="skill-tag">ClickHouse</span>
+                                <span class="skill-tag">Redis</span>
+                            </div>
                         </div>
-                    </div>
-                    <div class="skill-category">
-                        <h3 class="skill-category-title">Monitoring</h3>
-                        <div class="skill-tags">
-                            <span class="skill-tag">Grafana</span>
-                            <span class="skill-tag">Prometheus</span>
-                            <span class="skill-tag">Redash</span>
+                        <div class="skill-category">
+                            <h3 class="skill-category-title">Monitoring</h3>
+                            <div class="skill-tags">
+                                <span class="skill-tag">Grafana</span>
+                                <span class="skill-tag">Prometheus</span>
+                                <span class="skill-tag">Redash</span>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -231,38 +244,46 @@
 
             <!-- Languages (1) - Moved here -->
             <section class="resume-section tile id-1-languages">
-                <h2 class="section-title">
-                    <span class="section-icon">🌍</span>
-                    Languages
-                </h2>
-                <div class="language-list">
-                    <div class="language-item">
-                        <span class="language-name">Russian</span>
-                        <span class="language-level">C2 Native</span>
-                    </div>
-                    <div class="language-item">
-                        <span class="language-name">English</span>
-                        <span class="language-level">C1 Advanced</span>
-                        <span class="language-cert">Cambridge CAE, 2024</span>
+                <div class="tile-header">
+                    <svg class="tile-icon">
+                        <use href="#i-conn"></use>
+                    </svg>
+                    <h2 class="tile-title">Languages</h2>
+                </div>
+                <div class="tile-content">
+                    <div class="language-list">
+                        <div class="language-item">
+                            <span class="language-name">Russian</span>
+                            <span class="language-level">C2 Native</span>
+                        </div>
+                        <div class="language-item">
+                            <span class="language-name">English</span>
+                            <span class="language-level">C1 Advanced</span>
+                            <span class="language-cert">Cambridge CAE, 2024</span>
+                        </div>
                     </div>
                 </div>
             </section>
 
             <!-- Soft Skills (5) -->
             <section class="resume-section tile id-5-soft-skills">
-                <h2 class="section-title">
-                    <span class="section-icon">🤝</span>
-                    Soft Skills
-                </h2>
-                <div class="soft-skills-list">
-                    <span class="soft-skill-tag">Effective Communication</span>
-                    <span class="soft-skill-tag">Deep Focus</span>
-                    <span class="soft-skill-tag">Problem-Solving</span>
-                    <span class="soft-skill-tag">Adaptability</span>
-                    <span class="soft-skill-tag">Time Management</span>
-                    <span class="soft-skill-tag">Attention to Detail</span>
+                <div class="tile-header">
+                    <svg class="tile-icon">
+                        <use href="#i-users"></use>
+                    </svg>
+                    <h2 class="tile-title">Soft Skills</h2>
                 </div>
-                <p class="soft-skill-note">Coordinated with 50+ developers during infrastructure changes</p>
+                <div class="tile-content">
+                    <div class="soft-skills-list">
+                        <span class="soft-skill-tag">Effective Communication</span>
+                        <span class="soft-skill-tag">Deep Focus</span>
+                        <span class="soft-skill-tag">Problem-Solving</span>
+                        <span class="soft-skill-tag">Adaptability</span>
+                        <span class="soft-skill-tag">Time Management</span>
+                        <span class="soft-skill-tag">Attention to Detail</span>
+                    </div>
+                    <p class="soft-skill-note">Coordinated with 50+ developers during infrastructure changes</p>
+                </div>
             </section>
         </div>
     </main>
