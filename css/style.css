@@ -785,10 +785,6 @@ mark {
         padding-top: var(--gap);
     }
 
-    .resume-container {
-        padding-top: var(--gap);
-    }
-
     body {
         overflow: auto;
     }
@@ -1347,6 +1343,7 @@ mark {
         display: flex;
         flex-direction: column;
         max-width: 1400px;
+        padding-top: var(--gap);
     }
 
     .resume-major-left,
@@ -1366,10 +1363,6 @@ mark {
 }
 
 @media (max-width: 768px) {
-    .resume-header {
-        padding: 24px 20px;
-    }
-
     .resume-name {
         font-size: 1.8rem;
     }
@@ -1381,10 +1374,6 @@ mark {
 
     .contact-item {
         justify-content: center;
-    }
-
-    .resume-section {
-        padding: 20px 16px;
     }
 
     .experience-title-row {
