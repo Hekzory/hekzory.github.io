@@ -666,13 +666,171 @@ mark {
 }
 
 .cursor {
+    color: var(--success);
+    font-weight: bold;
     animation: blink 1s step-end infinite;
-    color: var(--fg-dim);
 }
 
 @keyframes blink {
     50% {
         opacity: 0;
+    }
+}
+
+/* Oh-My-Posh style prompt blocks */
+.posh-prompt-block {
+    margin-bottom: 8px;
+    padding-top: 6px;
+}
+
+.posh-line1 {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    align-items: center;
+    margin-bottom: 2px;
+}
+
+.posh-line2 {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    margin-top: 2px;
+}
+
+.posh-line2 .cmd {
+    color: var(--success);
+    font-weight: 500;
+}
+
+.git-branch {
+    font-style: italic;
+}
+
+/* Terminal syntax highlighting */
+.output {
+    color: var(--fg-dark);
+    padding-left: 16px;
+    margin-bottom: 6px;
+    line-height: 1.5;
+}
+
+/* Highlight patterns in output */
+.terminal-output .output {
+    /* File paths */
+    word-break: break-word;
+}
+
+/* Command-specific output coloring via JS classes */
+.output-path {
+    color: var(--secondary);
+}
+
+.output-number {
+    color: var(--warning);
+}
+
+.output-keyword {
+    color: var(--accent);
+}
+
+.output-success {
+    color: var(--success);
+}
+
+.output-error {
+    color: var(--error);
+}
+
+.output-dim {
+    color: var(--fg-dim);
+}
+
+/* Text Color Utilities */
+.text-success {
+    color: var(--success);
+}
+
+.text-warning {
+    color: var(--warning);
+}
+
+.text-error {
+    color: var(--error);
+}
+
+.text-accent {
+    color: var(--accent);
+}
+
+.text-secondary {
+    color: var(--secondary);
+}
+
+.text-primary {
+    color: var(--primary);
+}
+
+.text-dim {
+    color: var(--fg-dim);
+}
+
+.text-fg {
+    color: var(--fg);
+}
+
+.font-bold {
+    font-weight: bold;
+}
+
+/* Terminal selection */
+.terminal-output ::selection {
+    background: var(--primary);
+    color: var(--bg);
+}
+
+/* Terminal touch hint for mobile */
+/* Terminal touch hint for mobile */
+@media (max-width: 768px) {
+
+    .terminal-tile,
+    .terminal-toggle-tile {
+        display: none !important;
+    }
+
+    .terminal-header {
+        flex-shrink: 0;
+    }
+
+    .terminal-tile::after {
+        content: 'swipe down to close';
+        position: absolute;
+        top: 4px;
+        left: 50%;
+        transform: translateX(-50%);
+        font-size: 0.7rem;
+        color: var(--fg-dim);
+        opacity: 0.5;
+        pointer-events: none;
+    }
+
+    .terminal-output {
+        font-size: 0.85rem;
+        -webkit-overflow-scrolling: touch;
+        flex: 1;
+        height: auto !important;
+        min-height: 0;
+        overflow-y: auto;
+    }
+
+    .posh-line1 {
+        font-size: 0.8rem;
+        gap: 4px;
+    }
+
+    .posh-prompt-block {
+        margin-bottom: 6px;
+        padding-top: 4px;
     }
 }
 
