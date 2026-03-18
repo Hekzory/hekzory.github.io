@@ -40,7 +40,7 @@ export default defineConfig({
     },
     build: {
         modulePreload: { polyfill: false },
-        rollupOptions: {
+        rolldownOptions: {
             input: {
                 main: resolve(__dirname, "index.html"),
                 resume: resolve(__dirname, "resume.html"),
@@ -49,7 +49,6 @@ export default defineConfig({
         },
         target: "baseline-widely-available",
         minify: "terser",
-        cssMinify: "esbuild",
         terserOptions: {
             compress: {
                 drop_console: true,
