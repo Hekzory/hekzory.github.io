@@ -4,6 +4,23 @@
     const $ = document.querySelector.bind(document);
     const isMobile = window.innerWidth <= 768;
 
+    // --- System identity (single source of truth for host/OS/kernel) ---
+    const SYS = {
+        os: 'CachyOS',
+        host: 'cachyos',
+        kernel: '6.19.11-1-cachyos',
+        user: 'oleg',
+    };
+
+    // Populate System Info tile from SYS
+    (() => {
+        const map = { 'sys-os': SYS.os, 'sys-host': SYS.host, 'sys-kernel': SYS.kernel };
+        for (const [id, val] of Object.entries(map)) {
+            const el = document.getElementById(id);
+            if (el) el.textContent = val;
+        }
+    })();
+
     // --- Clock Functionality ---
     function updateClock() {
         const now = new Date();
@@ -21,8 +38,12 @@
         }
     }
 
+    // Sync clock ticks to minute boundaries — display is HH:MM, so per-second updates are wasted work
     updateClock();
-    setInterval(updateClock, 1000);
+    setTimeout(() => {
+        updateClock();
+        setInterval(updateClock, 60000);
+    }, 60000 - (Date.now() % 60000));
 
     // --- Uptime Functionality ---
     function updateUptime() {
@@ -250,7 +271,7 @@
             name: 'System Check',
             weight: 8,
             commands: (ctx) => [
-                { cmd: 'uname -a', output: 'Linux cachyos 6.12.8-2-cachyos #1 SMP PREEMPT_DYNAMIC x86_64 GNU/Linux' },
+                { cmd: 'uname -a', output: `Linux ${SYS.host} ${SYS.kernel} #1 SMP PREEMPT_DYNAMIC x86_64 GNU/Linux` },
                 {
                     cmd: 'uptime', output: () => {
                         const h = Math.floor(Math.random() * 72) + 1;
@@ -316,8 +337,8 @@
             name: 'Identity Check',
             weight: 6,
             commands: (ctx) => [
-                { cmd: 'whoami', output: 'oleg' },
-                { cmd: 'hostname', output: 'cachyos' },
+                { cmd: 'whoami', output: SYS.user },
+                { cmd: 'hostname', output: SYS.host },
                 { cmd: 'pwd', output: () => ctx.cwdString() },
                 {
                     cmd: 'date', output: () => new Date().toLocaleString('en-US', {
@@ -439,9 +460,9 @@
             weight: 12,
             commands: (ctx) => [
                 {
-                    cmd: 'fastfetch --logo-type small', output: `  ╭─╮   oleg@cachyos
- ╭╯ ╰╮  OS: CachyOS
- ╰─╮ │  Kernel: 6.19.8-2-cachyos
+                    cmd: 'fastfetch --logo-type small', output: `  ╭─╮   ${SYS.user}@${SYS.host}
+ ╭╯ ╰╮  OS: ${SYS.os}
+ ╰─╮ │  Kernel: ${SYS.kernel}
    ╰─╯  Uptime: 4 hours, 32 mins` },
                 { cmd: 'cd projects', effect: () => ctx.cd(['~', 'projects']) },
                 { cmd: 'ls', output: 'docker-labs  dotfiles  hekzory.github.io  py-scripts' }
@@ -887,7 +908,7 @@
             }
 
             // Line 1: user@host [time] path | git
-            let line1 = `<span class="posh-user text-warning font-bold">oleg@cachyos</span> `;
+            let line1 = `<span class="posh-user text-warning font-bold">${SYS.user}@${SYS.host}</span> `;
             line1 += `<span class="posh-time text-primary font-bold">[${time}]</span>`;
             line1 += `<span class="posh-path text-secondary font-bold"> ${pathStr} </span>`;
             if (gitPart) {

@@ -62,6 +62,7 @@ export default function htmlMetaPlugin(options = {}) {
             insertMetaTag(document, "og:url", meta.url, true);
             insertMetaTag(document, "og:image", meta.image || metaData.image, true);
             insertMetaTag(document, "og:type", meta.type || metaData.type, true);
+            insertMetaTag(document, "og:locale", meta.locale || metaData.locale || "en_US", true);
             insertMetaTag(document, "theme-color", meta.themeColor || metaData.themeColor);
 
             // Color scheme hint (helps UA pick native UI colors)

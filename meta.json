@@ -1,9 +1,9 @@
 {
     "title": "Oleg Tsvetkov | Software Engineer & Developer | Hekzo",
-    "description": "Welcome to my personal page. I'm a software engineer with a passion for developing innovative and practical solutions. Find contact info and more right here.",
+    "description": "Personal website of Oleg Tsvetkov, Software Engineer at VK. DevOps, CI/CD, Python, Go, Docker, Consul, infrastructure.",
     "url": "https://tsv.one/",
     "image": "https://tsv.one/preview.png",
-    "themeColor": "#242329",
+    "themeColor": "#1a1b26",
     "type": "website",
     "colorScheme": "dark",
     "pages": {

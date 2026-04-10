@@ -12,7 +12,7 @@
     --bg-dark: #16161e;
     --fg: #c0caf5;
     --fg-dark: #a9b1d6;
-    --fg-dim: #9498b8;
+    --fg-dim: #a9b1d6;
 
     --primary: #7aa2f7;
     --secondary: #bb9af7;
@@ -50,6 +50,8 @@
 
 html {
     scrollbar-gutter: stable;
+    scrollbar-width: thin;
+    scrollbar-color: var(--fg-dim) var(--bg-dark);
     width: 100vw;
     overflow-x: hidden;
 }
@@ -1079,11 +1081,11 @@ mark {
     }
 }
 
-/* Focus states for keyboard accessibility */
-.connection-item:focus-visible,
-.terminal-toggle-tile:focus-visible {
+/* Focus states for keyboard accessibility — global, so every interactive element gets a consistent ring */
+:focus-visible {
     outline: 2px solid var(--primary);
     outline-offset: 2px;
+    border-radius: 2px;
 }
 
 /* ========================================
@@ -1144,6 +1146,32 @@ mark {
 .resume-header {
     padding: 0;
     /* Background handled by .tile and .profile-banner */
+}
+
+/* Compact contact row inside the resume profile header.
+   Reuses .connection-item brand hover styles but overrides to a tight horizontal layout. */
+.profile-contact {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 14px;
+}
+
+.profile-contact .connection-item {
+    flex: 0 0 auto;
+    flex-direction: row;
+    padding: 8px 14px;
+    gap: 8px;
+}
+
+.profile-contact .conn-icon {
+    width: 18px;
+    height: 18px;
+}
+
+.profile-contact .conn-label {
+    font-size: 0.8rem;
 }
 
 
