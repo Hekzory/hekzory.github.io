@@ -3,6 +3,7 @@ import { resolve } from "path";
 import { compression, defineAlgorithm } from "vite-plugin-compression2";
 import { createHtmlPlugin } from "vite-plugin-html";
 import htmlMetaPlugin from "./vite-plugin-html-meta";
+import sitemapPlugin from "./vite-plugin-sitemap";
 import injectHtml from "vite-plugin-html-inject";
 import zlib from "node:zlib";
 
@@ -10,6 +11,7 @@ export default defineConfig({
     appType: "mpa",
     plugins: [
         htmlMetaPlugin(),
+        sitemapPlugin(),
         injectHtml(),
         createHtmlPlugin({
             minify: true,

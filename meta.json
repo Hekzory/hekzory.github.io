@@ -11,6 +11,11 @@
             "title": "Oleg Tsvetkov | Resume | Software Engineer",
             "description": "Resume of Oleg Tsvetkov - Middle Software Engineer at VK with expertise in DevOps, CI/CD, Python, and infrastructure. View work experience, skills, and education.",
             "url": "https://tsv.one/resume"
+        },
+        "404": {
+            "title": "404 — Page Not Found | Oleg Tsvetkov",
+            "description": "This page doesn't exist. Check the URL or head back to the home page.",
+            "url": "https://tsv.one/404"
         }
     }
 }

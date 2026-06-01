@@ -22,9 +22,7 @@
     --error: #f7768e;
 
     --border: #414868;
-    --border-highlight: #7aa2f7;
 
-    --surface: rgba(26, 27, 38, 0.8);
     --surface-highlight: rgba(36, 40, 59, 0.8);
 
     --glass: rgba(26, 27, 38, 0.7);
@@ -195,6 +193,7 @@ body {
 .tile {
     background: var(--glass);
     backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
     border: 1px solid var(--glass-border);
     border-radius: var(--radius);
     display: flex;
@@ -300,12 +299,10 @@ body {
     padding: 4px;
     width: 200px;
     height: 200px;
-    border-radius: 50%;
     overflow: hidden;
     border: 3px solid var(--primary);
     box-shadow: 0 0 20px rgba(122, 162, 247, 0.3), 0 0 30px rgba(122, 162, 247, 0.1);
     animation: profile-glow 4s ease-in-out infinite;
-    position: relative;
     z-index: 2;
     background: var(--bg);
 }
@@ -593,6 +590,9 @@ mark {
     color: var(--fg-dim);
     cursor: pointer;
     padding: 4px;
+    /* 44x44 minimum hit area (WCAG 2.5.5); the glyph stays small, centered by flex. */
+    min-width: 44px;
+    min-height: 44px;
     border-radius: 4px;
     display: flex;
     align-items: center;
@@ -723,31 +723,6 @@ mark {
     word-break: break-word;
 }
 
-/* Command-specific output coloring via JS classes */
-.output-path {
-    color: var(--secondary);
-}
-
-.output-number {
-    color: var(--warning);
-}
-
-.output-keyword {
-    color: var(--accent);
-}
-
-.output-success {
-    color: var(--success);
-}
-
-.output-error {
-    color: var(--error);
-}
-
-.output-dim {
-    color: var(--fg-dim);
-}
-
 /* Text Color Utilities */
 .text-success {
     color: var(--success);
@@ -791,8 +766,7 @@ mark {
     color: var(--bg);
 }
 
-/* Terminal touch hint for mobile */
-/* Terminal touch hint for mobile */
+/* Mobile terminal styling (the terminal is removed from the DOM on phones) */
 @media (max-width: 768px) {
 
     .terminal-tile,
@@ -802,18 +776,6 @@ mark {
 
     .terminal-header {
         flex-shrink: 0;
-    }
-
-    .terminal-tile::after {
-        content: 'swipe down to close';
-        position: absolute;
-        top: 4px;
-        left: 50%;
-        transform: translateX(-50%);
-        font-size: 0.7rem;
-        color: var(--fg-dim);
-        opacity: 0.5;
-        pointer-events: none;
     }
 
     .terminal-output {
@@ -842,6 +804,7 @@ mark {
     inset: 0;
     background: rgba(0, 0, 0, 0.6);
     backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
     border: none;
     width: 100vw;
     height: 100vh;
@@ -955,6 +918,11 @@ mark {
         overflow: visible;
         /* Let content expand the tile */
         flex-shrink: 0;
+        /* Phones/tablets scroll these layouts — drop the per-tile blur (costly to
+           recomposite each frame) and use a near-opaque surface instead. */
+        backdrop-filter: none;
+        -webkit-backdrop-filter: none;
+        background: rgba(26, 27, 38, 0.92);
     }
 
     .tile-content {
@@ -1088,39 +1056,34 @@ mark {
     border-radius: 2px;
 }
 
+/* --- Cross-document View Transitions (progressive enhancement) ---
+   Same-origin MPA navigations (home <-> resume <-> 404) crossfade instead of
+   hard-cutting. The shared waybar persists in place and the avatar disc morphs
+   across the navigation. Unsupported browsers just navigate normally — zero JS. */
+@view-transition {
+    navigation: auto;
+}
+
+.waybar {
+    view-transition-name: waybar;
+}
+
+.profile-image-container {
+    view-transition-name: avatar;
+}
+
+@media (prefers-reduced-motion: reduce) {
+
+    ::view-transition-group(*),
+    ::view-transition-old(*),
+    ::view-transition-new(*) {
+        animation: none !important;
+    }
+}
+
 /* ========================================
    RESUME PAGE STYLES
    ======================================== */
-
-/* Resume Button in Profile Tile */
-.resume-btn {
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    margin-top: 16px;
-    padding: 10px 20px;
-    background: rgba(122, 162, 247, 0.15);
-    border: 1px solid var(--primary);
-    border-radius: 25px;
-    color: var(--primary);
-    text-decoration: none;
-    font-size: 0.85rem;
-    font-weight: 600;
-    transition: all 0.3s var(--ease);
-    cursor: pointer;
-}
-
-.resume-btn:hover {
-    background: var(--primary);
-    color: var(--bg);
-    box-shadow: 0 0 20px rgba(122, 162, 247, 0.4);
-    transform: translateY(-2px);
-}
-
-.resume-btn .icon {
-    width: 1em;
-    height: 1em;
-}
 
 /* Resume Page Body - Inherits standard scrolling from html/body now */
 /* Resume Page Body - Inherits standard scrolling from html/body now */
@@ -1536,38 +1499,11 @@ mark {
     .resume-major-right {
         grid-column: 1 / -1;
     }
-
-    .resume-sidebar {
-        display: grid;
-        grid-template-columns: repeat(2, 1fr);
-        gap: var(--gap);
-    }
-
-    .resume-sidebar .resume-section {
-        margin-bottom: 0;
-    }
 }
 
 @media (max-width: 768px) {
-    .resume-name {
-        font-size: 1.8rem;
-    }
-
-    .resume-contact {
-        flex-direction: column;
-        gap: 12px;
-    }
-
-    .contact-item {
-        justify-content: center;
-    }
-
     .experience-title-row {
         flex-direction: column;
-    }
-
-    .resume-sidebar {
-        grid-template-columns: 1fr;
     }
 
     .experience-timeline {

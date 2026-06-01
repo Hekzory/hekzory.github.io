@@ -71,8 +71,17 @@
         uptimeEl.textContent = `${years}y ${months}m ${days}d`;
     }
 
+    // Age is shown as y/m/d, so it only changes at midnight. Sync one tick to the
+    // next local midnight, then refresh once per day — no per-minute wakeups.
     updateUptime();
-    setInterval(updateUptime, 60000);
+    (function scheduleUptime() {
+        const now = new Date();
+        const nextMidnight = new Date(now.getFullYear(), now.getMonth(), now.getDate() + 1);
+        setTimeout(() => {
+            updateUptime();
+            setInterval(updateUptime, 86400000);
+        }, nextMidnight - now);
+    })();
 
     // --- Clipboard Dialog ---
     class ClipboardDialog {

@@ -529,7 +529,7 @@ const EASTER_EGGS = {
             const diffStr = mskDiff > 0 ? `+${mskDiff}h` : `${mskDiff}h`;
             return [
                 {
-                    cmd: 'timedatectl', output: `               Local time: ${new Date().toLocaleString('en-US', { weekday: 'short', year: 'numeric', month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: false })}\n           Universal time: ${new Date().toISOString().replace('T', ' ').slice(0, 19)} UTC\n                 RTC time: ${new Date().toISOString().replace('T', ' ').slice(0, 19)}\n                Time zone: ${tz} (${tz}, ${diffStr} from MSK)\nSystem clock synchronized: yes\n              NTP service: active\n          RTC in local TZ: no`
+                    cmd: 'timedatectl', output: `               Local time: ${new Date().toLocaleString('en-US', { weekday: 'short', year: 'numeric', month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: false })}\n           Universal time: ${new Date().toISOString().replace('T', ' ').slice(0, 19)} UTC\n                 RTC time: ${new Date().toISOString().replace('T', ' ').slice(0, 19)}\n                Time zone: ${tz} (${diffStr} from MSK)\nSystem clock synchronized: yes\n              NTP service: active\n          RTC in local TZ: no`
                 },
                 { cmd: 'echo $TZ', output: tz },
                 {
