@@ -5,11 +5,11 @@ name: Node.js CI
 
 on:
   push:
-    branches: 
+    branches:
       - 'master'
       - 'main'
   pull_request:
-    branches: 
+    branches:
       - 'master'
       - 'main'
 
@@ -18,7 +18,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        node-version: [22.x, 24.x]
+        node-version: [24.x, 26.x]
 
     steps:
     - uses: actions/checkout@v6
@@ -26,8 +26,8 @@ jobs:
       uses: actions/setup-node@v6
       with:
         node-version: ${{ matrix.node-version }}
-    - uses: pnpm/action-setup@v5
+    - uses: pnpm/action-setup@v6
       with:
-        version: 10
+        version: 11
     - run: pnpm install
     - run: pnpm run build

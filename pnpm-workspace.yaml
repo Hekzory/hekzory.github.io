@@ -1,0 +1,7 @@
+# esbuild is only an OPTIONAL peer of Vite 8 (Vite 8 bundles with Rolldown/Oxc,
+# not esbuild); it is pulled in by peer auto-install but the build never invokes
+# it. pnpm 11 blocks dependency build scripts by default and errors on any that
+# aren't explicitly decided, so we explicitly decline esbuild's postinstall.
+# (false = do not run its build scripts.)
+allowBuilds:
+  esbuild: false
