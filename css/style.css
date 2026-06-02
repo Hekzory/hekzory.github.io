@@ -200,7 +200,7 @@ body {
     flex-direction: column;
     overflow: hidden;
     box-shadow: var(--shadow);
-    transition: border-color var(--duration) var(--ease), transform 0.2s var(--ease);
+    transition: border-color var(--duration) var(--ease), transform 0.2s var(--ease), opacity 0.4s var(--ease), filter 0.4s var(--ease);
     position: relative;
 }
 
@@ -301,21 +301,31 @@ body {
     height: 200px;
     overflow: hidden;
     border: 3px solid var(--primary);
-    box-shadow: 0 0 20px rgba(122, 162, 247, 0.3), 0 0 30px rgba(122, 162, 247, 0.1);
+    box-shadow:
+        0 0 calc(15px + var(--glow) * 5px) rgb(122 162 247 / calc(0.3 + var(--glow) * 0.2)),
+        0 0 calc(40px + var(--glow) * 10px) rgb(122 162 247 / calc(0.1 + var(--glow) * 0.1));
     animation: profile-glow 4s ease-in-out infinite;
     z-index: 2;
     background: var(--bg);
+}
+
+/* Registered so the glow animates as one interpolated number instead of
+   swapping whole box-shadow strings each keyframe — single source of truth. */
+@property --glow {
+    syntax: "<number>";
+    inherits: false;
+    initial-value: 0;
 }
 
 @keyframes profile-glow {
 
     0%,
     100% {
-        box-shadow: 0 0 15px rgba(122, 162, 247, 0.3), 0 0 40px rgba(122, 162, 247, 0.1);
+        --glow: 0;
     }
 
     50% {
-        box-shadow: 0 0 20px rgba(122, 162, 247, 0.5), 0 0 50px rgba(122, 162, 247, 0.2);
+        --glow: 1;
     }
 }
 
@@ -560,6 +570,14 @@ mark {
 
 .terminal-tile.terminal-open {
     transform: translateY(0);
+}
+
+/* When the terminal drawer is open, recede the other tiles to focus it.
+   Siblings only — never the fixed drawer's ancestor, since filter/opacity on
+   an ancestor would strip the drawer's viewport-fixed positioning. */
+body:has(.terminal-tile.terminal-open) .grid-container>.tile:not(.terminal-tile):not(.terminal-toggle-tile) {
+    opacity: 0.5;
+    filter: blur(2px);
 }
 
 .terminal-tile::before {
@@ -811,27 +829,31 @@ mark {
     max-width: none;
     max-height: none;
     margin: 0;
-    display: flex;
     align-items: center;
     justify-content: center;
     opacity: 0;
-    pointer-events: none;
-    transition: opacity 0.2s;
+    /* Native entry/exit animation: display + overlay use allow-discrete so the
+       dialog stays painted through its fade-out when close() drops [open].
+       display lives on [open] ONLY — the closed dialog must fall back to the UA
+       display:none, or the invisible full-screen overlay eats every click. */
+    transition: opacity 0.2s, display 0.2s allow-discrete, overlay 0.2s allow-discrete;
     z-index: 1001;
+}
+
+.clipboard[open] {
+    display: flex;
+    opacity: 1;
+}
+
+/* Starting state for the entry transition (first paint in the top layer). */
+@starting-style {
+    .clipboard[open] {
+        opacity: 0;
+    }
 }
 
 .clipboard::backdrop {
     background: transparent;
-}
-
-.clipboard[open] {
-    opacity: 1;
-    pointer-events: auto;
-}
-
-.clipboard.closing {
-    opacity: 0;
-    pointer-events: none;
 }
 
 .clipboard .wrapper {
@@ -849,8 +871,10 @@ mark {
     transform: scale(1);
 }
 
-.clipboard.closing .wrapper {
-    transform: scale(0.95);
+@starting-style {
+    .clipboard[open] .wrapper {
+        transform: scale(0.95);
+    }
 }
 
 .dialog-header {
@@ -1030,6 +1054,37 @@ mark {
     }
 }
 
+/* Windows High Contrast / forced-colors: the transparent text-fill on the
+   shimmer otherwise wins over the forced system color and renders the name
+   invisible. Reset it to a system color and drop decorative glows. */
+@media (forced-colors: active) {
+
+    .name-shimmer {
+        background: none;
+        -webkit-text-fill-color: revert;
+        color: CanvasText;
+        animation: none;
+    }
+
+    .conn-icon,
+    .connection-item:hover .conn-icon {
+        filter: none;
+    }
+}
+
+/* Wider-gamut accents on P3-capable displays. sRGB screens never match this
+   query and keep the hex tokens, so there is zero change for them. */
+@media (color-gamut: p3) {
+    :root {
+        --primary: color(display-p3 0.478 0.635 0.969);
+        --secondary: color(display-p3 0.733 0.604 0.969);
+        --accent: color(display-p3 0.49 0.812 1);
+        --success: color(display-p3 0.62 0.808 0.416);
+        --warning: color(display-p3 0.878 0.686 0.408);
+        --error: color(display-p3 0.969 0.463 0.557);
+    }
+}
+
 /* Clock pulse animation */
 .clock-tick {
     animation: clock-pulse 1s ease-out;
@@ -1178,6 +1233,10 @@ mark {
     padding: 0;
     /* Handled by .tile-content */
     margin-bottom: var(--gap);
+    /* Skip rendering off-screen sections; the placeholder size keeps the
+       scrollbar stable and is remembered after first render (the `auto`). */
+    content-visibility: auto;
+    contain-intrinsic-size: auto 400px;
 }
 
 .resume-section .tile-content {

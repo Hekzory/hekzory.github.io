@@ -89,10 +89,8 @@
             this.$dialog = $('#clipboard-dialog');
             if (!this.$dialog) return;
 
-            this.$wrapper = this.$dialog.querySelector('.wrapper');
             this.$content = document.getElementById('clipboard-content');
             this.$closeBtn = this.$dialog.querySelector('.close-btn');
-            this.closeTimeout = null;
             this.setupEvents();
         }
 
@@ -101,9 +99,7 @@
             this.$dialog.addEventListener('click', (e) => {
                 if (e.target === this.$dialog) this.close();
             });
-            this.$dialog.addEventListener('keydown', (e) => {
-                if (e.key === 'Escape') this.close();
-            });
+            // Escape is handled natively by <dialog> showModal().
             document.addEventListener('click', (e) => {
                 const btn = e.target.closest('.connection-item.contact-btn');
                 if (!btn) return;
@@ -143,24 +139,16 @@
         }
 
         open(text) {
-            if (this.closeTimeout) {
-                clearTimeout(this.closeTimeout);
-                this.closeTimeout = null;
-            }
             this.$content.textContent = text;
             if (!this.$dialog.open) {
                 this.$dialog.showModal();
             }
         }
 
+        // Native close() drops [open]; CSS (@starting-style + transition-behavior:
+        // allow-discrete) animates the fade-out, so no JS timer is needed.
         close() {
-            this.$dialog.classList.add('closing');
-            if (this.closeTimeout) clearTimeout(this.closeTimeout);
-            this.closeTimeout = setTimeout(() => {
-                this.$dialog.close();
-                this.$dialog.classList.remove('closing');
-                this.closeTimeout = null;
-            }, 300);
+            this.$dialog.close();
         }
     }
 
