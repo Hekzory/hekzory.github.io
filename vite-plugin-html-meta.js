@@ -61,6 +61,17 @@ export default function htmlMetaPlugin(options = {}) {
             insertMetaTag(document, "og:description", meta.description, true);
             insertMetaTag(document, "og:url", meta.url, true);
             insertMetaTag(document, "og:image", meta.image || metaData.image, true);
+            // Optional og:image refinements — emitted only when defined so a card
+            // never ships content="undefined". Dimensions/type let scrapers render
+            // the card without first fetching the image.
+            const imageType = meta.imageType || metaData.imageType;
+            const imageWidth = meta.imageWidth || metaData.imageWidth;
+            const imageHeight = meta.imageHeight || metaData.imageHeight;
+            const imageAlt = meta.imageAlt || metaData.imageAlt;
+            if (imageType) insertMetaTag(document, "og:image:type", imageType, true);
+            if (imageWidth) insertMetaTag(document, "og:image:width", imageWidth, true);
+            if (imageHeight) insertMetaTag(document, "og:image:height", imageHeight, true);
+            if (imageAlt) insertMetaTag(document, "og:image:alt", imageAlt, true);
             insertMetaTag(document, "og:type", meta.type || metaData.type, true);
             insertMetaTag(document, "og:locale", meta.locale || metaData.locale || "en_US", true);
             insertMetaTag(document, "theme-color", meta.themeColor || metaData.themeColor);
@@ -73,6 +84,7 @@ export default function htmlMetaPlugin(options = {}) {
             insertMetaTag(document, "twitter:title", meta.title);
             insertMetaTag(document, "twitter:description", meta.description);
             insertMetaTag(document, "twitter:image", meta.image || metaData.image);
+            if (imageAlt) insertMetaTag(document, "twitter:image:alt", imageAlt);
             insertMetaTag(document, "twitter:site", meta.twitterSite || metaData.twitterSite || meta.url);
 
             // Update or create canonical link
