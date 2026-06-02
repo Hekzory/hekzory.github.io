@@ -484,7 +484,7 @@ const EASTER_EGGS = {
             return [
                 { cmd: 'cd projects/hekzory.github.io', effect: () => ctx.cd(['~', 'projects', 'hekzory.github.io']), gitBranch: 'main' },
                 { cmd: 'git shortlog -sn --all | head -4', output: `   142  Oleg Tsvetkov\n    ${visits}  You (frequent visitor)\n     3  dependabot[bot]\n     1  GitHub Actions` },
-                { cmd: 'wc -l js/main.js', output: '1199 js/main.js' },
+                { cmd: 'wc -l js/main.js', output: '173 js/main.js' },
                 { cmd: 'du -sh .', output: '4.2M    .' }
             ];
         }
@@ -525,7 +525,7 @@ const EASTER_EGGS = {
             const absH = Math.floor(Math.abs(offsetMin) / 60);
             const absM = Math.abs(offsetMin) % 60;
             const tz = `UTC${sign}${absH}${absM ? ':' + String(absM).padStart(2, '0') : ''}`;
-            const mskDiff = (-180 - (-offsetMin)) / 60; // hours difference from MSK
+            const mskDiff = (-offsetMin - 180) / 60; // visitor's hours east of Moscow (UTC+3)
             const diffStr = mskDiff > 0 ? `+${mskDiff}h` : `${mskDiff}h`;
             return [
                 {

@@ -4,6 +4,7 @@ import { compression, defineAlgorithm } from "vite-plugin-compression2";
 import { createHtmlPlugin } from "vite-plugin-html";
 import htmlMetaPlugin from "./vite-plugin-html-meta";
 import sitemapPlugin from "./vite-plugin-sitemap";
+import minifyInlineJsonPlugin from "./vite-plugin-minify-inline-json";
 import injectHtml from "vite-plugin-html-inject";
 import zlib from "node:zlib";
 
@@ -16,6 +17,7 @@ export default defineConfig({
         createHtmlPlugin({
             minify: true,
         }),
+        minifyInlineJsonPlugin(),
         compression({
             algorithms: [
                 defineAlgorithm('brotliCompress', {
