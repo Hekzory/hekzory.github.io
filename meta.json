@@ -8,7 +8,10 @@
     "imageType": "image/png",
     "imageAlt": "Oleg Tsvetkov — Software Engineer. Personal webpage",
     "themeColor": "#1a1b26",
-    "type": "website",
+    "type": "profile",
+    "profileFirstName": "Oleg",
+    "profileLastName": "Tsvetkov",
+    "profileUsername": "hekzory",
     "colorScheme": "dark",
     "pages": {
         "resume": {
@@ -19,7 +22,8 @@
         "404": {
             "title": "404 — Page Not Found | Oleg Tsvetkov",
             "description": "This page doesn't exist. Check the URL or head back to the home page.",
-            "url": "https://tsv.one/404"
+            "url": "https://tsv.one/404",
+            "type": "website"
         }
     }
 }

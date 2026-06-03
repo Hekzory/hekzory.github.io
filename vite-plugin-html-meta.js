@@ -73,6 +73,16 @@ export default function htmlMetaPlugin(options = {}) {
             if (imageHeight) insertMetaTag(document, "og:image:height", imageHeight, true);
             if (imageAlt) insertMetaTag(document, "og:image:alt", imageAlt, true);
             insertMetaTag(document, "og:type", meta.type || metaData.type, true);
+            // Profile-specific OG tags — emitted only when og:type is "profile"
+            // so non-profile pages (e.g. 404) never ship stray profile:* tags.
+            if ((meta.type || metaData.type) === "profile") {
+                const firstName = meta.profileFirstName || metaData.profileFirstName;
+                const lastName = meta.profileLastName || metaData.profileLastName;
+                const username = meta.profileUsername || metaData.profileUsername;
+                if (firstName) insertMetaTag(document, "profile:first_name", firstName, true);
+                if (lastName) insertMetaTag(document, "profile:last_name", lastName, true);
+                if (username) insertMetaTag(document, "profile:username", username, true);
+            }
             insertMetaTag(document, "og:locale", meta.locale || metaData.locale || "en_US", true);
             insertMetaTag(document, "theme-color", meta.themeColor || metaData.themeColor);
 

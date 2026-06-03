@@ -1,0 +1,21 @@
+# Oleg Tsvetkov
+
+> Personal website of Oleg Tsvetkov (handle: Hekzory), a Software Engineer at VK
+> (VK Ads, DevExp team) focused on DevOps, CI/CD, and infrastructure — Consul
+> service mesh, Python, Go, Docker. Based in Moscow, Russia.
+
+## Pages
+
+- [Home](https://tsv.one/): Profile, social links, and an interactive terminal.
+- [Resume](https://tsv.one/resume): Work experience, technical skills, education, and languages.
+
+## Links
+
+- [GitHub](https://github.com/hekzory)
+- [Telegram](https://t.me/hekzory)
+- Email: oleg@tsv.one
+
+## Notes
+
+- This is a static personal website. There is no public API.
+- Structured data (schema.org Person/ProfilePage) is embedded as JSON-LD on each page.
