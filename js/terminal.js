@@ -184,7 +184,15 @@ const SCENARIOS = {
         commands: (ctx) => [
             { cmd: 'cd .config/hypr', effect: () => ctx.cd(['~', '.config', 'hypr']) },
             { cmd: 'cat hyprland.conf' },
-            { cmd: 'hyprctl monitors', output: 'Monitor DP-1 (ID 0):\n\t2560x1440@144 at 0x0\n\tactive workspace: 1\n\treserved: 0 36 0 0\n\tscale: 1.00' }
+            {
+                // The visitor's actual display, reported as this box's monitor
+                cmd: 'hyprctl monitors', output: () => {
+                    const dpr = window.devicePixelRatio || 1;
+                    const w = Math.round(screen.width * dpr);
+                    const h = Math.round(screen.height * dpr);
+                    return `Monitor DP-1 (ID 0):\n\t${w}x${h}@144 at 0x0\n\tactive workspace: 1\n\treserved: 0 36 0 0\n\tscale: ${dpr.toFixed(2)}`;
+                }
+            }
         ]
     },
 
@@ -204,6 +212,9 @@ const SCENARIOS = {
         weight: 8,
         commands: (ctx) => [
             { cmd: 'uname -a', output: `Linux ${SYS.host} ${SYS.kernel} #1 SMP PREEMPT_DYNAMIC x86_64 GNU/Linux` },
+            // The visitor's real core count leaks through — same gag as the
+            // battery/network/timezone easter eggs.
+            { cmd: 'nproc', output: () => String(navigator.hardwareConcurrency || 16) },
             {
                 cmd: 'uptime', output: () => {
                     const h = Math.floor(Math.random() * 72) + 1;
@@ -211,7 +222,16 @@ const SCENARIOS = {
                     return ` 15:42:01 up ${h}:${String(m).padStart(2, '0')},  1 user,  load average: 0.42, 0.38, 0.35`;
                 }
             },
-            { cmd: 'free -h', output: '              total        used        free      shared  buff/cache   available\nMem:           31Gi       8.2Gi        14Gi       892Mi       8.6Gi        21Gi\nSwap:         8.0Gi          0B       8.0Gi' }
+            {
+                // Chromium reports the visitor's RAM (capped at 8Gi by the API);
+                // elsewhere the box keeps its stock 31Gi.
+                cmd: 'free -h', output: () => {
+                    const total = navigator.deviceMemory;
+                    if (!total) return '              total        used        free      shared  buff/cache   available\nMem:           31Gi       8.2Gi        14Gi       892Mi       8.6Gi        21Gi\nSwap:         8.0Gi          0B       8.0Gi';
+                    const gi = (x) => `${(total * x).toFixed(1)}Gi`;
+                    return `              total        used        free      shared  buff/cache   available\nMem:          ${total}Gi      ${gi(0.27)}       ${gi(0.45)}       412Mi       ${gi(0.28)}        ${gi(0.66)}\nSwap:         8.0Gi          0B       8.0Gi`;
+                }
+            }
         ]
     },
 
