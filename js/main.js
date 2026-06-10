@@ -2,7 +2,6 @@
     'use strict';
 
     const $ = document.querySelector.bind(document);
-    const isMobile = window.innerWidth <= 768;
 
     // --- System identity (single source of truth for host/OS/kernel) ---
     const SYS = {
@@ -154,20 +153,31 @@
 
     new ClipboardDialog();
 
-    // --- Terminal (lazy-loaded; desktop + index page only) ---
+    // --- Terminal (lazy-loaded on first interaction; index page only) ---
     // Terminal code is ~900 lines of scenarios/easter-eggs/Terminal class that
-    // mobile users and resume/404 visitors never touch. Dynamic import tells
-    // Rolldown to split it into its own chunk.
+    // most visitors never touch. The chunk is fetched on hover/focus of the
+    // toggle tile (warm-up, so activation feels instant) or on activation
+    // itself. Phones never pay for it: CSS hides the tiles at <=768px, so they
+    // can't be interacted with. Resume/404 pages don't have the tile at all.
     const terminalToggleTile = document.getElementById('terminal-toggle-tile');
-    const terminalTile = document.querySelector('.terminal-tile');
 
-    if (isMobile) {
-        // Remove the terminal tiles from the DOM on mobile — grid layout cleanup.
-        if (terminalToggleTile) terminalToggleTile.remove();
-        if (terminalTile) terminalTile.remove();
-    } else if (terminalToggleTile && terminalTile) {
-        // Only the index page has these tiles, so resume/404 never load the chunk.
-        import('./terminal.js').then(({ initTerminal }) => initTerminal(SYS));
+    if (terminalToggleTile) {
+        let terminalReady = null;
+        const loadTerminal = () =>
+            terminalReady ??= import('./terminal.js').then(({ initTerminal }) => initTerminal(SYS));
+
+        terminalToggleTile.addEventListener('pointerenter', loadTerminal, { once: true });
+        terminalToggleTile.addEventListener('focus', loadTerminal, { once: true });
+
+        const activate = (e) => {
+            if (e.type === 'keydown') {
+                if (e.key !== 'Enter' && e.key !== ' ') return;
+                e.preventDefault();
+            }
+            loadTerminal().then((openTerminal) => openTerminal());
+        };
+        terminalToggleTile.addEventListener('click', activate);
+        terminalToggleTile.addEventListener('keydown', activate);
     }
 
 })();

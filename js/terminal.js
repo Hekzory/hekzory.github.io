@@ -277,7 +277,7 @@ const SCENARIOS = {
                     weekday: 'short', month: 'short', day: 'numeric',
                     hour: '2-digit', minute: '2-digit', second: '2-digit',
                     hour12: false
-                }) + ' MSK 2026'
+                }) + ` MSK ${new Date().getFullYear()}`
             }
         ]
     },
@@ -354,12 +354,7 @@ const EASTER_EGGS = {
         },
         weight: 100,
         commands: (ctx) => [
-            {
-                cmd: 'cal', output: () => {
-                    const y = new Date().getFullYear();
-                    return `   September ${y}\nSu Mo Tu We Th Fr Sa\n       1  2  3  4  5\n 6  7  8  9 10 [11] 12\n13 14 15 16 17 18 19\n20 21 22 23 24 25 26\n27 28 29 30`;
-                }
-            },
+            { cmd: 'date +%F', output: () => `${new Date().getFullYear()}-09-11` },
             {
                 cmd: 'cowsay "Happy Birthday!"', output: () => {
                     const age = new Date().getFullYear() - 2003;
@@ -461,15 +456,13 @@ const EASTER_EGGS = {
             return d.getMonth() === 0 && d.getDate() <= 7;
         },
         weight: 80,
-        commands: (ctx) => [
-            {
-                cmd: 'cal', output: () => {
-                    const year = new Date().getFullYear();
-                    return `    January ${year}\nSu Mo Tu We Th Fr Sa\n          1  2  3  4\n 5  6  7  8  9 10 11\n12 13 14 15 16 17 18\n19 20 21 22 23 24 25\n26 27 28 29 30 31`;
-                }
-            },
-            { cmd: 'uptime', output: () => `up ${Math.floor(Math.random() * 7) + 1} days` }
-        ]
+        commands: (ctx) => {
+            const year = new Date().getFullYear();
+            return [
+                { cmd: `echo "Happy New Year ${year}!"`, output: `Happy New Year ${year}!` },
+                { cmd: 'uptime', output: () => `up ${Math.floor(Math.random() * 7) + 1} days` }
+            ];
+        }
     },
 
     // Frequent visitor — dynamic visit count
@@ -1107,14 +1100,16 @@ class Terminal {
 
 /**
  * Bootstraps the terminal on the index page.
- * Safe to call once — attaches toggle/close/keyboard/swipe listeners and
- * creates a Terminal instance bound to #terminal-output.
+ * Safe to call once — attaches close/keyboard/swipe listeners and creates a
+ * Terminal instance bound to #terminal-output. The toggle-tile activation
+ * listeners live in main.js (they trigger the lazy import of this module);
+ * the returned openTerminal callback is what they invoke.
  */
 export function initTerminal(systemConfig) {
     SYS = systemConfig;
 
     const terminalOutput = document.getElementById('terminal-output');
-    if (!terminalOutput) return;
+    if (!terminalOutput) return () => { };
 
     const term = new Terminal('terminal-output');
 
@@ -1145,16 +1140,6 @@ export function initTerminal(systemConfig) {
         term.stop();
     };
 
-    if (terminalToggleTile && terminalTile) {
-        terminalToggleTile.addEventListener('click', () => openTerminal());
-        terminalToggleTile.addEventListener('keydown', (e) => {
-            if (e.key === 'Enter' || e.key === ' ') {
-                e.preventDefault();
-                openTerminal();
-            }
-        });
-    }
-
     if (terminalCloseBtn && terminalTile) {
         terminalCloseBtn.addEventListener('click', () => closeTerminal());
     }
@@ -1179,4 +1164,6 @@ export function initTerminal(systemConfig) {
             }
         }, { passive: true });
     }
+
+    return openTerminal;
 }

@@ -97,6 +97,20 @@ body {
     display: none !important;
 }
 
+/* Typography niceties (no-ops where unsupported):
+   balance — multi-line headings wrap to even-length lines instead of a long
+   line plus an orphan word; pretty — body text avoids single-word last lines. */
+h1,
+h2,
+h3 {
+    text-wrap: balance;
+}
+
+p,
+li {
+    text-wrap: pretty;
+}
+
 .resume-link {
     color: var(--primary);
     text-decoration: none;
@@ -661,6 +675,8 @@ body:has(.terminal-tile.terminal-open) .grid-container>.tile:not(.terminal-tile)
     line-height: 1.6;
     height: 100%;
     overflow-y: auto;
+    /* Reaching the end of the log must not chain-scroll the page behind the drawer */
+    overscroll-behavior: contain;
     padding-bottom: 20px;
     /* Space for the last line */
 }
@@ -778,7 +794,8 @@ body:has(.terminal-tile.terminal-open) .grid-container>.tile:not(.terminal-tile)
     color: var(--bg);
 }
 
-/* Mobile terminal styling (the terminal is removed from the DOM on phones) */
+/* Mobile terminal styling (hidden on phones — this is also what keeps the
+   lazy terminal chunk from ever loading there: no visible tile, no interaction) */
 @media (max-width: 768px) {
 
     .terminal-tile,

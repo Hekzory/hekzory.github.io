@@ -95,7 +95,9 @@ export default function htmlMetaPlugin(options = {}) {
             insertMetaTag(document, "twitter:description", meta.description);
             insertMetaTag(document, "twitter:image", meta.image || metaData.image);
             if (imageAlt) insertMetaTag(document, "twitter:image:alt", imageAlt);
-            insertMetaTag(document, "twitter:site", meta.twitterSite || metaData.twitterSite || meta.url);
+            // twitter:site requires an @username; only emit when one is configured.
+            const twitterSite = meta.twitterSite || metaData.twitterSite;
+            if (twitterSite) insertMetaTag(document, "twitter:site", twitterSite);
 
             // Update or create canonical link
             let canonical = document.head.querySelector('link[rel="canonical"]');
