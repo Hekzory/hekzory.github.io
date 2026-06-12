@@ -1,12 +1,12 @@
 import { defineConfig } from "vite";
 import { resolve } from "path";
-import { compression, defineAlgorithm } from "vite-plugin-compression2";
+// import { compression, defineAlgorithm } from "vite-plugin-compression2";
 import { createHtmlPlugin } from "vite-plugin-html";
 import htmlMetaPlugin from "./vite-plugin-html-meta";
 import sitemapPlugin from "./vite-plugin-sitemap";
 import minifyInlineJsonPlugin from "./vite-plugin-minify-inline-json";
 import injectHtml from "vite-plugin-html-inject";
-import zlib from "node:zlib";
+// import zlib from "node:zlib";
 
 export default defineConfig({
     appType: "mpa",
@@ -18,16 +18,19 @@ export default defineConfig({
             minify: true,
         }),
         minifyInlineJsonPlugin(),
-        compression({
-            algorithms: [
-                defineAlgorithm('brotliCompress', {
-                    params: {
-                        [zlib.constants.BROTLI_PARAM_QUALITY]: 12
-                    }
-                }),
-                defineAlgorithm('gzip', { level: 9 })],
-            exclude: [/\.(br)$/, /\.(gz)$/],
-        }),
+        // Disabled: GitHub Pages never serves precompressed .br/.gz files,
+        // so this only bloated the artifact. Re-enable (plus the two imports
+        // above) if the site moves to a host that picks them up.
+        // compression({
+        //     algorithms: [
+        //         defineAlgorithm('brotliCompress', {
+        //             params: {
+        //                 [zlib.constants.BROTLI_PARAM_QUALITY]: 12
+        //             }
+        //         }),
+        //         defineAlgorithm('gzip', { level: 9 })],
+        //     exclude: [/\.(br)$/, /\.(gz)$/],
+        // }),
     ],
     json: {
         stringify: true,
