@@ -54,6 +54,20 @@ export default function htmlMetaPlugin(options = {}) {
                 document.head.insertBefore(charsetMeta, document.head.firstChild);
             }
 
+            // CSP ships as a meta tag because GitHub Pages cannot send custom
+            // HTTP headers; frame-ancestors is ignored in meta CSP, so omitted.
+            const csp = meta.csp || metaData.csp;
+            if (csp) {
+                let cspMeta = document.head.querySelector('meta[http-equiv="Content-Security-Policy"]');
+                if (!cspMeta) {
+                    cspMeta = document.createElement("meta");
+                    cspMeta.setAttribute("http-equiv", "Content-Security-Policy");
+                    const charsetMeta = document.head.querySelector("meta[charset]");
+                    document.head.insertBefore(cspMeta, charsetMeta.nextSibling);
+                }
+                cspMeta.setAttribute("content", csp);
+            }
+
             // Basic metatags for proper presentation on the web
             insertMetaTag(document, "description", meta.description);
             insertMetaTag(document, "og:site_name", metaData.title, true); // Always use base site name
