@@ -2,10 +2,9 @@
 <html lang="en">
 
 <head>
+    <link rel="icon" href="/favicon.ico" sizes="48x48" />
     <link rel="icon" href="/favicon.svg" sizes="any" type="image/svg+xml" />
     <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
-    <link rel="icon" href="/favicon.ico" sizes="48x48" />
-    <link rel="mask-icon" href="/safari-pinned-tab.svg" color="#7aa2f7" />
     <link rel="manifest" href="/site.webmanifest" />
     <link rel="preload" href="/css/martianmono.woff2" as="font" type="font/woff2" crossorigin />
     <link href="/css/style.css" rel="stylesheet" />
@@ -29,9 +28,12 @@
             <div class="profile-banner"></div>
             <div class="profile-content">
                 <div class="profile-image-container">
-                    <div class="profile-img"
-                        style="display: flex; align-items: center; justify-content: center; font-size: 4rem; font-weight: bold; color: var(--error);">
-                        404</div>
+                    <div class="profile-img" style="display: flex; align-items: center; justify-content: center;">
+                        <!-- 68% keeps the glyph's bounds inside the circular crop (needs <= 70.7%) -->
+                        <svg style="width: 68%; height: 68%;" aria-hidden="true">
+                            <use href="#i-logo"></use>
+                        </svg>
+                    </div>
                 </div>
                 <div class="profile-details">
                     <h1 class="name-shimmer">Page Not Found</h1>
@@ -78,7 +80,7 @@
                 <!-- Navigation Links -->
                 <a href="/" class="connection-item" title="Home">
                     <svg class="conn-icon">
-                        <use href="#i-home"></use>
+                        <use href="#i-logo"></use>
                     </svg>
                     <span class="conn-label">Home</span>
                 </a>

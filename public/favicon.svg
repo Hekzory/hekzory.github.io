@@ -1,1 +1,13 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="512" height="512"><path fill="#08F" d="M0 0h512v512H0z"/><path fill="#FDFEFF" d="M193 85v152h127V104c39.188-19 39.188-19 43-19v323l-28 13-12 6h-3V275H193v133c-38 18-38 18-43 19V104c39.462-19 39.462-19 43-19"/></svg>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+  <defs>
+    <linearGradient id="g" x1="14" y1="12" x2="40" y2="52" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#7aa2f7"/><stop offset="1" stop-color="#bb9af7"/>
+    </linearGradient>
+  </defs>
+  <rect width="64" height="64" rx="14" fill="#1a1b26"/>
+  <rect x="1" y="1" width="62" height="62" rx="13" fill="none" stroke="#7aa2f7" stroke-opacity=".3" stroke-width="2"/>
+  <path d="M14 12 h12 v14 h8 v12 h-8 v14 H14 Z" fill="url(#g)"/>
+  <rect x="40" y="12" width="12" height="40" rx="2" fill="#7dcfff">
+    <animate attributeName="opacity" values="1;1;0.15;0.15;1" keyTimes="0;0.5;0.55;0.95;1" dur="1.2s" repeatCount="indefinite"/>
+  </rect>
+</svg>

@@ -1,6 +1,14 @@
 <svg class="d-n-d" xmlns="http://www.w3.org/2000/svg">
-    <symbol id="i-home" viewBox="0 0 24 24">
-        <path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z" />
+    <!-- Site logo: the /favicon.svg "H" glyph, bare — no backdrop/border, no SMIL
+         (Chrome/Firefox would animate it in <use> contexts; the blink stays a
+         favicon-only Firefox easter egg) -->
+    <symbol id="i-logo" viewBox="14 12 38 40">
+        <linearGradient id="lg" x1="14" y1="12" x2="40" y2="52" gradientUnits="userSpaceOnUse">
+            <stop offset="0" stop-color="#7aa2f7" />
+            <stop offset="1" stop-color="#bb9af7" />
+        </linearGradient>
+        <path d="M14 12 h12 v14 h8 v12 h-8 v14 H14 Z" fill="url(#lg)" />
+        <rect x="40" y="12" width="12" height="40" rx="2" fill="#7dcfff" />
     </symbol>
     <symbol id="i-resume" viewBox="0 0 24 24">
         <path

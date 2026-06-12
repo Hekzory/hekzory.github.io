@@ -92,9 +92,14 @@ body {
     background: var(--primary);
 }
 
-/* Utility */
+/* Utility: hide the SVG sprite sheets. Zero-size instead of display:none —
+   Chrome can't resolve paint servers (the #i-logo gradient) from a
+   display:none subtree. */
 .d-n-d {
-    display: none !important;
+    position: absolute !important;
+    width: 0 !important;
+    height: 0 !important;
+    overflow: hidden !important;
 }
 
 /* Typography niceties (no-ops where unsupported):
@@ -165,6 +170,12 @@ li {
     background: var(--primary);
     color: var(--bg);
     font-weight: bold;
+}
+
+/* Dark silhouette like the label text — the logo's gradient otherwise starts
+   at the chip's exact blue and melts into it */
+.module.active .icon {
+    filter: brightness(0);
 }
 
 .module .icon {
