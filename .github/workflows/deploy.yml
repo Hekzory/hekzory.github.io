@@ -23,6 +23,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v6
+        with:
+          # full history so sitemap <lastmod> reflects real commit dates
+          # (vite-plugin-sitemap.js falls back to build time on shallow clones)
+          fetch-depth: 0
       - uses: pnpm/action-setup@v6
         with:
           version: 11
@@ -52,3 +56,15 @@ jobs:
     steps:
       - id: deployment
         uses: actions/deploy-pages@v5
+      # Tell IndexNow-participating engines (Bing, Yandex, Seznam, ...) the
+      # site changed. URL list comes from the live sitemap so it never drifts
+      # from vite-plugin-sitemap.js. Best-effort: a failed ping must not fail
+      # the deploy. The key is public by design (served at its keyLocation).
+      - name: Ping IndexNow
+        continue-on-error: true
+        run: |
+          key=ec5433724775ed2bbe6e7d5ea943683d
+          urls=$(curl -sf https://tsv.one/sitemap.xml | grep -oP '(?<=<loc>)[^<]+' | jq -R . | jq -sc .)
+          curl -sS -X POST https://api.indexnow.org/indexnow \
+            -H 'Content-Type: application/json; charset=utf-8' \
+            -d "{\"host\":\"tsv.one\",\"key\":\"$key\",\"keyLocation\":\"https://tsv.one/$key.txt\",\"urlList\":$urls}"
