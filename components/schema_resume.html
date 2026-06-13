@@ -15,7 +15,7 @@
                 "@type": "ProfilePage",
                 "@id": "{{canonical}}#profilepage",
                 "url": "{{canonical}}",
-                "name": "Oleg Tsvetkov | Resume",
+                "name": "{{t.schema.page_resume}}",
                 "isPartOf": { "@id": "{{origin}}/#website" },
                 "mainEntity": { "@id": "{{origin}}/#person" },
                 "inLanguage": "{{locale}}"
@@ -30,8 +30,8 @@
                 "url": "{{origin}}/",
                 "image": "{{origin}}/profile400x400.webp",
                 "email": "oleg@tsv.one",
-                "jobTitle": "Software Engineer",
-                "description": "Middle Software Engineer at VK Ads (DevExp team) with expertise in DevOps, CI/CD, and infrastructure.",
+                "jobTitle": "{{t.home.role}}",
+                "description": "{{t.schema.person_desc}}",
                 "worksFor": {
                     "@type": "Organization",
                     "name": "VK",
@@ -39,7 +39,7 @@
                 },
                 "hasOccupation": {
                     "@type": "Occupation",
-                    "name": "Software Engineer",
+                    "name": "{{t.home.role}}",
                     "occupationLocation": {
                         "@type": "City",
                         "name": "Moscow"

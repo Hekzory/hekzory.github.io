@@ -1,0 +1,19 @@
+{
+    "slug": "why-this-blog",
+    "datePublished": "2026-06-13T12:00:00+03:00",
+    "section": { "en": "Meta", "ru": "Мета" },
+    "tags": {
+        "en": ["blog", "personal site", "infrastructure", "DevOps"],
+        "ru": ["блог", "личный сайт", "инфраструктура", "DevOps"]
+    },
+    "en": {
+        "title": "Why all this",
+        "excerpt": "First post: who I am, what goes here, and why. No claim to be the final word.",
+        "description": "First post: who I am, what goes here, and why. Notes, personal experience, and breakdowns of what I built, no claim to be the final word."
+    },
+    "ru": {
+        "title": "Зачем это всё",
+        "excerpt": "Первый пост: кто я, что тут будет и зачем. Без претензии на истину в последней инстанции.",
+        "description": "Первый пост: кто я, что тут будет и зачем. Инструкции, личный опыт и разбор сделанного, без претензии на истину в последней инстанции."
+    }
+}

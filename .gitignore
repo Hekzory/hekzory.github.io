@@ -22,3 +22,10 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+# Generated per-post route shells — regenerated from articles/*.post.json on
+# every build (vite.config -> generateShells). The index shells are real source.
+/articles/*.html
+!/articles/index.html
+/ru/articles/*.html
+!/ru/articles/index.html

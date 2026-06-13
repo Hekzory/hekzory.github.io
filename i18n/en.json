@@ -1,9 +1,14 @@
 {
-    "nav": { "home": "HOME", "resume": "RESUME", "articles": "ARTICLES" },
+    "nav": { "home": "HOME", "resume": "RESUME", "articles": "ARTICLES", "primary_aria": "Primary navigation" },
     "lang": {
         "switch_aria": "Switch language",
         "banner": "Читать по-русски →",
         "dismiss": "Dismiss"
+    },
+    "schema": {
+        "person_desc": "Software Engineer at VK Ads (DevExp team), working on DevOps, CI/CD, and infrastructure.",
+        "page_home": "Oleg Tsvetkov | Software Engineer",
+        "page_resume": "Oleg Tsvetkov | Resume"
     },
     "ui": {
         "clipboard_title": "Clipboard Manager",
@@ -48,15 +53,7 @@
         "title": "Articles",
         "intro": "Notes, write-ups from personal experience, and breakdowns of what I have built - infrastructure, DevOps, development, and whatever else seems worth recording. Partly subjective.",
         "back": "← All articles",
-        "crumb_home": "Home",
-        "posts": {
-            "why_this_blog": {
-                "title": "Why all this",
-                "date": "June 13, 2026",
-                "excerpt": "First post: who I am, what goes here, and why. No claim to be the final word.",
-                "desc": "First post: who I am, what goes here, and why. Notes, personal experience, and breakdowns of what I built - no claim to be the final word."
-            }
-        }
+        "crumb_home": "Home"
     },
     "resume": {
         "work": "Work Experience",

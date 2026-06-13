@@ -1,6 +1,8 @@
 import { defineConfig } from "vite";
 import { resolve } from "path";
 import { readdirSync } from "node:fs";
+import { PAGE_DIRS } from "./i18n-paths.js";
+import { generateShells } from "./post-data.js";
 // import { compression, defineAlgorithm } from "vite-plugin-compression2";
 import { createHtmlPlugin } from "vite-plugin-html";
 import htmlMetaPlugin from "./vite-plugin-html-meta";
@@ -10,15 +12,18 @@ import i18nFanoutPlugin from "./vite-plugin-i18n-fanout";
 import injectHtml from "vite-plugin-html-inject";
 // import zlib from "node:zlib";
 
-// Collect every *.html build entry across both language trees. Drop a file in
-// (e.g. a new article, or its /ru/ counterpart) and it ships, no edits here.
-// Vite keys output off each entry's path relative to root, so the thin shells at
-// index.html / ru/index.html / articles/<slug>.html emit to the right URLs
-// automatically. templates/ and components/ hold <load> partials (not entries),
-// so they're never scanned here.
+// Collect every *.html build entry across both language trees. Static pages are
+// real files; article posts come from articles/*.post.json, whose route shells
+// generateShells() writes just below before the scan. Vite keys output off each
+// entry's path relative to root, so the shells at index.html / ru/index.html /
+// articles/<slug>.html emit to the right URLs automatically. templates/ and
+// components/ hold <load> partials (not entries), so they're never scanned here.
 function htmlEntries() {
+    // Regenerate the per-post route shells from articles/*.post.json first, so
+    // the scan below picks them up exactly like hand-written entries.
+    generateShells(__dirname);
     const entries = {};
-    const scan = (relDir) => {
+    for (const relDir of PAGE_DIRS) {
         const absDir = relDir ? resolve(__dirname, relDir) : __dirname;
         try {
             for (const f of readdirSync(absDir)) {
@@ -29,11 +34,7 @@ function htmlEntries() {
         } catch {
             /* directory may not exist yet */
         }
-    };
-    scan(""); // index.html, resume.html, 404.html
-    scan("articles"); // articles/index.html + posts (en)
-    scan("ru"); // ru/index.html, ru/resume.html, ru/404.html
-    scan("ru/articles"); // ru/articles/index.html + posts
+    }
     return entries;
 }
 

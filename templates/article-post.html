@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <link rel="icon" href="/favicon.ico" sizes="48x48" />
+    <link rel="icon" href="/favicon.svg" sizes="any" type="image/svg+xml" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+    <link rel="manifest" href="/site.webmanifest" />
+    <link rel="preload" href="/css/martianmono.woff2" as="font" type="font/woff2" crossorigin />
+    <link href="/css/style.css" rel="stylesheet" />
+    <link href="/css/articles.css" rel="stylesheet" />
+    <title>Article | Oleg Tsvetkov</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+</head>
+
+<body class="article-page">
+    <load src="components/icons_common.html" />
+
+    <!-- Top Bar (Waybar style) -->
+    <load src="components/waybar.html" home_active="" resume_active="" articles_active="active"
+        window_title="~ / home / oleg / articles / {=$slug}" />
+
+    <main class="article-container">
+        <article class="tile article">
+            <header class="article-header">
+                <a class="article-back" href="{{base}}/articles/">{{t.art.back}}</a>
+                <h1 class="article-title">{{title}}</h1>
+                <div class="article-meta"><time datetime="{{published}}">{{date}}</time></div>
+            </header>
+
+            <div class="article-content">
+                <load src="{=$content}.html" />
+            </div>
+        </article>
+    </main>
+
+    <!-- BlogPosting + BreadcrumbList JSON-LD, assembled and escaped in post-data.js
+         (buildPostJsonLd) so record strings can never break the JSON or this <script>. -->
+    <script type="application/ld+json">{{article_ld}}</script>
+
+    <script type="module" src="/js/main.js" defer></script>
+    <load src="components/speculation.html" />
+</body>
+
+</html>

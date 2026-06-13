@@ -7,6 +7,11 @@ export const SITE_ORIGIN = "https://tsv.one";
 export const LOCALES = ["en", "ru"];
 export const DEFAULT_LOCALE = "en";
 
+// The directories scanned for *.html build entries, across both language trees.
+// Single-sourced here so vite.config.js (build inputs) and vite-plugin-sitemap.js
+// (sitemap URLs) can never drift — adding a tree means editing one list.
+export const PAGE_DIRS = ["", "articles", "ru", "ru/articles"];
+
 // `relPath` is a build entry's path relative to the project root, posix-style:
 // "index.html", "resume.html", "articles/why-this-blog.html",
 // "ru/index.html", "ru/articles/why-this-blog.html".
@@ -39,6 +44,32 @@ export function enHref(logical) {
 
 export function ruHref(logical) {
     return logical === "/" ? "/ru/" : "/ru" + logical;
+}
+
+// Inverse of cleanUrl for the English/root tree: a logical clean URL -> the
+// source file it builds from. "/" -> "index.html", "/resume" -> "resume.html",
+// "/articles/" -> "articles/index.html", "/articles/x" -> "articles/x.html".
+export function logicalToFile(logical) {
+    if (logical === "/") return "index.html";
+    if (logical.endsWith("/")) return logical.slice(1) + "index.html";
+    return logical.slice(1) + ".html";
+}
+
+// Source file (relative to root) for each locale's counterpart of an entry.
+// The ru/ tree mirrors the en tree 1:1, so the ru file is just "ru/" + en file.
+export function siblingFiles(relPath) {
+    const logical = stripLocale(cleanUrl(relPath));
+    const en = logicalToFile(logical);
+    return { en, ru: "ru/" + en };
+}
+
+// Which locales actually have a built page for this entry, given an existence
+// predicate (callers pass one bound to the build root). A single-language
+// article has no twin, so its absent locale must be dropped from hreflang /
+// og:locale:alternate / sitemap alternates rather than advertised as a 404.
+export function availableLocales(relPath, exists) {
+    const f = siblingFiles(relPath);
+    return { en: exists(f.en), ru: exists(f.ru) };
 }
 
 // Full sibling set for a build entry. xdefault points at the English version,

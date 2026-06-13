@@ -26,15 +26,7 @@
             <p class="articles-intro">{{t.art.intro}}</p>
         </header>
 
-        <ul class="articles-list">
-            <li>
-                <a class="tile article-card" href="{{base}}/articles/why-this-blog">
-                    <span class="article-card-meta"><time datetime="2026-06-13">{{t.art.posts.why_this_blog.date}}</time></span>
-                    <h2 class="article-card-title">{{t.art.posts.why_this_blog.title}}</h2>
-                    <p class="article-card-excerpt">{{t.art.posts.why_this_blog.excerpt}}</p>
-                </a>
-            </li>
-        </ul>
+        <ul class="articles-list">{{article_list}}</ul>
     </main>
 
     <script type="application/ld+json">
@@ -60,14 +52,7 @@
                 {
                     "@type": "ItemList",
                     "@id": "{{canonical}}#postlist",
-                    "itemListElement": [
-                        {
-                            "@type": "ListItem",
-                            "position": 1,
-                            "url": "{{origin}}{{base}}/articles/why-this-blog",
-                            "name": "{{t.art.posts.why_this_blog.title}}"
-                        }
-                    ]
+                    "itemListElement": [{{article_items}}]
                 },
                 {
                     "@type": "BreadcrumbList",

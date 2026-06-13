@@ -1,5 +1,5 @@
 <header class="waybar">
-    <div class="waybar-left">
+    <nav class="waybar-left" aria-label="{{t.nav.primary_aria}}">
         <a href="{{base}}/" class="module workspace {=$home_active}" aria-label="{{t.nav.home}}">
             <svg class="icon" aria-hidden="true">
                 <use href="#i-logo"></use>
@@ -24,7 +24,7 @@
             </svg>
             <span id="window-title">{=$window_title}</span>
         </div>
-    </div>
+    </nav>
 
     <div class="waybar-right">
         <nav class="module lang-switch" id="lang-switch" aria-label="{{t.lang.switch_aria}}"

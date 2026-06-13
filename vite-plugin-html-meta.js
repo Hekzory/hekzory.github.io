@@ -1,7 +1,11 @@
 import fs from "fs/promises";
+import { existsSync } from "node:fs";
 import path from "path";
 import { Window } from "happy-dom";
-import { siblings, localeOf, abs } from "./i18n-paths.js";
+import { siblings, localeOf, abs, availableLocales } from "./i18n-paths.js";
+import { resolvePageMeta, pick } from "./meta-resolve.js";
+import { pageLastMod } from "./page-lastmod.js";
+import { loadPosts, postSlug, postLocaleData } from "./post-data.js";
 
 export default function htmlMetaPlugin(options = {}) {
     const {
@@ -31,10 +35,6 @@ export default function htmlMetaPlugin(options = {}) {
         document.head.appendChild(link);
     };
 
-    // Resolve a possibly locale-nested value ({ en, ru }) for the current locale.
-    const pick = (v, locale) =>
-        v && typeof v === "object" && !Array.isArray(v) ? v[locale] ?? v.en : v;
-
     let root = process.cwd();
 
     return {
@@ -45,28 +45,34 @@ export default function htmlMetaPlugin(options = {}) {
         async transformIndexHtml(html, ctx) {
             const metaData = JSON.parse(await fs.readFile(path.resolve(metaFile), encoding));
 
-            // Page key = path relative to root, minus .html, with directory
-            // indexes folded to the directory (e.g. "resume", "articles" from
-            // articles/index.html, "ru" from ru/index.html, "ru/articles/why-this-blog").
-            // Root index -> null (uses locale-resolved global defaults).
-            const rel = ctx.filename ? path.relative(root, ctx.filename).replace(/\\/g, "/") : "index.html";
-            let pageName = rel.replace(/\.html$/, "");
-            if (pageName.endsWith("/index")) pageName = pageName.slice(0, -"/index".length);
-            if (pageName === "index") pageName = null;
-
             // English is the default locale at the root; Russian lives under /ru/.
+            const rel = ctx.filename ? path.relative(root, ctx.filename).replace(/\\/g, "/") : "index.html";
             const locale = localeOf(rel);
             const sib = siblings(rel);
             const url = abs(sib.clean);
 
-            // Merge locale-resolved globals + page-specific overrides.
-            const pageOverrides = pageName && metaData.pages?.[pageName] ? metaData.pages[pageName] : {};
-            const meta = {
-                ...metaData,
-                title: pick(metaData.title, locale),
-                description: pick(metaData.description, locale),
-                ...pageOverrides,
-            };
+            // Effective metadata: locale-resolved globals overlaid with the
+            // page-specific override block (shared with the i18n-fanout tokens, so
+            // <meta> and inline JSON-LD single-source the same values).
+            const { pageName, meta } = resolvePageMeta(metaData, rel, locale);
+
+            // Which locales actually ship a page for this URL. A single-language
+            // post (or the dropped ru 404) must not advertise a twin that 404s.
+            const have = availableLocales(rel, (f) => existsSync(path.resolve(root, f)));
+
+            // The OG preview (preview.png) is a screenshot of the home page, so
+            // it's only honest there. Other pages ship no card image unless they
+            // define their own meta.json "image" — we never fabricate one.
+            const isHome = sib.clean === "/" || sib.clean === "/ru/";
+            const showImage = isHome || !!(pageName && metaData.pages?.[pageName]?.image);
+
+            // Article posts are driven by their single-source record
+            // (articles/<slug>.post.json), not by a meta.json "pages" entry.
+            const slug = postSlug(rel);
+            const post = slug ? loadPosts(root)[slug] : null;
+            const pd = post ? postLocaleData(post, locale) : null;
+            const type = pd ? "article" : meta.type || metaData.type;
+            const description = pd ? pd.description : meta.description;
 
             const siteName = metaData.siteName || pick(metaData.title, locale);
             const altLocale = locale === "ru" ? "en" : "ru";
@@ -82,9 +88,14 @@ export default function htmlMetaPlugin(options = {}) {
             // Per-locale lang attribute (templates ship a static placeholder value).
             document.documentElement.setAttribute("lang", locale);
 
+            // <title>/og:title: an article reads its record's title (single-sourced
+            // with the <h1> and JSON-LD headline); every other page uses its
+            // resolved meta.json title.
+            const pageTitle = pd ? `${pd.title} | ${siteName}` : meta.title;
+
             // Update or set title if none present
             const t = document.head.querySelector("title") || document.createElement("title");
-            t.textContent = meta.title;
+            t.textContent = pageTitle;
             if (!t.parentNode) {
                 document.head.insertBefore(t, document.head.firstChild);
             }
@@ -118,27 +129,30 @@ export default function htmlMetaPlugin(options = {}) {
             }
 
             // Basic metatags for proper presentation on the web
-            insertMetaTag(document, "description", meta.description);
+            insertMetaTag(document, "description", description);
             insertMetaTag(document, "og:site_name", siteName, true); // Locale-resolved site name
-            insertMetaTag(document, "og:title", meta.title, true);
-            insertMetaTag(document, "og:description", meta.description, true);
+            insertMetaTag(document, "og:title", pageTitle, true);
+            insertMetaTag(document, "og:description", description, true);
             insertMetaTag(document, "og:url", url, true);
-            insertMetaTag(document, "og:image", meta.image || metaData.image, true);
-            // Optional og:image refinements — emitted only when defined so a card
-            // never ships content="undefined". Dimensions/type let scrapers render
-            // the card without first fetching the image.
+            // og:image — only on pages that honestly own a preview (see showImage).
+            // Refinements emitted only when defined so a card never ships
+            // content="undefined"; dimensions/type let scrapers render the card
+            // without first fetching the image.
             const imageType = meta.imageType || metaData.imageType;
             const imageWidth = meta.imageWidth || metaData.imageWidth;
             const imageHeight = meta.imageHeight || metaData.imageHeight;
             const imageAlt = meta.imageAlt || metaData.imageAlt;
-            if (imageType) insertMetaTag(document, "og:image:type", imageType, true);
-            if (imageWidth) insertMetaTag(document, "og:image:width", imageWidth, true);
-            if (imageHeight) insertMetaTag(document, "og:image:height", imageHeight, true);
-            if (imageAlt) insertMetaTag(document, "og:image:alt", imageAlt, true);
-            insertMetaTag(document, "og:type", meta.type || metaData.type, true);
+            if (showImage) {
+                insertMetaTag(document, "og:image", meta.image || metaData.image, true);
+                if (imageType) insertMetaTag(document, "og:image:type", imageType, true);
+                if (imageWidth) insertMetaTag(document, "og:image:width", imageWidth, true);
+                if (imageHeight) insertMetaTag(document, "og:image:height", imageHeight, true);
+                if (imageAlt) insertMetaTag(document, "og:image:alt", imageAlt, true);
+            }
+            insertMetaTag(document, "og:type", type, true);
             // Profile-specific OG tags — emitted only when og:type is "profile"
             // so non-profile pages (e.g. 404) never ship stray profile:* tags.
-            if ((meta.type || metaData.type) === "profile") {
+            if (type === "profile") {
                 const firstName = meta.profileFirstName || metaData.profileFirstName;
                 const lastName = meta.profileLastName || metaData.profileLastName;
                 const username = meta.profileUsername || metaData.profileUsername;
@@ -146,8 +160,30 @@ export default function htmlMetaPlugin(options = {}) {
                 if (lastName) insertMetaTag(document, "profile:last_name", lastName, true);
                 if (username) insertMetaTag(document, "profile:username", username, true);
             }
+            // Article-specific OG tags — emitted only when og:type is "article" so
+            // non-article pages never ship stray article:* tags. published/section/
+            // tags come from the post record; modified is the same git "content last
+            // changed" date the sitemap <lastmod> and {{modified}} use.
+            if (type === "article") {
+                const buildTime = new Date().toISOString().replace(/\.\d{3}Z$/, "Z");
+                const modified = pageLastMod(root, rel, { meta: metaData, buildTime });
+                if (pd.datePublished) insertMetaTag(document, "article:published_time", pd.datePublished, true);
+                if (modified) insertMetaTag(document, "article:modified_time", modified, true);
+                // Author as the canonical profile URL (matches the JSON-LD #person url).
+                insertMetaTag(document, "article:author", abs("/"), true);
+                if (pd.section) insertMetaTag(document, "article:section", pd.section, true);
+                // article:tag repeats; the name-keyed dedup helper would collapse
+                // them, so append each as a fresh element.
+                for (const tag of pd.tags || []) {
+                    const t = document.createElement("meta");
+                    t.setAttribute("property", "article:tag");
+                    t.setAttribute("content", tag);
+                    document.head.appendChild(t);
+                }
+            }
             insertMetaTag(document, "og:locale", ogLocale, true);
-            insertMetaTag(document, "og:locale:alternate", ogLocaleAlt, true);
+            // Only advertise the alternate locale when it actually exists.
+            if (have[altLocale]) insertMetaTag(document, "og:locale:alternate", ogLocaleAlt, true);
             insertMetaTag(document, "theme-color", meta.themeColor || metaData.themeColor);
 
             // Color scheme hint (helps UA pick native UI colors)
@@ -155,10 +191,12 @@ export default function htmlMetaPlugin(options = {}) {
 
             // Twitter card (uses same meta values by default)
             insertMetaTag(document, "twitter:card", meta.twitterCard || metaData.twitterCard || "summary_large_image");
-            insertMetaTag(document, "twitter:title", meta.title);
-            insertMetaTag(document, "twitter:description", meta.description);
-            insertMetaTag(document, "twitter:image", meta.image || metaData.image);
-            if (imageAlt) insertMetaTag(document, "twitter:image:alt", imageAlt);
+            insertMetaTag(document, "twitter:title", pageTitle);
+            insertMetaTag(document, "twitter:description", description);
+            if (showImage) {
+                insertMetaTag(document, "twitter:image", meta.image || metaData.image);
+                if (imageAlt) insertMetaTag(document, "twitter:image:alt", imageAlt);
+            }
             // twitter:site requires an @username; only emit when one is configured.
             const twitterSite = meta.twitterSite || metaData.twitterSite;
             if (twitterSite) insertMetaTag(document, "twitter:site", twitterSite);
@@ -172,13 +210,14 @@ export default function htmlMetaPlugin(options = {}) {
             }
             canonical.setAttribute("href", url);
 
-            // Reciprocal hreflang cluster. x-default points at the English version,
-            // which doubles as the neutral fallback. Skipped for noindex pages so
-            // we never advertise a page we've asked crawlers to drop.
+            // Reciprocal hreflang cluster — only for locales that actually ship a
+            // page (a single-language post lists just its own + x-default). Skipped
+            // for noindex pages so we never advertise a page we've asked crawlers to
+            // drop. x-default points at English when present, else the locale that is.
             if (indexable) {
-                insertAlternate(document, "en", abs(sib.enPath));
-                insertAlternate(document, "ru", abs(sib.ruPath));
-                insertAlternate(document, "x-default", abs(sib.xdefault));
+                if (have.en) insertAlternate(document, "en", abs(sib.enPath));
+                if (have.ru) insertAlternate(document, "ru", abs(sib.ruPath));
+                insertAlternate(document, "x-default", abs(have.en ? sib.enPath : sib.ruPath));
             }
 
             return `<!DOCTYPE html>\n${document.documentElement.outerHTML}`;
