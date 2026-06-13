@@ -6,28 +6,43 @@ import { createHtmlPlugin } from "vite-plugin-html";
 import htmlMetaPlugin from "./vite-plugin-html-meta";
 import sitemapPlugin from "./vite-plugin-sitemap";
 import minifyInlineJsonPlugin from "./vite-plugin-minify-inline-json";
+import i18nFanoutPlugin from "./vite-plugin-i18n-fanout";
 import injectHtml from "vite-plugin-html-inject";
 // import zlib from "node:zlib";
 
-// Every articles/*.html is a build entry — drop a file in there and it ships,
-// no edits here. Vite keys output off each entry's path relative to root, so
-// articles/foo.html -> dist/articles/foo.html regardless of the input key.
-function articleInputs() {
-    const dir = resolve(__dirname, "articles");
-    try {
-        return Object.fromEntries(
-            readdirSync(dir)
-                .filter((f) => f.endsWith(".html"))
-                .map((f) => [`articles/${f.slice(0, -5)}`, resolve(dir, f)])
-        );
-    } catch {
-        return {};
-    }
+// Collect every *.html build entry across both language trees. Drop a file in
+// (e.g. a new article, or its /ru/ counterpart) and it ships, no edits here.
+// Vite keys output off each entry's path relative to root, so the thin shells at
+// index.html / ru/index.html / articles/<slug>.html emit to the right URLs
+// automatically. templates/ and components/ hold <load> partials (not entries),
+// so they're never scanned here.
+function htmlEntries() {
+    const entries = {};
+    const scan = (relDir) => {
+        const absDir = relDir ? resolve(__dirname, relDir) : __dirname;
+        try {
+            for (const f of readdirSync(absDir)) {
+                if (!f.endsWith(".html")) continue;
+                const rel = relDir ? `${relDir}/${f}` : f;
+                entries[rel.slice(0, -5)] = resolve(absDir, f);
+            }
+        } catch {
+            /* directory may not exist yet */
+        }
+    };
+    scan(""); // index.html, resume.html, 404.html
+    scan("articles"); // articles/index.html + posts (en)
+    scan("ru"); // ru/index.html, ru/resume.html, ru/404.html
+    scan("ru/articles"); // ru/articles/index.html + posts
+    return entries;
 }
 
 export default defineConfig({
     appType: "mpa",
     plugins: [
+        // Runs after injectHtml's "pre" pass (components inlined) and before the
+        // meta plugin: fills {{t.*}} dictionary tokens + computed locale tokens.
+        i18nFanoutPlugin(),
         htmlMetaPlugin(),
         sitemapPlugin(),
         injectHtml(),
@@ -59,10 +74,20 @@ export default defineConfig({
                 // /articles/<slug> are what the site links to; the slash-less
                 // /articles is 301'd to /articles/ by GitHub Pages in prod.
                 const [pathname, query = ''] = req.url.split('?');
-                if (pathname === '/resume') {
-                    req.url = '/resume.html';
-                } else if (/^\/articles\/[^/.]+$/.test(pathname)) {
-                    req.url = pathname + '.html' + (query && '?' + query);
+                const suffix = query ? '?' + query : '';
+                // Clean extensionless URLs -> real files, for both language trees:
+                // /resume, /ru/resume               -> .../resume.html
+                // /articles/<slug>, /ru/articles/<slug> -> .../<slug>.html
+                // Directory roots (/, /ru/, /articles/, /ru/articles/) are served
+                // from their index.html by Vite. /articles is 301'd to /articles/
+                // by GitHub Pages in prod.
+                if (
+                    /^\/(?:ru\/)?resume$/.test(pathname) ||
+                    /^\/(?:ru\/)?articles\/[^/.]+$/.test(pathname)
+                ) {
+                    req.url = pathname + '.html' + suffix;
+                } else if (pathname === '/ru') {
+                    req.url = '/ru/' + suffix;
                 }
                 next();
             });
@@ -71,12 +96,7 @@ export default defineConfig({
     build: {
         modulePreload: { polyfill: false },
         rolldownOptions: {
-            input: {
-                main: resolve(__dirname, "index.html"),
-                resume: resolve(__dirname, "resume.html"),
-                notfoundpage: resolve(__dirname, "404.html"),
-                ...articleInputs(),
-            },
+            input: htmlEntries(),
         },
         target: "baseline-widely-available",
         minify: "terser",

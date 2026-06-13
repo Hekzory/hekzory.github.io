@@ -196,6 +196,67 @@ li {
     border: none;
 }
 
+/* Language switcher — segmented EN | RU control in the bar */
+.lang-switch {
+    gap: 2px;
+    padding: 2px;
+    font-size: 0.8rem;
+}
+
+.lang-link {
+    padding: 2px 7px;
+    border-radius: 3px;
+    color: var(--fg-dim);
+    text-decoration: none;
+    transition: color 0.2s var(--ease), background 0.2s var(--ease);
+}
+
+.lang-link:hover {
+    color: var(--fg);
+}
+
+.lang-link.active {
+    background: var(--primary);
+    color: var(--bg);
+    font-weight: bold;
+}
+
+/* First-visit "read in your language" suggestion banner (JS-inserted) */
+.lang-banner {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    padding: 8px 12px;
+    background: var(--surface-highlight);
+    border-bottom: 1px solid var(--border);
+    font-size: 0.85rem;
+}
+
+.lang-banner a {
+    color: var(--primary);
+    text-decoration: none;
+    font-weight: bold;
+}
+
+.lang-banner a:hover {
+    text-decoration: underline;
+}
+
+.lang-banner-dismiss {
+    background: none;
+    border: none;
+    color: var(--fg-dim);
+    cursor: pointer;
+    font-size: 1.1rem;
+    line-height: 1;
+    padding: 0 4px;
+}
+
+.lang-banner-dismiss:hover {
+    color: var(--fg);
+}
+
 /* --- Grid Layout --- */
 .grid-container {
     flex: 1;
@@ -1016,7 +1077,8 @@ body:has(.terminal-tile.terminal-open) .grid-container>.tile:not(.terminal-tile)
         display: none;
     }
 
-    .waybar-right {
+    /* Keep the language switcher reachable on mobile; only drop the clock. */
+    .waybar-right .clock {
         display: none;
     }
 
