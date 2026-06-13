@@ -1,22 +1,22 @@
 <header class="waybar">
     <div class="waybar-left">
-        <a href="/" class="module workspace {=$home_active}" aria-label="Home">
+        <a href="{{base}}/" class="module workspace {=$home_active}" aria-label="{{t.nav.home}}">
             <svg class="icon" aria-hidden="true">
                 <use href="#i-logo"></use>
             </svg>
-            <span class="label">HOME</span>
+            <span class="label">{{t.nav.home}}</span>
         </a>
-        <a href="/resume" class="module workspace {=$resume_active}" aria-label="Resume">
+        <a href="{{base}}/resume" class="module workspace {=$resume_active}" aria-label="{{t.nav.resume}}">
             <svg class="icon" aria-hidden="true">
                 <use href="#i-resume"></use>
             </svg>
-            <span class="label">RESUME</span>
+            <span class="label">{{t.nav.resume}}</span>
         </a>
-        <a href="/articles/" class="module workspace {=$articles_active}" aria-label="Articles">
+        <a href="{{base}}/articles/" class="module workspace {=$articles_active}" aria-label="{{t.nav.articles}}">
             <svg class="icon" aria-hidden="true">
                 <use href="#i-articles"></use>
             </svg>
-            <span class="label">ARTICLES</span>
+            <span class="label">{{t.nav.articles}}</span>
         </a>
         <div class="module window-title" aria-label="Window title">
             <svg class="icon" aria-hidden="true">
@@ -27,6 +27,11 @@
     </div>
 
     <div class="waybar-right">
+        <nav class="module lang-switch" id="lang-switch" aria-label="{{t.lang.switch_aria}}"
+            data-banner="{{t.lang.banner}}" data-alt-href="{{alt_href}}" data-dismiss="{{t.lang.dismiss}}">
+            <a class="lang-link {{en_active}}" href="{{en_href}}" hreflang="en" lang="en" {{en_current}}>EN</a>
+            <a class="lang-link {{ru_active}}" href="{{ru_href}}" hreflang="ru" lang="ru" {{ru_current}}>RU</a>
+        </nav>
         <div class="module clock" aria-label="Clock">
             <svg class="icon" aria-hidden="true">
                 <use href="#i-clk"></use>

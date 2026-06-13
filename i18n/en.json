@@ -1,0 +1,120 @@
+{
+    "nav": { "home": "HOME", "resume": "RESUME", "articles": "ARTICLES" },
+    "lang": {
+        "switch_aria": "Switch language",
+        "banner": "Читать по-русски →",
+        "dismiss": "Dismiss"
+    },
+    "ui": {
+        "clipboard_title": "Clipboard Manager",
+        "clipboard_copied": "Copied to clipboard:",
+        "close": "Close"
+    },
+    "home": {
+        "role": "Software Engineer",
+        "location": "Moscow, Russia",
+        "locality": "Moscow",
+        "country": "Russia",
+        "sysinfo": "System Info",
+        "k_os": "OS:",
+        "k_user": "Username:",
+        "k_kernel": "Kernel:",
+        "k_uptime": "Uptime:",
+        "k_position": "Position:",
+        "k_resume": "My resume:",
+        "uptime_loading": "Loading...",
+        "resume_link": "Click to view",
+        "connections": "Connections",
+        "terminal_open": "Open Terminal System",
+        "terminal_title": "Terminal",
+        "terminal_close": "Close Terminal"
+    },
+    "nf": {
+        "heading": "Page Not Found",
+        "subtitle": "The requested page does not exist",
+        "location": "Lost in cyberspace",
+        "details": "Error Details",
+        "k_status": "Status:",
+        "k_reason": "Reason:",
+        "k_method": "Method:",
+        "v_reason": "Not Found",
+        "k_suggestion": "Suggestion:",
+        "v_suggestion": "Check the URL or go home",
+        "nav": "Navigation",
+        "home": "Home",
+        "email": "Email"
+    },
+    "art": {
+        "title": "Articles",
+        "intro": "Notes, write-ups from personal experience, and breakdowns of what I have built - infrastructure, DevOps, development, and whatever else seems worth recording. Partly subjective.",
+        "back": "← All articles",
+        "crumb_home": "Home",
+        "posts": {
+            "why_this_blog": {
+                "title": "Why all this",
+                "date": "June 13, 2026",
+                "excerpt": "First post: who I am, what goes here, and why. No claim to be the final word.",
+                "desc": "First post: who I am, what goes here, and why. Notes, personal experience, and breakdowns of what I built - no claim to be the final word."
+            }
+        }
+    },
+    "resume": {
+        "work": "Work Experience",
+        "education": "Education",
+        "skills": "Technical Skills",
+        "languages": "Languages",
+        "soft": "Soft Skills",
+        "exp": {
+            "se": {
+                "role": "Middle Software Engineer",
+                "date": "September 2025 - Present",
+                "team": "DevExp Team",
+                "b1": "Migrated 100+ VK Ads microservices to Consul service mesh, improving service discovery, observability, and inter-service communication reliability",
+                "b2": "Designed and maintained metrics collection service with TeamCity REST API integration, enabling automated data import and analytics; implemented modular architecture supporting multiple data sources",
+                "b3": "Enhanced developer experience through modernization of release and test pipelines, implementing GitOps principles for cloud deployments"
+            },
+            "sdet": {
+                "role": "Junior Software Development Engineer in Test",
+                "date": "November 2024 - August 2025",
+                "b1": "Engineered thread-level test isolation and multi-machine parallel execution framework, achieving 50% reduction in test failure rates",
+                "b2": "Led migration of multiple critical CI/CD pipelines from Jenkins to GitLab CI/CD, modernized legacy Jenkins jobs to declarative Pipelines",
+                "b3": "Optimized CI/CD pipelines by implementing stage separation (build & test), enabling parallel execution and reducing resource contention"
+            },
+            "intern": {
+                "role": "Intern, Software Development Engineer in Test",
+                "date": "May 2024 - October 2024",
+                "b1": "Optimized test execution workflows through parallelization, achieving 30% reduction in overall test runtime",
+                "b2": "Implemented Redash dashboard with ClickHouse backend for real-time test statistics and quality metrics",
+                "b3": "Developed robust Python integration tests for complex microservices ecosystem involving Kafka, MySQL, ClickHouse, and Milvus",
+                "b4": "Reduced Docker build times by 40% through migration from pip to uv for dependency resolution and multi-stage builds"
+            }
+        },
+        "edu": {
+            "degree": "Bachelor of Software Engineering",
+            "date": "2022 - Present",
+            "school": "RTU MIREA - Institution of Information Technology"
+        },
+        "cat": {
+            "languages": "Languages",
+            "devops": "DevOps & CI/CD",
+            "infra": "Infrastructure",
+            "testing": "Testing",
+            "databases": "Databases",
+            "monitoring": "Monitoring"
+        },
+        "lang_ru": "Russian",
+        "lang_ru_level": "C2 Native",
+        "lang_en": "English",
+        "lang_en_level": "C1 Advanced",
+        "lang_en_cert": "Cambridge CAE, 2024",
+        "soft_list": {
+            "communication": "Effective Communication",
+            "focus": "Deep Focus",
+            "problem": "Problem-Solving",
+            "adapt": "Adaptability",
+            "time": "Time Management",
+            "detail": "Attention to Detail"
+        },
+        "soft_note": "Coordinated with 50+ developers during infrastructure changes"
+    }
+}

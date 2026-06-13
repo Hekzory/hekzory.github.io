@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <link rel="icon" href="/favicon.ico" sizes="48x48" />
+    <link rel="icon" href="/favicon.svg" sizes="any" type="image/svg+xml" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+    <link rel="manifest" href="/site.webmanifest" />
+    <link rel="preload" href="/css/martianmono.woff2" as="font" type="font/woff2" crossorigin />
+    <link href="/css/style.css" rel="stylesheet" />
+    <title>Hekzory ~ Home</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+</head>
+
+<body>
+    <load src="components/icons_common.html" />
+    <load src="components/icons_index.html" />
+
+    <!-- Top Bar (Waybar style) -->
+    <load src="components/waybar.html" home_active="active" resume_active="" articles_active=""
+        window_title="~ / home / oleg" />
+
+    <!-- Main Grid Layout -->
+    <main class="grid-container">
+
+        <!-- Profile Tile -->
+        <article class="tile profile-tile h-card">
+            <div class="profile-banner"></div>
+            <div class="profile-content">
+                <div class="profile-image-container">
+                    <img src="/profile400x400c.webp" fetchpriority="high" alt="Oleg Tsvetkov" class="profile-img u-photo"
+                        width="200" height="200" loading="eager" />
+                </div>
+                <div class="profile-details">
+                    <h1 class="name-shimmer p-name">Oleg Tsvetkov</h1>
+                    <h2 class="role p-job-title">{{t.home.role}}</h2>
+                    <p class="location">📍 <span class="p-locality">{{t.home.locality}}</span>, <span class="p-country-name">{{t.home.country}}</span></p>
+                </div>
+            </div>
+        </article>
+
+        <!-- About / Work Tile -->
+        <article class="tile work-tile">
+            <div class="tile-header">
+                <svg class="tile-icon">
+                    <use href="#i-sys"></use>
+                </svg>
+                <span class="tile-title">{{t.home.sysinfo}}</span>
+            </div>
+            <div class="tile-content">
+                <div class="info-row">
+                    <span class="key">{{t.home.k_os}}</span>
+                    <span class="value" id="sys-os">CachyOS</span>
+                </div>
+                <div class="info-row">
+                    <span class="key">{{t.home.k_user}}</span>
+                    <span class="value">Hekzory</span>
+                </div>
+                <div class="info-row">
+                    <span class="key">{{t.home.k_kernel}}</span>
+                    <span class="value" id="sys-kernel">6.19.11-1-cachyos</span>
+                </div>
+                <div class="info-row">
+                    <span class="key">{{t.home.k_uptime}}</span>
+                    <span class="value" id="uptime-value">{{t.home.uptime_loading}}</span>
+                </div>
+                <div class="info-row">
+                    <span class="key">{{t.home.k_position}}</span>
+                    <span class="value">{{t.home.role}} @ <mark>VK</mark></span>
+                </div>
+                <div class="info-row">
+                    <span class="key">{{t.home.k_resume}}</span>
+                    <span class="value"><a href="{{base}}/resume" class="resume-link"><mark>{{t.home.resume_link}}</mark></a></span>
+                </div>
+            </div>
+        </article>
+
+        <!-- Connections Tile -->
+        <article class="tile connections-tile">
+            <div class="tile-header">
+                <svg class="tile-icon">
+                    <use href="#i-conn"></use>
+                </svg>
+                <span class="tile-title">{{t.home.connections}}</span>
+            </div>
+            <div class="tile-content connections-grid">
+                <!-- Social Links -->
+                <a href="https://t.me/hekzory" class="connection-item" target="_blank" rel="me noopener" title="Telegram" data-brand="telegram">
+                    <svg class="conn-icon">
+                        <use href="#i-tg"></use>
+                    </svg>
+                    <span class="conn-label">Telegram</span>
+                </a>
+                <a href="https://github.com/hekzory/" class="connection-item" target="_blank" rel="me noopener" title="GitHub"
+                    data-brand="github">
+                    <svg class="conn-icon">
+                        <use href="#i-gh"></use>
+                    </svg>
+                    <span class="conn-label">GitHub</span>
+                </a>
+                <a href="https://vk.com/hekzo" class="connection-item" target="_blank" rel="me noopener" title="VK" data-brand="vk">
+                    <svg class="conn-icon">
+                        <use href="#i-vk"></use>
+                    </svg>
+                    <span class="conn-label">VK</span>
+                </a>
+                <a href="https://steamcommunity.com/id/hekzory/" class="connection-item" target="_blank" rel="me noopener" title="Steam"
+                    data-brand="steam">
+                    <svg class="conn-icon">
+                        <use href="#i-st"></use>
+                    </svg>
+                    <span class="conn-label">Steam</span>
+                </a>
+
+                <!-- Contact Buttons -->
+                <button class="connection-item contact-btn" data-content="hekzory" title="Discord"
+                    aria-label="Copy Discord Username" data-brand="discord">
+                    <svg class="conn-icon">
+                        <use href="#i-ds"></use>
+                    </svg>
+                    <span class="conn-label">Discord</span>
+                </button>
+                <button class="connection-item contact-btn" data-content="oleg-tsv@yandex.ru" title="Yandex"
+                    aria-label="Copy Yandex Email" data-brand="yandex">
+                    <svg class="conn-icon">
+                        <use href="#i-ya"></use>
+                    </svg>
+                    <span class="conn-label">Yandex</span>
+                </button>
+                <button class="connection-item contact-btn" data-content="oleg@tsv.one" title="Email"
+                    aria-label="Copy Email" data-brand="email">
+                    <svg class="conn-icon">
+                        <use href="#i-ml"></use>
+                    </svg>
+                    <span class="conn-label">Email</span>
+                </button>
+            </div>
+        </article>
+
+        <!-- Terminal Toggle Tile -->
+        <div class="tile terminal-toggle-tile" id="terminal-toggle-tile" role="button" tabindex="0"
+            aria-label="{{t.home.terminal_open}}">
+            <svg class="icon">
+                <use href="#i-term"></use>
+            </svg>
+            <span>{{t.home.terminal_open}}</span>
+        </div>
+
+        <!-- Terminal / Footer Tile -->
+        <article class="tile terminal-tile">
+            <div class="terminal-header">
+                <span>{{t.home.terminal_title}}</span>
+                <button id="terminal-close" class="icon-btn" aria-label="{{t.home.terminal_close}}">
+                    <svg class="icon">
+                        <use href="#i-x"></use>
+                    </svg>
+                </button>
+            </div>
+            <div class="tile-content terminal-output" id="terminal-output">
+                <!-- Terminal content will be generated by JS -->
+            </div>
+        </article>
+
+    </main>
+
+    <dialog id="clipboard-dialog" class="clipboard">
+        <div class="wrapper">
+            <div class="dialog-header">
+                <span class="dialog-title">{{t.ui.clipboard_title}}</span>
+                <button class="close-btn" aria-label="{{t.ui.close}}">×</button>
+            </div>
+            <div class="dialog-body">
+                <p>{{t.ui.clipboard_copied}}</p>
+                <div id="clipboard-content" class="code-block"></div>
+            </div>
+        </div>
+    </dialog>
+
+    <script type="module" src="/js/main.js" defer></script>
+    <load src="components/schema.html" />
+    <load src="components/speculation.html" />
+</body>
+
+</html>

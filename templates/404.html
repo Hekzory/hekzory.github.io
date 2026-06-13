@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <link rel="icon" href="/favicon.ico" sizes="48x48" />
+    <link rel="icon" href="/favicon.svg" sizes="any" type="image/svg+xml" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+    <link rel="manifest" href="/site.webmanifest" />
+    <link rel="preload" href="/css/martianmono.woff2" as="font" type="font/woff2" crossorigin />
+    <link href="/css/style.css" rel="stylesheet" />
+    <title>Hekzory ~ 404</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+</head>
+
+<body>
+    <load src="components/icons_common.html" />
+    <load src="components/icons_index.html" />
+
+    <!-- Top Bar (Waybar style) -->
+    <load src="components/waybar.html" home_active="" resume_active="" articles_active="" window_title="~ / 404 / not-found" />
+
+    <!-- Main Grid Layout -->
+    <main class="grid-container">
+
+        <!-- Profile Tile -->
+        <article class="tile profile-tile">
+            <div class="profile-banner"></div>
+            <div class="profile-content">
+                <div class="profile-image-container">
+                    <div class="profile-img" style="display: flex; align-items: center; justify-content: center;">
+                        <!-- 68% keeps the glyph's bounds inside the circular crop (needs <= 70.7%) -->
+                        <svg style="width: 68%; height: 68%;" aria-hidden="true">
+                            <use href="#i-logo"></use>
+                        </svg>
+                    </div>
+                </div>
+                <div class="profile-details">
+                    <h1 class="name-shimmer">{{t.nf.heading}}</h1>
+                    <h2 class="role">{{t.nf.subtitle}}</h2>
+                    <p class="location">📍 {{t.nf.location}}</p>
+                </div>
+            </div>
+        </article>
+
+        <!-- About / Work Tile -->
+        <article class="tile work-tile">
+            <div class="tile-header">
+                <svg class="tile-icon">
+                    <use href="#i-sys"></use>
+                </svg>
+                <span class="tile-title">{{t.nf.details}}</span>
+            </div>
+            <div class="tile-content">
+                <div class="info-row">
+                    <span class="key">{{t.nf.k_status}}</span>
+                    <span class="value">404</span>
+                </div>
+                <div class="info-row">
+                    <span class="key">{{t.nf.k_reason}}</span>
+                    <span class="value">{{t.nf.v_reason}}</span>
+                </div>
+                <div class="info-row">
+                    <span class="key">{{t.nf.k_method}}</span>
+                    <span class="value">GET</span>
+                </div>
+                <div class="info-row highlight">
+                    <span class="key">{{t.nf.k_suggestion}}</span>
+                    <span class="value">{{t.nf.v_suggestion}}</span>
+                </div>
+            </div>
+        </article>
+
+        <!-- Connections Tile -->
+        <article class="tile connections-tile">
+            <div class="tile-header">
+                <span class="tile-title">{{t.nf.nav}}</span>
+            </div>
+            <div class="tile-content connections-grid">
+                <!-- Navigation Links -->
+                <a href="{{base}}/" class="connection-item" title="{{t.nf.home}}">
+                    <svg class="conn-icon">
+                        <use href="#i-logo"></use>
+                    </svg>
+                    <span class="conn-label">{{t.nf.home}}</span>
+                </a>
+                <button class="connection-item contact-btn" data-content="oleg@tsv.one" title="{{t.nf.email}}">
+                    <svg class="conn-icon">
+                        <use href="#i-ml"></use>
+                    </svg>
+                    <span class="conn-label">{{t.nf.email}}</span>
+                </button>
+            </div>
+        </article>
+
+    </main>
+
+    <dialog id="clipboard-dialog" class="clipboard">
+        <div class="wrapper">
+            <div class="dialog-header">
+                <span class="dialog-title">{{t.ui.clipboard_title}}</span>
+                <button class="close-btn" aria-label="{{t.ui.close}}">×</button>
+            </div>
+            <div class="dialog-body">
+                <p>{{t.ui.clipboard_copied}}</p>
+                <div id="clipboard-content" class="code-block"></div>
+            </div>
+        </div>
+    </dialog>
+
+    <script type="module" src="/js/main.js" defer></script>
+    <load src="components/schema.html" />
+    <load src="components/speculation.html" />
+</body>
+
+</html>

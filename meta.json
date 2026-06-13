@@ -1,44 +1,73 @@
 {
-    "title": "Oleg Tsvetkov | Software Engineer & Developer | Hekzo",
-    "description": "Personal website of Oleg Tsvetkov, Software Engineer at VK. DevOps, CI/CD, Python, Go, Docker, Consul, infrastructure.",
-    "url": "https://tsv.one/",
+    "siteOrigin": "https://tsv.one",
+    "siteName": "Oleg Tsvetkov",
+    "title": {
+        "en": "Oleg Tsvetkov | Software Engineer",
+        "ru": "Oleg Tsvetkov | Разработчик"
+    },
+    "description": {
+        "en": "Personal website of Oleg Tsvetkov, Software Engineer at VK. DevOps, CI/CD, Python, Go, Docker, Consul, infrastructure.",
+        "ru": "Личный сайт Олега Цветкова, разработчика в VK. DevOps, CI/CD, Python, Go, Docker, Consul, инфраструктура."
+    },
     "csp": "default-src 'self' *.tsv.one; script-src 'self' *.tsv.one 'inline-speculation-rules'; style-src 'self' *.tsv.one 'unsafe-inline'; img-src * data:; object-src 'none'; base-uri 'self'",
     "image": "https://tsv.one/preview.png",
     "imageWidth": "2400",
     "imageHeight": "1260",
     "imageType": "image/png",
-    "imageAlt": "Oleg Tsvetkov — Software Engineer. Personal webpage",
+    "imageAlt": "Oleg Tsvetkov - Software Engineer. Personal webpage",
     "themeColor": "#1a1b26",
     "type": "profile",
     "profileFirstName": "Oleg",
     "profileLastName": "Tsvetkov",
     "profileUsername": "hekzory",
     "colorScheme": "dark",
+    "locales": {
+        "en": { "ogLocale": "en_US" },
+        "ru": { "ogLocale": "ru_RU" }
+    },
     "pages": {
         "resume": {
-            "title": "Oleg Tsvetkov | Resume | Software Engineer",
-            "description": "Resume of Oleg Tsvetkov - Middle Software Engineer at VK with expertise in DevOps, CI/CD, Python, and infrastructure. View work experience, skills, and education.",
-            "url": "https://tsv.one/resume"
+            "title": "Resume | Oleg Tsvetkov",
+            "description": "Resume of Oleg Tsvetkov - Middle Software Engineer at VK with expertise in DevOps, CI/CD, Python, and infrastructure. View work experience, skills, and education."
         },
         "404": {
-            "title": "404 — Page Not Found | Oleg Tsvetkov",
+            "title": "Page not found | Oleg Tsvetkov",
             "description": "This page doesn't exist. Check the URL or head back to the home page.",
-            "url": "https://tsv.one/404",
-            "type": "website"
+            "type": "website",
+            "robots": "noindex, follow"
         },
         "articles": {
-            "title": "Статьи | Oleg Tsvetkov",
-            "description": "Личные заметки: инструкции, опыт и разбор сделанного про инфраструктуру, DevOps и разработку. Частично субъективно.",
-            "url": "https://tsv.one/articles/",
-            "type": "website",
-            "locale": "ru_RU"
+            "title": "Articles | Oleg Tsvetkov",
+            "description": "Notes, write-ups from personal experience, and breakdowns of what I have built - infrastructure, DevOps and development. Partly subjective.",
+            "type": "website"
         },
         "articles/why-this-blog": {
+            "title": "Why all this | Oleg Tsvetkov",
+            "description": "First post: who I am, what goes here, and why. Notes, personal experience, and breakdowns of what I built, no claim to be the final word.",
+            "type": "article"
+        },
+        "ru": {
+            "title": "Oleg Tsvetkov | Разработчик"
+        },
+        "ru/resume": {
+            "title": "Резюме | Oleg Tsvetkov",
+            "description": "Резюме Олега Цветкова - разработчика (middle) в VK: DevOps, CI/CD, Python и инфраструктура. Опыт работы, навыки и образование."
+        },
+        "ru/404": {
+            "title": "Страница не найдена | Oleg Tsvetkov",
+            "description": "Такой страницы нет. Проверьте URL или вернитесь на главную.",
+            "type": "website",
+            "robots": "noindex, follow"
+        },
+        "ru/articles": {
+            "title": "Статьи | Oleg Tsvetkov",
+            "description": "Личные заметки: инструкции, опыт и разбор сделанного про инфраструктуру, DevOps и разработку. Частично субъективно.",
+            "type": "website"
+        },
+        "ru/articles/why-this-blog": {
             "title": "Зачем это всё | Oleg Tsvetkov",
             "description": "Первый пост: кто я, что тут будет и зачем. Инструкции, личный опыт и разбор сделанного, без претензии на истину в последней инстанции.",
-            "url": "https://tsv.one/articles/why-this-blog",
-            "type": "article",
-            "locale": "ru_RU"
+            "type": "article"
         }
     }
 }

@@ -4,31 +4,31 @@
         "@graph": [
             {
                 "@type": "WebSite",
-                "@id": "https://tsv.one/#website",
-                "url": "https://tsv.one/",
+                "@id": "{{origin}}/#website",
+                "url": "{{origin}}/",
                 "name": "Oleg Tsvetkov",
                 "description": "Personal website of Oleg Tsvetkov, Software Engineer at VK.",
-                "inLanguage": "en",
-                "publisher": { "@id": "https://tsv.one/#person" }
+                "inLanguage": "{{locale}}",
+                "publisher": { "@id": "{{origin}}/#person" }
             },
             {
                 "@type": "ProfilePage",
-                "@id": "https://tsv.one/#profilepage",
-                "url": "https://tsv.one/",
+                "@id": "{{canonical}}#profilepage",
+                "url": "{{canonical}}",
                 "name": "Oleg Tsvetkov | Software Engineer",
-                "isPartOf": { "@id": "https://tsv.one/#website" },
-                "mainEntity": { "@id": "https://tsv.one/#person" },
-                "inLanguage": "en"
+                "isPartOf": { "@id": "{{origin}}/#website" },
+                "mainEntity": { "@id": "{{origin}}/#person" },
+                "inLanguage": "{{locale}}"
             },
             {
                 "@type": "Person",
-                "@id": "https://tsv.one/#person",
+                "@id": "{{origin}}/#person",
                 "name": "Oleg Tsvetkov",
                 "givenName": "Oleg",
                 "familyName": "Tsvetkov",
                 "alternateName": "Hekzory",
-                "url": "https://tsv.one/",
-                "image": "https://tsv.one/profile400x400.webp",
+                "url": "{{origin}}/",
+                "image": "{{origin}}/profile400x400.webp",
                 "email": "oleg@tsv.one",
                 "jobTitle": "Software Engineer",
                 "description": "Software Engineer at VK working on DevOps, CI/CD, and infrastructure.",

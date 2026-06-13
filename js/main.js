@@ -153,6 +153,65 @@
 
     new ClipboardDialog();
 
+    // --- Language preference: persist switcher choice + suggest a better match ---
+    // No auto-redirect (per Google guidance): every URL stays crawlable. We only
+    // remember an explicit choice and, on a first visit whose browser language
+    // doesn't match this page, surface a dismissible one-line suggestion banner.
+    (() => {
+        const sw = document.getElementById('lang-switch');
+        if (!sw) return;
+
+        const KEY = 'lang';
+        const SUPPORTED = ['en', 'ru'];
+        const curLang = document.documentElement.lang === 'ru' ? 'ru' : 'en';
+        const otherLang = curLang === 'en' ? 'ru' : 'en';
+        const store = (lang) => {
+            try { localStorage.setItem(KEY, lang); } catch (_) { /* private mode */ }
+        };
+
+        // Remember an explicit switcher click for future visits + banner logic.
+        sw.addEventListener('click', (e) => {
+            const link = e.target.closest('.lang-link');
+            if (link) store(link.getAttribute('lang'));
+        });
+
+        let stored = null;
+        try { stored = localStorage.getItem(KEY); } catch (_) { /* private mode */ }
+        if (stored) return; // user already chose — never nag
+
+        const navs = navigator.languages || [navigator.language || ''];
+        let preferred = null;
+        for (const l of navs) {
+            const base = (l || '').toLowerCase().split('-')[0];
+            if (SUPPORTED.includes(base)) { preferred = base; break; }
+        }
+        if (!preferred || preferred === curLang) return;
+
+        const altHref = sw.dataset.altHref;
+        const text = sw.dataset.banner;
+        if (!altHref || !text) return;
+
+        const banner = document.createElement('div');
+        banner.className = 'lang-banner';
+
+        const link = document.createElement('a');
+        link.href = altHref;
+        link.textContent = text;
+        link.addEventListener('click', () => store(otherLang));
+
+        const dismiss = document.createElement('button');
+        dismiss.type = 'button';
+        dismiss.className = 'lang-banner-dismiss';
+        dismiss.textContent = '×';
+        dismiss.setAttribute('aria-label', sw.dataset.dismiss || 'Dismiss');
+        dismiss.addEventListener('click', () => { store(curLang); banner.remove(); });
+
+        banner.append(link, dismiss);
+        const bar = document.querySelector('.waybar');
+        if (bar) bar.insertAdjacentElement('afterend', banner);
+        else document.body.insertBefore(banner, document.body.firstChild);
+    })();
+
     // --- Terminal (lazy-loaded on first interaction; index page only) ---
     // Terminal code is ~900 lines of scenarios/easter-eggs/Terminal class that
     // most visitors never touch. The chunk is fetched on hover/focus of the

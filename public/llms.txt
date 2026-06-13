@@ -1,13 +1,26 @@
 # Oleg Tsvetkov
 
 > Personal website of Oleg Tsvetkov (handle: Hekzory), a Software Engineer at VK
-> (VK Ads, DevExp team) focused on DevOps, CI/CD, and infrastructure — Consul
-> service mesh, Python, Go, Docker. Based in Moscow, Russia.
+> (VK Ads, DevExp team) focused on DevOps, CI/CD, and infrastructure - Consul
+> service mesh, Python, Go, Docker. Based in Moscow, Russia. The site is
+> bilingual: English is the default at the root, Russian mirrors every page
+> under /ru/.
 
 ## Pages
 
 - [Home](https://tsv.one/): Profile, social links, and an interactive terminal.
 - [Resume](https://tsv.one/resume): Work experience, technical skills, education, and languages.
+- [Articles](https://tsv.one/articles/): Blog index - notes, write-ups, and breakdowns on infrastructure, DevOps, and development.
+
+## Articles
+
+- [Why all this](https://tsv.one/articles/why-this-blog): First post - who I am, what the blog is for, and why.
+
+## Languages
+
+- English is the default and lives at the root (e.g. /, /resume, /articles/, /articles/<slug>).
+- Russian mirrors every page under /ru/ (e.g. /ru/, /ru/resume, /ru/articles/, /ru/articles/<slug>).
+- Both directions are reciprocally linked via hreflang; x-default points to the English version.
 
 ## Links
 
@@ -18,4 +31,4 @@
 ## Notes
 
 - This is a static personal website. There is no public API.
-- Structured data (schema.org Person/ProfilePage) is embedded as JSON-LD on each page.
+- Structured data is embedded as JSON-LD on each page: schema.org Person/ProfilePage on home and resume, BlogPosting on article posts.
