@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="ru">
+
+<head>
+    <link rel="icon" href="/favicon.ico" sizes="48x48" />
+    <link rel="icon" href="/favicon.svg" sizes="any" type="image/svg+xml" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+    <link rel="manifest" href="/site.webmanifest" />
+    <link rel="preload" href="/css/martianmono.woff2" as="font" type="font/woff2" crossorigin />
+    <link href="/css/style.css" rel="stylesheet" />
+    <link href="/css/articles.css" rel="stylesheet" />
+    <title>Зачем это всё | Oleg Tsvetkov</title>
+    <meta name="description"
+        content="Первый пост: кто я, что тут будет и зачем. Инструкции, личный опыт и разбор сделанного, без претензии на истину в последней инстанции." />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+</head>
+
+<body class="article-page">
+    <load src="../components/icons_common.html" />
+
+    <!-- Top Bar (Waybar style) -->
+    <load src="../components/waybar.html" home_active="" resume_active="" articles_active="active"
+        window_title="~ / home / oleg / articles / why-this-blog" />
+
+    <main class="article-container">
+        <article class="tile article">
+            <header class="article-header">
+                <a class="article-back" href="/articles/">← Все статьи</a>
+                <h1 class="article-title">Зачем это всё</h1>
+                <div class="article-meta"><time datetime="2026-06-13">13 июня 2026</time></div>
+            </header>
+
+            <div class="article-content">
+                <p>У меня есть GitHub, забитый репозиториями, и этот сайт, который я переписываю заметно чаще, чем
+                    стоило бы. А вот места, где можно спокойно рассказать, зачем всё это затевалось и что по дороге
+                    сломалось, не нашлось. Исправляю.</p>
+
+                <p>Если коротко и без пафоса, я инфраструктурщик, грейд миддл. Серверы, CI/CD, контейнеры,
+                    немного Go и Python. Скучные подробности живут в <a href="/resume">резюме</a>, тут не оно. На
+                    десктопе Arch + репы CachyOS (да, i use Arch btw; теперь это даже задокументировано).</p>
+
+                <p>О чём это всё будет, примерно в порядке убывания частоты:</p>
+                <ul>
+                    <li>инструкции про то, как я что-то поднял, настроил или починил, и что при этом пошло не так (а
+                        что-то всегда идёт);</li>
+                    <li>личный опыт из работы и пет-проектов, без причёсывания под success story;</li>
+                    <li>разборы в духе «смотрите, что собрал», иногда просто чтобы самому через полгода вспомнить
+                        как.</li>
+                </ul>
+
+                <p>Сразу про планку. Всё здесь не в духе «делайте как я, я знаю
+                    как правильно», а скорее «вот как я попробовал, в основном заработало, остальное вкусовщина». Мнение
+                    не окончательное, местами наверняка спорное, и через полгода я с частью сам не соглашусь. И это
+                    нормально. Когда знаешь, что прочитают, проверяешь себя внимательнее.</p>
+
+                <p>Сам сайт это отдельная история. Он для меня не только визитка, но и полигон: кастомный CSS, ванильный
+                    JS, ноль фреймворков и почти болезненная гонка за размером, когда выпиливаешь байты, которых, кроме
+                    тебя, никто не заметит. Оптимизировать до последнего килобайта страницу, которую смотрит полтора
+                    человека, польза сомнительная, но мне нравится, и попутно понимаешь, как оно всё работает под
+                    капотом. Исходники открыты, если любопытно:
+                    <a href="https://github.com/hekzory/hekzory.github.io" target="_blank"
+                        rel="noopener">github.com/hekzory/hekzory.github.io</a>.</p>
+
+                <p>Будет ли это полезно кому-то ещё? Возможно. Будет ли полезно мне? Точно - хотя бы как внешняя
+                    память.</p>
+
+                <p>В общем, поехали.</p>
+            </div>
+        </article>
+    </main>
+
+    <script type="application/ld+json">
+        {
+            "@context": "https://schema.org",
+            "@graph": [
+                {
+                    "@type": "BlogPosting",
+                    "@id": "https://tsv.one/articles/why-this-blog#article",
+                    "url": "https://tsv.one/articles/why-this-blog",
+                    "headline": "Зачем это всё",
+                    "description": "Первый пост: кто я, что тут будет и зачем. Инструкции, личный опыт и разбор сделанного, без претензии на истину в последней инстанции.",
+                    "datePublished": "2026-06-13T12:00:00+03:00",
+                    "dateModified": "2026-06-13T12:00:00+03:00",
+                    "image": "https://tsv.one/preview.png",
+                    "inLanguage": "ru",
+                    "author": {
+                        "@type": "Person",
+                        "@id": "https://tsv.one/#person",
+                        "name": "Oleg Tsvetkov",
+                        "url": "https://tsv.one/"
+                    },
+                    "publisher": {
+                        "@type": "Person",
+                        "@id": "https://tsv.one/#person",
+                        "name": "Oleg Tsvetkov"
+                    },
+                    "isPartOf": {
+                        "@type": "Blog",
+                        "@id": "https://tsv.one/articles/#blog",
+                        "name": "Статьи",
+                        "url": "https://tsv.one/articles/"
+                    },
+                    "mainEntityOfPage": { "@type": "WebPage", "@id": "https://tsv.one/articles/why-this-blog" }
+                },
+                {
+                    "@type": "BreadcrumbList",
+                    "@id": "https://tsv.one/articles/why-this-blog#breadcrumb",
+                    "itemListElement": [
+                        { "@type": "ListItem", "position": 1, "name": "Главная", "item": "https://tsv.one/" },
+                        { "@type": "ListItem", "position": 2, "name": "Статьи", "item": "https://tsv.one/articles/" },
+                        { "@type": "ListItem", "position": 3, "name": "Зачем это всё" }
+                    ]
+                }
+            ]
+        }
+    </script>
+
+    <script type="module" src="/js/main.js" defer></script>
+    <load src="../components/speculation.html" />
+</body>
+
+</html>

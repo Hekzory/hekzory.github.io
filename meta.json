@@ -25,6 +25,20 @@
             "description": "This page doesn't exist. Check the URL or head back to the home page.",
             "url": "https://tsv.one/404",
             "type": "website"
+        },
+        "articles": {
+            "title": "Статьи | Oleg Tsvetkov",
+            "description": "Личные заметки: инструкции, опыт и разбор сделанного про инфраструктуру, DevOps и разработку. Частично субъективно.",
+            "url": "https://tsv.one/articles/",
+            "type": "website",
+            "locale": "ru_RU"
+        },
+        "articles/why-this-blog": {
+            "title": "Зачем это всё | Oleg Tsvetkov",
+            "description": "Первый пост: кто я, что тут будет и зачем. Инструкции, личный опыт и разбор сделанного, без претензии на истину в последней инстанции.",
+            "url": "https://tsv.one/articles/why-this-blog",
+            "type": "article",
+            "locale": "ru_RU"
         }
     }
 }

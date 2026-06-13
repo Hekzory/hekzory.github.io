@@ -1,4 +1,5 @@
 import fs from "node:fs/promises";
+import { readdirSync } from "node:fs";
 import path from "node:path";
 import { execFileSync } from "node:child_process";
 
@@ -12,6 +13,24 @@ const DEFAULT_ROUTES = [
     { loc: "https://tsv.one/", sources: ["index.html"] },
     { loc: "https://tsv.one/resume", sources: ["resume.html"] },
 ];
+
+// Discover articles/*.html so dropping a post in there auto-adds its sitemap
+// entry: index.html -> /articles/, <slug>.html -> /articles/<slug>.
+function articleRoutes() {
+    try {
+        return readdirSync("articles")
+            .filter((f) => f.endsWith(".html"))
+            .map((f) => {
+                const slug = f.slice(0, -5);
+                const loc = slug === "index"
+                    ? "https://tsv.one/articles/"
+                    : `https://tsv.one/articles/${slug}`;
+                return { loc, sources: [`articles/${f}`] };
+            });
+    } catch {
+        return [];
+    }
+}
 
 function git(args) {
     return execFileSync("git", args, { encoding: "utf-8" }).trim();
@@ -33,7 +52,8 @@ export default function sitemapPlugin({ routes = DEFAULT_ROUTES, outDir = "dist"
         apply: "build",
         async closeBundle() {
             const buildTime = new Date().toISOString().replace(/\.\d{3}Z$/, "Z");
-            const body = routes
+            const allRoutes = [...routes, ...articleRoutes()];
+            const body = allRoutes
                 .map(({ loc, sources }) => {
                     const lastmod = gitLastMod([...sources, ...SHARED_SOURCES]) ?? buildTime;
                     return `  <url>\n    <loc>${loc}</loc>\n    <lastmod>${lastmod}</lastmod>\n  </url>`;

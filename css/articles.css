@@ -1,0 +1,202 @@
+/* Articles / blog — loaded only by /articles/ pages.
+   Tokens, .tile, .name-shimmer, the waybar, base reset and responsive rules
+   all come from style.css (also linked on these pages); this sheet adds only
+   the list + long-form reading styles so / and /resume never download it. */
+
+/* --- Shared container spacing --- */
+.articles-container,
+.article-container {
+    flex: 1;
+    width: 100%;
+    max-width: 1080px;
+    margin: 0 auto;
+    padding: var(--gap);
+    /* Airy top offset matching .grid-container/.resume-container, but clamped
+       so very tall viewports don't push content absurdly far down. */
+    padding-top: clamp(32px, 10vh, 120px);
+    min-height: calc(100vh - var(--bar-height));
+}
+
+/* ============================ List page ============================ */
+.articles-header {
+    margin-bottom: calc(var(--gap) * 1.5);
+}
+
+.articles-header .name-shimmer {
+    font-size: clamp(1.8rem, 5vw, 2.6rem);
+}
+
+.articles-intro {
+    margin-top: 8px;
+    color: var(--fg-dim);
+    font-size: 0.95rem;
+    line-height: 1.6;
+}
+
+.articles-list {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: var(--gap);
+}
+
+/* Card reuses .tile (glass + hover border-color: primary); add link reset,
+   padding and a lift on hover (transform is already in .tile's transition). */
+.article-card {
+    padding: 18px 20px;
+    gap: 8px;
+    text-decoration: none;
+    color: inherit;
+}
+
+.article-card:hover {
+    transform: translateY(-3px);
+}
+
+.article-card-meta {
+    font-size: 0.85rem;
+    color: var(--warning);
+}
+
+.article-card-title {
+    margin: 0;
+    font-size: 1.2rem;
+    font-weight: bold;
+    color: var(--fg);
+    transition: color var(--duration) var(--ease);
+}
+
+.article-card:hover .article-card-title {
+    color: var(--primary);
+}
+
+.article-card-excerpt {
+    margin: 0;
+    color: var(--fg-dim);
+    font-size: 0.9rem;
+    line-height: 1.6;
+}
+
+/* ============================ Article page ============================ */
+.article {
+    padding: clamp(20px, 4vw, 40px);
+}
+
+.article-back {
+    display: inline-block;
+    margin-bottom: 16px;
+    color: var(--fg-dim);
+    text-decoration: none;
+    font-size: 0.85rem;
+    transition: color var(--duration) var(--ease);
+}
+
+.article-back:hover {
+    color: var(--primary);
+}
+
+.article-header {
+    margin-bottom: 28px;
+    padding-bottom: 20px;
+    border-bottom: 1px solid var(--border);
+}
+
+.article-title {
+    margin: 0;
+    font-size: clamp(1.6rem, 4.5vw, 2.2rem);
+    line-height: 1.2;
+    color: var(--fg);
+}
+
+.article-meta {
+    margin-top: 10px;
+    font-size: 0.85rem;
+    color: var(--warning);
+}
+
+/* --- Long-form prose --- */
+.article-content {
+    color: var(--fg-dark);
+    line-height: 1.75;
+}
+
+.article-content > * + * {
+    margin-top: 1.1em;
+}
+
+.article-content h2 {
+    margin-top: 1.8em;
+    font-size: 1.4rem;
+    color: var(--fg);
+}
+
+.article-content h3 {
+    margin-top: 1.5em;
+    font-size: 1.15rem;
+    color: var(--fg);
+}
+
+.article-content a {
+    color: var(--primary);
+    text-decoration: underline;
+    text-underline-offset: 3px;
+    transition: color var(--duration) var(--ease);
+}
+
+.article-content a:hover {
+    color: var(--accent);
+}
+
+.article-content ul,
+.article-content ol {
+    padding-left: 1.5em;
+}
+
+.article-content li + li {
+    margin-top: 0.4em;
+}
+
+.article-content blockquote {
+    border-left: 3px solid var(--primary);
+    padding-left: 1em;
+    color: var(--fg-dim);
+    font-style: italic;
+}
+
+.article-content hr {
+    border: none;
+    border-top: 1px solid var(--border);
+    margin: 2em 0;
+}
+
+.article-content img {
+    max-width: 100%;
+    height: auto;
+    border-radius: var(--radius);
+}
+
+/* Inline code + fenced blocks reuse the dashed terminal look of .code-block. */
+.article-content code {
+    background: var(--bg-dark);
+    padding: 2px 6px;
+    border-radius: 4px;
+    color: var(--accent);
+    font-family: monospace;
+    font-size: 0.9em;
+}
+
+.article-content pre {
+    background: var(--bg-dark);
+    border: 1px dashed var(--border);
+    border-radius: 6px;
+    padding: 14px 16px;
+    overflow-x: auto;
+}
+
+.article-content pre code {
+    background: none;
+    padding: 0;
+    border-radius: 0;
+    color: var(--success);
+    font-size: 0.9rem;
+}

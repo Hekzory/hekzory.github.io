@@ -21,14 +21,23 @@ export default function htmlMetaPlugin(options = {}) {
         meta.setAttribute("content", content);
     };
 
+    let root = process.cwd();
+
     return {
         name: "vite-plugin-html-meta",
+        configResolved(config) {
+            root = config.root;
+        },
         async transformIndexHtml(html, ctx) {
             const metaData = JSON.parse(await fs.readFile(path.resolve(metaFile), encoding));
 
-            // Extract page name from the file path (e.g., "resume" from "/path/to/resume.html")
-            const fileName = ctx.filename ? path.basename(ctx.filename, '.html') : 'index';
-            const pageName = fileName === 'index' ? null : fileName;
+            // Page key = path relative to root, minus .html, with directory
+            // indexes folded to the directory (e.g. "resume", "articles" from
+            // articles/index.html, "articles/why-this-blog"). Root index -> null.
+            const rel = ctx.filename ? path.relative(root, ctx.filename).replace(/\\/g, "/") : "index.html";
+            let pageName = rel.replace(/\.html$/, "");
+            if (pageName.endsWith("/index")) pageName = pageName.slice(0, -"/index".length);
+            if (pageName === "index") pageName = null;
 
             // Merge page-specific overrides if they exist
             const pageOverrides = pageName && metaData.pages?.[pageName] ? metaData.pages[pageName] : {};

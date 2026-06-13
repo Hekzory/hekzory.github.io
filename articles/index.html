@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="ru">
+
+<head>
+    <link rel="icon" href="/favicon.ico" sizes="48x48" />
+    <link rel="icon" href="/favicon.svg" sizes="any" type="image/svg+xml" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+    <link rel="manifest" href="/site.webmanifest" />
+    <link rel="preload" href="/css/martianmono.woff2" as="font" type="font/woff2" crossorigin />
+    <link href="/css/style.css" rel="stylesheet" />
+    <link href="/css/articles.css" rel="stylesheet" />
+    <title>Статьи | Oleg Tsvetkov</title>
+    <meta name="description"
+        content="Личные заметки: инструкции, опыт и разбор сделанного про инфраструктуру, DevOps и разработку. Частично субъективно." />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+</head>
+
+<body class="articles-page">
+    <load src="../components/icons_common.html" />
+
+    <!-- Top Bar (Waybar style) -->
+    <load src="../components/waybar.html" home_active="" resume_active="" articles_active="active"
+        window_title="~ / home / oleg / articles" />
+
+    <main class="articles-container">
+        <header class="articles-header">
+            <h1 class="name-shimmer">Статьи</h1>
+            <p class="articles-intro">Инструкции, заметки из личного опыта и разбор того, что собрал - про
+                инфраструктуру, DevOps, разработку и что ещё покажется достойным записи. Частично
+                субъективно.</p>
+        </header>
+
+        <ul class="articles-list">
+            <li>
+                <a class="tile article-card" href="/articles/why-this-blog">
+                    <span class="article-card-meta"><time datetime="2026-06-13">13 июня 2026</time></span>
+                    <h2 class="article-card-title">Зачем это всё</h2>
+                    <p class="article-card-excerpt">Первый пост: кто я, что тут будет и зачем. Без претензии на истину
+                        в последней инстанции.</p>
+                </a>
+            </li>
+        </ul>
+    </main>
+
+    <script type="application/ld+json">
+        {
+            "@context": "https://schema.org",
+            "@graph": [
+                {
+                    "@type": "Blog",
+                    "@id": "https://tsv.one/articles/#blog",
+                    "url": "https://tsv.one/articles/",
+                    "name": "Статьи - Oleg Tsvetkov",
+                    "description": "Личные заметки: инструкции, опыт и разбор сделанного про инфраструктуру, DevOps и разработку.",
+                    "inLanguage": "ru",
+                    "isPartOf": { "@id": "https://tsv.one/#website" },
+                    "author": {
+                        "@type": "Person",
+                        "@id": "https://tsv.one/#person",
+                        "name": "Oleg Tsvetkov",
+                        "url": "https://tsv.one/"
+                    },
+                    "mainEntity": { "@id": "https://tsv.one/articles/#postlist" }
+                },
+                {
+                    "@type": "ItemList",
+                    "@id": "https://tsv.one/articles/#postlist",
+                    "itemListElement": [
+                        {
+                            "@type": "ListItem",
+                            "position": 1,
+                            "url": "https://tsv.one/articles/why-this-blog",
+                            "name": "Зачем это всё"
+                        }
+                    ]
+                },
+                {
+                    "@type": "BreadcrumbList",
+                    "@id": "https://tsv.one/articles/#breadcrumb",
+                    "itemListElement": [
+                        { "@type": "ListItem", "position": 1, "name": "Главная", "item": "https://tsv.one/" },
+                        { "@type": "ListItem", "position": 2, "name": "Статьи" }
+                    ]
+                }
+            ]
+        }
+    </script>
+
+    <script type="module" src="/js/main.js" defer></script>
+    <load src="../components/speculation.html" />
+</body>
+
+</html>
