@@ -99,6 +99,15 @@ export default function htmlMetaPlugin(options = {}) {
             // Per-locale lang attribute (templates ship a static placeholder value).
             document.documentElement.setAttribute("lang", locale);
 
+            // RDFa prefix declarations for the OGP vocabularies this page emits.
+            // Strict validators (e.g. Yandex) don't assume the article:/profile:
+            // prefixes, so declare exactly the ones used — og: is always present,
+            // the others mirror the conditional article:/profile:* tag blocks below.
+            const prefixes = ["og: https://ogp.me/ns#"];
+            if (type === "article") prefixes.push("article: https://ogp.me/ns/article#");
+            if (type === "profile") prefixes.push("profile: https://ogp.me/ns/profile#");
+            document.documentElement.setAttribute("prefix", prefixes.join(" "));
+
             // <title>/og:title: an article reads its record's title (single-sourced
             // with the <h1> and JSON-LD headline); every other page uses its
             // resolved meta.json title.
