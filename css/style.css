@@ -458,6 +458,19 @@ li {
     object-fit: cover;
 }
 
+/* 404 page: logo glyph centered inside the circular profile crop */
+.profile-glyph {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* 68% keeps the glyph's bounds inside the circular crop (needs <= 70.7%) */
+.profile-glyph svg {
+    width: 68%;
+    height: 68%;
+}
+
 
 .profile-details h1 {
     font-size: 1.8rem;

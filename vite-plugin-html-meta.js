@@ -143,6 +143,21 @@ export default function htmlMetaPlugin(options = {}) {
                 cspMeta.setAttribute("content", csp);
             }
 
+            // Referrer-Policy ships as a meta tag for the same reason as the CSP
+            // (GitHub Pages cannot send custom HTTP headers). Placed high in <head>
+            // so it governs every subsequent request; overridable via meta.json.
+            const referrer = meta.referrer || metaData.referrer;
+            if (referrer) {
+                let refMeta = document.head.querySelector('meta[name="referrer"]');
+                if (!refMeta) {
+                    refMeta = document.createElement("meta");
+                    refMeta.setAttribute("name", "referrer");
+                    const charsetMeta = document.head.querySelector("meta[charset]");
+                    document.head.insertBefore(refMeta, charsetMeta.nextSibling);
+                }
+                refMeta.setAttribute("content", referrer);
+            }
+
             // Crawler directives, only when a page opts in (e.g. 404).
             if (robots) {
                 insertMetaTag(document, "robots", robots);
