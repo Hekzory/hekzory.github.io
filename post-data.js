@@ -99,6 +99,26 @@ export function postHtmlTokens(record, locale) {
     };
 }
 
+// The in-body <figure> for a post, built from the record's optional `image`
+// (single-sourced with the og:image + JSON-LD ImageObject). Emitted where the
+// prose drops the {{article_figure}} token, so the author controls placement;
+// "" for a post without an image. alt/caption are locale-resolved; src/alt/
+// caption are HTML-escaped, and width/height (from the record) curb upscaling and
+// reserve space (no layout shift). loading=lazy since figures sit below the fold.
+export function buildPostFigure(record, locale) {
+    const img = record.image;
+    if (!img || !img.src) return "";
+    const alt = pick(img.alt, locale) ?? "";
+    const caption = pick(img.caption, locale);
+    const dim = (k) => (img[k] ? ` ${k}="${esc(img[k])}"` : "");
+    return (
+        `<figure class="article-figure">` +
+        `<img src="${esc(img.src)}"${dim("width")}${dim("height")} alt="${esc(alt)}" loading="lazy" decoding="async" />` +
+        (caption ? `<figcaption>${esc(caption)}</figcaption>` : "") +
+        `</figure>`
+    );
+}
+
 // Human display date derived from datePublished, so the calendar date lives in
 // exactly one place. We read the YYYY-MM-DD off the ISO string and format it in
 // UTC, so the build machine's timezone can never shift the day.
@@ -167,6 +187,16 @@ export function indexItems(posts, locale, origin, base) {
 export function buildPostJsonLd({ record, locale, canonical, origin, base, blogName, crumbHome, modified }) {
     const d = postLocaleData(record, locale);
     const person = { "@type": "Person", "@id": `${origin}/#person`, name: "Oleg Tsvetkov" };
+    // Optional article image as an ImageObject (absolute url), single-sourced with
+    // the og:image and the in-body <figure> from the same record.image.
+    const imageObj = record.image?.src
+        ? {
+              "@type": "ImageObject",
+              url: `${origin}${record.image.src}`,
+              ...(record.image.width ? { width: record.image.width } : {}),
+              ...(record.image.height ? { height: record.image.height } : {}),
+          }
+        : null;
     const graph = [
         {
             "@type": "BlogPosting",
@@ -174,6 +204,7 @@ export function buildPostJsonLd({ record, locale, canonical, origin, base, blogN
             url: canonical,
             headline: d.title,
             description: d.description,
+            ...(imageObj ? { image: imageObj } : {}),
             datePublished: d.datePublished,
             dateModified: modified,
             inLanguage: locale,

@@ -175,6 +175,28 @@
     border-radius: var(--radius);
 }
 
+/* Record-driven figures ({{article_figure}}): centered, framed, with a caption.
+   The inner img inherits .article-content img (max-width:100%, height:auto,
+   radius); its width/height attrs cap it at natural size (no upscaling) and
+   reserve space (no layout shift). */
+.article-figure {
+    margin: 1.6em 0;
+}
+
+.article-figure img {
+    display: block;
+    margin-inline: auto;
+    border: 1px solid var(--border);
+}
+
+.article-figure figcaption {
+    margin-top: 10px;
+    font-size: 0.85rem;
+    line-height: 1.5;
+    color: var(--fg-dim);
+    text-align: center;
+}
+
 /* Inline code + fenced blocks reuse the dashed terminal look of .code-block. */
 .article-content code {
     background: var(--bg-dark);

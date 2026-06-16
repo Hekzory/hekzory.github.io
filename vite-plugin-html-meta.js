@@ -60,12 +60,6 @@ export default function htmlMetaPlugin(options = {}) {
             // post (or the dropped ru 404) must not advertise a twin that 404s.
             const have = availableLocales(rel, (f) => existsSync(path.resolve(root, f)));
 
-            // The OG preview (preview.png) is a screenshot of the home page, so
-            // it's only honest there. Other pages ship no card image unless they
-            // define their own meta.json "image" — we never fabricate one.
-            const isHome = sib.clean === "/" || sib.clean === "/ru/";
-            const showImage = isHome || !!(pageName && metaData.pages?.[pageName]?.image);
-
             // Article posts are driven by their single-source record
             // (articles/<slug>.post.json), not by a meta.json "pages" entry.
             const slug = postSlug(rel);
@@ -73,6 +67,23 @@ export default function htmlMetaPlugin(options = {}) {
             const pd = post ? postLocaleData(post, locale) : null;
             const type = pd ? "article" : meta.type || metaData.type;
             const description = pd ? pd.description : meta.description;
+
+            // The OG preview (preview.png) is a screenshot of the home page, so it's
+            // only honest there. A post carries its own preview in its record
+            // ("image"); any other page can opt in via a meta.json "image". We never
+            // fabricate one.
+            const isHome = sib.clean === "/" || sib.clean === "/ru/";
+            const postImage = post?.image?.src ? post.image : null;
+            const showImage = isHome || !!postImage || !!(pageName && metaData.pages?.[pageName]?.image);
+
+            // Resolved card-image fields. A post's come from its record (src made
+            // absolute, alt locale-resolved, falling back to the title); every other
+            // page uses its page override, then the global default.
+            const imageUrl = postImage ? abs(postImage.src) : meta.image || metaData.image;
+            const imageType = postImage?.type || meta.imageType || metaData.imageType;
+            const imageWidth = postImage?.width || meta.imageWidth || metaData.imageWidth;
+            const imageHeight = postImage?.height || meta.imageHeight || metaData.imageHeight;
+            const imageAlt = postImage ? pick(postImage.alt, locale) || pd.title : meta.imageAlt || metaData.imageAlt;
 
             const siteName = metaData.siteName || pick(metaData.title, locale);
             const altLocale = locale === "ru" ? "en" : "ru";
@@ -138,15 +149,11 @@ export default function htmlMetaPlugin(options = {}) {
             // Refinements emitted only when defined so a card never ships
             // content="undefined"; dimensions/type let scrapers render the card
             // without first fetching the image.
-            const imageType = meta.imageType || metaData.imageType;
-            const imageWidth = meta.imageWidth || metaData.imageWidth;
-            const imageHeight = meta.imageHeight || metaData.imageHeight;
-            const imageAlt = meta.imageAlt || metaData.imageAlt;
             if (showImage) {
-                insertMetaTag(document, "og:image", meta.image || metaData.image, true);
+                insertMetaTag(document, "og:image", imageUrl, true);
                 if (imageType) insertMetaTag(document, "og:image:type", imageType, true);
-                if (imageWidth) insertMetaTag(document, "og:image:width", imageWidth, true);
-                if (imageHeight) insertMetaTag(document, "og:image:height", imageHeight, true);
+                if (imageWidth) insertMetaTag(document, "og:image:width", String(imageWidth), true);
+                if (imageHeight) insertMetaTag(document, "og:image:height", String(imageHeight), true);
                 if (imageAlt) insertMetaTag(document, "og:image:alt", imageAlt, true);
             }
             insertMetaTag(document, "og:type", type, true);
@@ -194,7 +201,7 @@ export default function htmlMetaPlugin(options = {}) {
             insertMetaTag(document, "twitter:title", pageTitle);
             insertMetaTag(document, "twitter:description", description);
             if (showImage) {
-                insertMetaTag(document, "twitter:image", meta.image || metaData.image);
+                insertMetaTag(document, "twitter:image", imageUrl);
                 if (imageAlt) insertMetaTag(document, "twitter:image:alt", imageAlt);
             }
             // twitter:site requires an @username; only emit when one is configured.

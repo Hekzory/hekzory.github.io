@@ -3,7 +3,7 @@ import { readFileSync, existsSync } from "node:fs";
 import path from "node:path";
 import { localeOf, siblings, abs, availableLocales, SITE_ORIGIN } from "./i18n-paths.js";
 import { pageLastMod } from "./page-lastmod.js";
-import { loadPosts, postSlug, postHtmlTokens, buildPostJsonLd, indexCards, indexItems } from "./post-data.js";
+import { loadPosts, postSlug, postHtmlTokens, buildPostJsonLd, buildPostFigure, indexCards, indexItems } from "./post-data.js";
 
 // Localizes each built page after components are inlined (runs after
 // vite-plugin-html-inject's "pre" pass, before the meta plugin). It derives the
@@ -100,6 +100,9 @@ export default function i18nFanoutPlugin({ dir = "i18n" } = {}) {
                     crumbHome: lookup(dict, "art.crumb_home") ?? "",
                     modified,
                 });
+                // Optional in-body figure from the record (empty when no image);
+                // the prose places it via {{article_figure}}.
+                data.article_figure = buildPostFigure(post, locale);
             }
             // Articles index: the post cards + their JSON-LD ItemList are generated
             // from the manifest (newest-first), so adding a post needs no edit here.

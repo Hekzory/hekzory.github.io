@@ -6,6 +6,20 @@
         "en": ["blog", "personal site", "infrastructure", "DevOps"],
         "ru": ["блог", "личный сайт", "инфраструктура", "DevOps"]
     },
+    "image": {
+        "src": "/why-this-blog-build.webp",
+        "width": 807,
+        "height": 617,
+        "type": "image/webp",
+        "alt": {
+            "en": "Terminal running pnpm build: Vite lists every file it generated into dist with its raw and gzipped size, then reports the build finished in under a second.",
+            "ru": "Терминал с командой pnpm build: Vite выводит каждый собранный в dist файл с обычным и gzip-размером и сообщает, что сборка заняла меньше секунды."
+        },
+        "caption": {
+            "en": "One production build of this very site. The right-hand column is the number I still keep trying to make smaller.",
+            "ru": "Одна сборка этого самого сайта. Размер каждого файла - это то самое число, которое я всё пытаюсь уменьшить."
+        }
+    },
     "en": {
         "title": "Why all this",
         "excerpt": "First post: who I am, what goes here, and why. No claim to be the final word.",
