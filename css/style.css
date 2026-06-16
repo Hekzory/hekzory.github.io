@@ -147,7 +147,43 @@ li {
     background: transparent;
     color: var(--fg-dark);
     margin-left: 16px;
-    /* Extra gap before path */
+    /* Extra gap before the breadcrumb */
+}
+
+/* Breadcrumb: a semantic <ol> styled as a "~ / articles / slug" path. The " / "
+   separators are drawn by CSS so the markup stays a clean list. */
+.crumbs {
+    display: flex;
+    align-items: center;
+    list-style: none;
+    gap: 0;
+}
+
+.crumbs li {
+    display: flex;
+    align-items: center;
+}
+
+.crumbs li + li::before {
+    content: "/";
+    color: var(--fg-dim);
+    opacity: 0.5;
+    margin: 0 0.5em;
+}
+
+.crumbs a {
+    color: var(--fg-dim);
+    text-decoration: none;
+    transition: color 0.2s var(--ease);
+}
+
+.crumbs a:hover {
+    color: var(--primary);
+}
+
+/* The current page — the leaf crumb. */
+.crumbs [aria-current="page"] {
+    color: var(--fg);
 }
 
 .module {
@@ -1302,10 +1338,6 @@ body:has(.terminal-tile.terminal-open) .grid-container>.tile:not(.terminal-tile)
 /* Header Row - REMOVED (Profile now full width) */
 
 /* Section overrides for specific placement */
-.id-1-languages {
-    /* Standard tile behavior now */
-}
-
 .id-2-profile {
     margin-bottom: 0;
 }

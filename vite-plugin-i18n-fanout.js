@@ -4,6 +4,7 @@ import path from "node:path";
 import { localeOf, siblings, abs, availableLocales, SITE_ORIGIN } from "./i18n-paths.js";
 import { pageLastMod } from "./page-lastmod.js";
 import { loadPosts, postSlug, postHtmlTokens, buildPostJsonLd, buildPostFigure, indexCards, indexItems } from "./post-data.js";
+import { buildBreadcrumb } from "./breadcrumb.js";
 
 // Localizes each built page after components are inlined (runs after
 // vite-plugin-html-inject's "pre" pass, before the meta plugin). It derives the
@@ -80,6 +81,9 @@ export default function i18nFanoutPlugin({ dir = "i18n" } = {}) {
             // token guard so a value that legitimately contains "{{...}}" (a post
             // about templating) can't false-trip it.
             const data = {};
+            // Waybar breadcrumb — a route-derived <ol> of crumbs, the same on
+            // every page (built once here, rendered in breadcrumb.js).
+            data.breadcrumb = buildBreadcrumb(rel, base);
             if (post) {
                 // <h1>/<time> get HTML-escaped strings; the whole BlogPosting +
                 // Breadcrumb JSON-LD is assembled and escaped in post-data, so no

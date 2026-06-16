@@ -234,9 +234,10 @@ export function buildPostJsonLd({ record, locale, canonical, origin, base, blogN
 // One-line route shell for an article post. Vite's MPA needs an HTML entry per
 // route, and html-inject needs the prose path as a {=$content} param, so we
 // generate these from the manifest rather than hand-authoring them (they're
-// gitignored). slug feeds the waybar window title.
-const shell = (slug, content) =>
-    `<load src="templates/article-post.html" slug="${slug}" content="${content}" />\n`;
+// gitignored). The waybar breadcrumb derives the slug from the route, so no
+// slug param is needed here.
+const shell = (content) =>
+    `<load src="templates/article-post.html" content="${content}" />\n`;
 
 // Regenerate the per-post route shells from the manifest, pruning any stale ones
 // (a deleted record) so the route list always mirrors articles/*.post.json. A
@@ -265,8 +266,8 @@ export function generateShells(root) {
         if (!hasEn && !hasRu) {
             throw new Error(`[posts] ${slug}: no prose found (expected articles/content/${slug}.html and/or its ru/ twin)`);
         }
-        if (hasEn) writeFileSync(path.resolve(root, `articles/${slug}.html`), shell(slug, `articles/content/${slug}`));
-        if (hasRu) writeFileSync(path.resolve(root, `ru/articles/${slug}.html`), shell(slug, `ru/articles/content/${slug}`));
+        if (hasEn) writeFileSync(path.resolve(root, `articles/${slug}.html`), shell(`articles/content/${slug}`));
+        if (hasRu) writeFileSync(path.resolve(root, `ru/articles/${slug}.html`), shell(`ru/articles/content/${slug}`));
     }
     return Object.keys(posts);
 }

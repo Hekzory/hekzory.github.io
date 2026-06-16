@@ -18,12 +18,12 @@
             </svg>
             <span class="label">{{t.nav.articles}}</span>
         </a>
-        <div class="module window-title" aria-label="Window title">
+        <nav class="module window-title" aria-label="{{t.nav.breadcrumb_aria}}">
             <svg class="icon" aria-hidden="true">
                 <use href="#i-win"></use>
             </svg>
-            <span id="window-title">{=$window_title}</span>
-        </div>
+            <ol class="crumbs">{{breadcrumb}}</ol>
+        </nav>
     </nav>
 
     <div class="waybar-right">

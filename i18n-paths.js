@@ -84,3 +84,25 @@ export function siblings(relPath) {
 }
 
 export const abs = (p) => SITE_ORIGIN + p;
+
+// Visible breadcrumb trail for a build entry, as structured data (no markup —
+// breadcrumb.js renders it). It's a pure function of the route: the locale-
+// stripped clean URL's path segments become the crumbs. The root is "~" and
+// links home; each ancestor segment links to its container (trailing slash); the
+// final segment is the current page and carries no href. `base` is the in-locale
+// link prefix ("" for en, "/ru" for ru) so the links never cross locales.
+// "/" -> [~]; "/resume" -> [~, resume]; "/articles/" -> [~, articles];
+// "/articles/x" -> [~, articles, x]; "/404" -> [~, 404].
+export function crumbTrail(relPath, base = "") {
+    const logical = stripLocale(cleanUrl(relPath));
+    const segments = logical.split("/").filter(Boolean);
+    // Home is just the root crumb, marked current by having no href.
+    if (!segments.length) return [{ label: "~" }];
+    const trail = [{ label: "~", href: `${base}/` }];
+    segments.forEach((seg, i) => {
+        const last = i === segments.length - 1;
+        const href = last ? undefined : `${base}/${segments.slice(0, i + 1).join("/")}/`;
+        trail.push({ label: seg, href });
+    });
+    return trail;
+}

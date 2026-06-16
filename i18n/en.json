@@ -1,5 +1,5 @@
 {
-    "nav": { "home": "HOME", "resume": "RESUME", "articles": "ARTICLES", "primary_aria": "Primary navigation" },
+    "nav": { "home": "HOME", "resume": "RESUME", "articles": "ARTICLES", "primary_aria": "Primary navigation", "breadcrumb_aria": "Breadcrumb" },
     "lang": {
         "switch_aria": "Switch language",
         "banner": "Читать по-русски →",
