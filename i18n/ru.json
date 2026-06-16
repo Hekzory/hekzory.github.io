@@ -41,6 +41,7 @@
         "crumb_home": "Главная"
     },
     "resume": {
+        "crumb": "Резюме",
         "work": "Опыт работы",
         "education": "Образование",
         "skills": "Technical Skills",
