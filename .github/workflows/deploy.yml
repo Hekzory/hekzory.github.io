@@ -22,7 +22,7 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
         with:
           # full history so sitemap <lastmod> reflects real commit dates
           # (vite-plugin-sitemap.js falls back to build time on shallow clones)
