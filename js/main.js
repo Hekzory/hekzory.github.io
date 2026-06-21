@@ -239,4 +239,24 @@
         terminalToggleTile.addEventListener('keydown', activate);
     }
 
+    // --- Article code: double-click selects the whole <code> ---
+    // Browsers segment double-click selection by "word", which mangles tokens
+    // like --compile-bytecode (breaks at the hyphen) and can grab surrounding
+    // spaces in prose. CSS can't retarget that granularity (only user-select:
+    // all, which selects on a single click). So on a real double-click inside a
+    // code span, select exactly its contents — a clean copy of the flag, env
+    // var, or verbatim error line. Article-post pages only (others lack it).
+    const articleBody = $('.article-content');
+    if (articleBody) {
+        articleBody.addEventListener('dblclick', (e) => {
+            const code = e.target.closest('code');
+            if (!code) return;
+            const range = document.createRange();
+            range.selectNodeContents(code);
+            const sel = window.getSelection();
+            sel.removeAllRanges();
+            sel.addRange(range);
+        });
+    }
+
 })();

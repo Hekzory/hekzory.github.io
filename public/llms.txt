@@ -14,6 +14,7 @@
 
 ## Articles
 
+- [uv in production: the speed is real, the integration isn't free](https://tsv.one/articles/uv-in-production-caveats): First-hand ~90 days running Astral's uv in production - five caveats (venv requirement, firewalled Python install, cache-lock timeouts, first-index, bytecode), each with the exact error and the fix.
 - [Why all this](https://tsv.one/articles/why-this-blog): First post - who I am, what the blog is for, and why.
 
 ## Languages

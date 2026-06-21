@@ -1,0 +1,98 @@
+<p class="article-stamp">uv 0.9+ · ~90 days in prod</p>
+
+<p class="article-lede">uv, Astral's package manager, is 10-100x faster than pip in benchmarks. On our CI it was more modest, about 10x. I think no one is surprised by that ~10x anymore - it's the main feature, right?</p>
+
+<p class="article-callout"><strong class="article-callout-label">Disclaimer.</strong> I have no affiliation with Astral. Everything below is in-house experience from VK and my own measurements on infra (who I am - it's all in the <a href="{{base}}/resume">resume</a>). Not reprinting anyone else's marketing numbers.</p>
+
+<p>The idea, not buried at the bottom under a spoiler: uv stays, we're not rolling back, the speed is worth it. But the speed promise is the easy part of the deal. The expensive thing was multiple non-obvious behavior changes. Behind almost every one is the same reason: uv is deliberately stricter than pip. Not a bug. Usually a correct and deliberate decision, but that doesn't stop you tripping over it.</p>
+
+<p>And yes, the version is stamped on purpose. uv moves fast - the specific flags, env vars and defaults could well have shifted by the time you're reading this.</p>
+
+<h2>Speed, in short</h2>
+
+<p>The number everyone loves, I'll quote once and move on. The install step in CI shrank from ~60 seconds to ~3-5. An honest ~10x on that, and you see it on the very first build.</p>
+
+<p>That's all on speed. It's real, it's nice, it came almost for free. What comes next didn't.</p>
+
+<h2>Five caveats, loudest first</h2>
+
+<p>First are the ones that break visibly. At the bottom, the ones that might be left for some time until someone happens to notice.</p>
+
+<h3>1. uv won't install without an active venv ("No virtual environment found")</h3>
+
+<p>With no venv active, pip will quite happily install into the global or user environment. uv won't. No venv? Then either activate one, or say it explicitly: <code>--python /path/to/python</code> or <code>--system</code>. The <code>--user</code> flag uv doesn't recognize at all, it rejects it on sight.</p>
+
+<p>Forgot to activate the venv? uv doesn't guess for you and doesn't reach into the system behind your back, it just stops:</p>
+
+<pre><code>error: No virtual environment found; run `uv venv` to create an environment, or pass `--system` to install into a non-virtual environment</code></pre>
+
+<p>Before: "the client just runs like it used to." After: "the client needs an active venv or explicit flags." Sounds trivial until it's twenty different services/dockerfiles/repos and multiple scripts that assumed a <code>--user</code> or implicitly global install.</p>
+
+<p>The thinking makes sense - global installs really do mess up the system, and pip is the kinder one here. But the cost of the switch is still present.</p>
+
+<h3>2. Auto-installing Python - firewall dislikes it (but it's fixable)</h3>
+
+<p>uv can download the interpreter you need on its own, pulling it on demand from Astral's python-build-standalone. You'd think - finally, a universal way to get the right Python version into an image of any distro. Handy right up to the first corporate perimeter. No outbound access? No Python. On a laptop with internet you won't even notice, but in a locked-down CI it stalls.</p>
+
+<pre><code>error: Failed to install cpython-3.12.12-linux-x86_64-gnu
+  Caused by: Request failed after 3 retries
+  Caused by: Failed to download https://github.com/astral-sh/python-build-standalone/releases/download/20260203/cpython-3.12.12%2B20260203-x86_64-unknown-linux-gnu-install_only_stripped.tar.gz
+  Caused by: error sending request for url (https://github.com/astral-sh/python-build-standalone/releases/download/20260203/cpython-3.12.12%2B20260203-x86_64-unknown-linux-gnu-install_only_stripped.tar.gz)
+  Caused by: operation timed out</code></pre>
+
+<p>There's a fix, and it's a built-in one. The <code>UV_PYTHON_INSTALL_MIRROR</code> variable repoints where uv fetches releases from to your internal mirror (PyPy needs its own variable, the CPython one never covered it). The same setting goes into <code>[tool.uv]</code>, so you don't depend on whatever the environment happens to have set.</p>
+
+<p>A PyPI mirror won't cover this: python-build-standalone sits outside your package index, so it needs a mirror of its own. On my side it was solved without anything exotic: I made a proxying repo in Nexus for these releases and pointed <code>UV_PYTHON_INSTALL_MIRROR</code> at it. You're configuring <code>HTTP(S)_PROXY</code> and an internal package index next to it anyway - without those the story is incomplete.</p>
+
+<h3>3. Parallel installs now get serialized</h3>
+
+<p>uv's cache is <a href="https://docs.astral.sh/uv/concepts/cache/" target="_blank" rel="noopener">concurrency-safe</a>: append-only, safe for parallel readers and writers. What it does lock is the venv for the duration of an install, plus the build of individual artifacts, so nothing overwrites them halfway through. pip didn't do this, and parallel installs into one environment could, in theory, break each other.</p>
+
+<pre><code>× Failed to download and build `pyyaml==6.0.3`
+├─▶ Failed to acquire lock on the distribution cache
+├─▶ Could not acquire lock
+╰─▶ Timeout (300s) when waiting for lock on `/var/lib/jenkins/.cache/uv/sdists-v9/pypi/pyyaml/6.0.3` at `/var/lib/jenkins/.cache/uv/sdists-v9/pypi/pyyaml/6.0.3/.lock`, is another uv process running? You can set `UV_LOCK_TIMEOUT` to increase the timeout.</code></pre>
+
+<p>For us it showed up where we weren't checking. A single Jenkins runner can have several jobs running at once. pip never cared. Now they hit the same lock, line up, and start collecting timeouts.</p>
+
+<p>You could call this more honest: pip could break and not tell you, here you at least get a visible timeout. Except in practice those timeouts fired noticeably more often for us (a couple times a day) than that original hypothetical race ever would have. So, either you try to cut down on parallel access, or you raise <code>UV_LOCK_TIMEOUT</code>. We did both.</p>
+
+<h3>4. Index order: first-index by default</h3>
+
+<p>By default uv runs in <code>first-index</code> mode: it takes versions only from the first index where the package turns up at all, and looks no further. pip gathers candidates from everywhere and picks the "best" one. Sounds like a convenience regression. In reality it's a defense against dependency confusion, the same attack that burned torchtriton in December 2022: you sneak a package named after an internal one into a public index, and the build pulls the outsider's instead of yours.</p>
+
+<p>You can bring pip-like behavior back through <code>--index-strategy</code> or <code>UV_INDEX_STRATEGY</code>. There are, by the way, two "unsafe" options here, not one: <code>unsafe-first-match</code> and <code>unsafe-best-match</code>. The latter is closest to pip, and it reintroduces dependency confusion problem.</p>
+
+<p>For us it stayed theory: the repos are corporate, dependency confusion is dealt with a layer above, so in prod we simply put the old behavior back. But the default's reasoning is clear and, on the whole, correct. This is also what <a href="https://peps.python.org/pep-0766/" target="_blank" rel="noopener">PEP 766</a> is trying to standardize.</p>
+
+<h3>5. Bytecode compilation off by default, cold start slower than pip</h3>
+
+<p>At install time, pip compiled <code>.py</code> to <code>.pyc</code> right away. uv doesn't, by default: compilation is lazy, on first import. In practice that means the first request to a freshly deployed service is a touch slower, until the bytecode has warmed up. We never actually hit this in prod - I caught it reading the docs. Well, to be honest, there aren't many latency-critical Python services in my corner of responsibility.</p>
+
+<p>The fix is a single flag: <code>--compile-bytecode</code> or <a href="https://docs.astral.sh/uv/reference/settings/#compile-bytecode" target="_blank" rel="noopener"><code>UV_COMPILE_BYTECODE=1</code></a>. Astral explicitly recommends turning it on in Docker builds to fix cold start problems. And since they recommend enabling it for anything that ships to prod anyway, it's hard not to notice how good leaving it off makes the install benchmark look...</p>
+
+<p>One thing that didn't quite earn its own section (we never tripped over it) but is worth knowing: PEP 517 build isolation is on by default.</p>
+
+<h2>Positive beyond speed</h2>
+
+<p>uv brought a few genuinely noticable things</p>
+
+<ul>
+    <li><strong>Speed. Yes.</strong> Ha, it's this one again, ~10x. Did I mention it is written in Rust?</li>
+    <li><strong>Managed Python.</strong> Honestly a good thing, with an asterisk: good once the mirror is up. Before the mirror it's the pain from caveat 2.</li>
+    <li><strong>Build and publish through uv.</strong> We moved some packages over to building and publishing with uv commands: an easy swap for Twine, one tool where there used to be several.</li>
+</ul>
+
+{{article_figure}}
+
+<h2>Bottom line</h2>
+
+<p>Take it if you've got any kind of living Python environment (you update reasonably often and aren't stuck in the past) and install time hurts: the win is real, it pays off fast, no regrets. Wait (or rather, budget time for the integration) if you're sitting in a closed network with private indexes.</p>
+
+<p class="article-callout is-key"><strong class="article-callout-label">Rule.</strong> Almost every uv default that surprised me turned out to be deliberate strictness. So the migration is really "find every place the old workflow depended on pip's kindness." uv isn't going to be kind.</p>
+
+<p>Across three months I haven't found a single surprise that turned out to be just bad design. Mildly unpleasant, but good for you.</p>
+
+<p>And one last caveat, this one not about the code: Astral is a VC-backed startup with no public revenue model, recently acquired by OpenAI. Open source, sure, but worth keeping in mind.</p>
+
+<p>Migration score: 8.5/10. The point and a half I took off wasn't for uv, it was mostly for the quirks of our own infra that we had to prep.</p>

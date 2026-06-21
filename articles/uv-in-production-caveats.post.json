@@ -1,0 +1,33 @@
+{
+    "slug": "uv-in-production-caveats",
+    "datePublished": "2026-06-21T18:00:00+03:00",
+    "section": { "en": "DevOps", "ru": "DevOps" },
+    "tags": {
+        "en": ["uv", "python", "pip", "venv", "Docker", "Twine", "DevOps", "CI/CD", "infrastructure"],
+        "ru": ["uv", "python", "pip", "venv", "Docker", "Twine", "DevOps", "CI/CD", "инфраструктура"]
+    },
+    "image": {
+        "src": "/uv-replaces-toolchain.webp",
+        "width": 1200,
+        "height": 630,
+        "type": "image/webp",
+        "alt": {
+            "en": "pip, pip-tools, virtualenv, pyenv, pipx and twine, each replaced by a single uv command.",
+            "ru": "pip, pip-tools, virtualenv, pyenv, pipx и twine - каждый заменяется одной командой uv."
+        },
+        "caption": {
+            "en": "Six familiar tools, all one uv command now. Sounds nice, right?",
+            "ru": "Шесть привычных утилит, и все теперь одна команда uv. Не главная причина переезжать, но приятная."
+        }
+    },
+    "en": {
+        "title": "uv in production: the speed is real, the integration isn't free",
+        "excerpt": "Moved our tooling from pip to uv and lived with it in big tech for ~90 days. The speed is real; everything else is the reason why this article exists.",
+        "description": "Astral's uv is ~10x faster than pip, but migrating surfaces non-obvious behavioral changes. Five production caveats, each with the error and the fix."
+    },
+    "ru": {
+        "title": "uv в проде: скорость реальна, интеграция не бесплатна",
+        "excerpt": "Перенесли тулинг с pip на uv и ~90 дней пожили с этим в бигтехе. Скорость честная. Остальное - причина, по которой существует эта статья.",
+        "description": "uv быстрее pip примерно в 10 раз, но миграция вскрывает неочевидные изменения поведения. Пять мест из прода, каждое с ошибкой и фиксом."
+    }
+}

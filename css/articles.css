@@ -204,7 +204,8 @@
     border-radius: 4px;
     color: var(--accent);
     font-family: monospace;
-    font-size: 0.9em;
+    /* Slightly larger than body text so monospace tokens stay legible, not shrunk. */
+    font-size: 1.1em;
 }
 
 .article-content pre {
@@ -212,7 +213,12 @@
     border: 1px dashed var(--border);
     border-radius: 6px;
     padding: 14px 16px;
-    overflow-x: auto;
+    line-height: 1.55;
+    /* Long verbatim lines (error strings, paths) wrap to the box instead of
+       forcing a horizontal scrollbar; overflow-wrap breaks unbreakable tokens
+       (long paths/URLs) so nothing spills past the edge. */
+    white-space: pre-wrap;
+    overflow-wrap: anywhere;
 }
 
 .article-content pre code {
@@ -220,5 +226,61 @@
     padding: 0;
     border-radius: 0;
     color: var(--success);
-    font-size: 0.9rem;
+    font-size: 1rem;
+}
+
+/* --- Long-form furniture (reusable across posts) --- */
+
+/* Version/date "decay stamp" near the top of a technical post — same instinct as
+   the build-time <lastmod>: tell the reader up front how stale the specifics may
+   already be. Quiet, monospace-ish, sits under the title. */
+.article-stamp {
+    font-size: 0.8rem;
+    color: var(--fg-dim);
+    letter-spacing: 0.03em;
+}
+
+/* Opening paragraph: a touch larger and brighter so the verdict-up-front lede
+   reads as the lede, not as body text. */
+.article-lede {
+    font-size: 1.15rem;
+    line-height: 1.7;
+    color: var(--fg);
+}
+
+/* Aside box for a verdict, a disclosure, a fix, or the one rule worth keeping.
+   Accent stripe + tinted glass; an optional inline label leads it in. Tone
+   variants reuse the palette so a callout can signal weight without new colors. */
+.article-callout {
+    border-left: 3px solid var(--primary);
+    background: var(--surface-highlight);
+    border-radius: 0 var(--radius) var(--radius) 0;
+    padding: 14px 18px;
+    color: var(--fg-dark);
+}
+
+.article-callout-label {
+    color: var(--primary);
+    font-weight: bold;
+}
+
+.article-callout.is-key {
+    border-left-color: var(--secondary);
+}
+
+.article-callout.is-key .article-callout-label {
+    color: var(--secondary);
+}
+
+.article-callout.is-warning {
+    border-left-color: var(--warning);
+}
+
+.article-callout.is-warning .article-callout-label {
+    color: var(--warning);
+}
+
+/* A callout can hold its own <pre>/<code>; keep those readable on the tint. */
+.article-callout > :first-child {
+    margin-top: 0;
 }
