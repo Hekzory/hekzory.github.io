@@ -29,3 +29,7 @@ dist-ssr
 !/articles/index.html
 /ru/articles/*.html
 !/ru/articles/index.html
+
+# ccount key (secret) — never commit
+tsv-one-*.json
+bing.txt
