@@ -12,8 +12,8 @@
         "height": 617,
         "type": "image/webp",
         "alt": {
-            "en": "Terminal running pnpm build: Vite lists every file it generated into dist with its raw and gzipped size, then reports the build finished in under a second.",
-            "ru": "Терминал с командой pnpm build: Vite выводит каждый собранный в dist файл с обычным и gzip-размером и сообщает, что сборка заняла меньше секунды."
+            "en": "Terminal running pnpm build: Vite lists every file with raw and gzipped size, build finished under a second.",
+            "ru": "Терминал с командой pnpm build: Vite выводит каждый файл с обычным и gzip-размером, сборка заняла меньше секунды."
         },
         "caption": {
             "en": "One production build of this very site. The right-hand column is the number I still keep trying to make smaller.",
