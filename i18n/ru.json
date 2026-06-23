@@ -17,6 +17,7 @@
     },
     "home": {
         "role": "Разработчик",
+        "bio": "Разработчик в VK Ads, команда DevExp, Москва. Делаю внутреннюю платформу, на которой держится разработка: CI/CD, сборка и релизы, service mesh, который связывает бэкенд. В основном Python, Go и Docker.",
         "location": "Москва, Россия",
         "locality": "Москва",
         "country": "Россия",
@@ -28,7 +29,7 @@
         "k_position": "Должность:",
         "k_resume": "Резюме:",
         "uptime_loading": "Загрузка...",
-        "resume_link": "Открыть",
+        "resume_link": "Открыть резюме",
         "connections": "Контакты",
         "terminal_open": "Открыть терминал",
         "terminal_title": "Терминал",
@@ -42,6 +43,7 @@
     },
     "resume": {
         "crumb": "Резюме",
+        "doc_label": "Резюме / CV",
         "work": "Опыт работы",
         "education": "Образование",
         "skills": "Technical Skills",

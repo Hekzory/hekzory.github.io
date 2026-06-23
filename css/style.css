@@ -758,11 +758,34 @@ body:has(.terminal-tile.terminal-open) .grid-container>.tile:not(.terminal-tile)
     color: var(--bg);
 }
 
+/* whoami / bio — left side of the status-bar row, beside the terminal toggle.
+   Spans under connections + profile (2/9); the toggle takes 9/12 on the same row. */
+.whoami-tile {
+    grid-column: 2 / 9;
+    grid-row: 6 / 7;
+}
+
+.whoami-bio {
+    margin: 0;
+    color: var(--fg-dim);
+    line-height: 1.7;
+    font-size: 0.95rem;
+}
+
+/* Resume/CV document label under the role on the resume header */
+.resume-doc-label {
+    margin: 2px 0 0;
+    font-size: 0.75rem;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: var(--fg-dim);
+}
+
 /* Terminal Toggle Tile */
 .terminal-toggle-tile {
-    grid-column: 2 / 12;
+    grid-column: 9 / 12;
     grid-row: 6 / 7;
-    height: 80px;
+    min-height: 80px;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -1114,6 +1137,12 @@ body:has(.terminal-tile.terminal-open) .grid-container>.tile:not(.terminal-tile)
 
     .connections-tile {
         order: 0;
+    }
+
+    /* Bio reads as the intro: same order as the profile, which precedes it in the
+       DOM, so it lands directly after the photo/name. */
+    .whoami-tile {
+        order: -1;
     }
 }
 

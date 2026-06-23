@@ -17,6 +17,7 @@
     },
     "home": {
         "role": "Software Engineer",
+        "bio": "I'm a Software Engineer on the DevExp team at VK Ads in Moscow, building the developer platform the rest of engineering runs on - CI/CD, build and release tooling, and the service mesh that holds the backend together. Mostly Python, Go, and Docker.",
         "location": "Moscow, Russia",
         "locality": "Moscow",
         "country": "Russia",
@@ -28,7 +29,7 @@
         "k_position": "Position:",
         "k_resume": "My resume:",
         "uptime_loading": "Loading...",
-        "resume_link": "Click to view",
+        "resume_link": "View resume",
         "connections": "Connections",
         "terminal_open": "Open Terminal System",
         "terminal_title": "Terminal",
@@ -57,6 +58,7 @@
     },
     "resume": {
         "crumb": "Resume",
+        "doc_label": "Resume / CV",
         "work": "Work Experience",
         "education": "Education",
         "skills": "Technical Skills",

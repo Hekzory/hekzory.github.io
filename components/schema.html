@@ -7,6 +7,7 @@
                 "@id": "{{origin}}/#website",
                 "url": "{{origin}}/",
                 "name": "Oleg Tsvetkov",
+                "alternateName": "Hekzory",
                 "description": "Personal website of Oleg Tsvetkov, Software Engineer at VK.",
                 "inLanguage": "{{locale}}",
                 "publisher": { "@id": "{{origin}}/#person" }
@@ -17,6 +18,7 @@
                 "url": "{{canonical}}",
                 "name": "{{t.schema.page_home}}",
                 "isPartOf": { "@id": "{{origin}}/#website" },
+                "primaryImageOfPage": { "@id": "{{origin}}/#primaryimage" },
                 "mainEntity": { "@id": "{{origin}}/#person" },
                 "inLanguage": "{{locale}}"
             },
@@ -28,7 +30,7 @@
                 "familyName": "Tsvetkov",
                 "alternateName": "Hekzory",
                 "url": "{{origin}}/",
-                "image": "{{origin}}/profile400x400.webp",
+                "image": { "@id": "{{origin}}/#primaryimage" },
                 "email": "oleg@tsv.one",
                 "jobTitle": "{{t.home.role}}",
                 "description": "{{t.schema.person_desc}}",
@@ -36,6 +38,15 @@
                     "@type": "Organization",
                     "name": "VK",
                     "url": "https://vk.company/"
+                },
+                "hasOccupation": {
+                    "@type": "Occupation",
+                    "name": "{{t.home.role}}",
+                    "occupationLocation": {
+                        "@type": "City",
+                        "name": "Moscow"
+                    },
+                    "skills": "DevOps, CI/CD, Python, Go, Docker, Consul Service Mesh, Linux"
                 },
                 "address": {
                     "@type": "PostalAddress",
@@ -47,10 +58,22 @@
                     "CI/CD",
                     "Python",
                     "Go",
+                    "SQL",
                     "Docker",
+                    "Podman",
+                    "Jenkins",
+                    "GitLab CI/CD",
+                    "TeamCity",
                     "Consul Service Mesh",
+                    "Nginx",
+                    "Kafka",
                     "Linux",
-                    "Infrastructure as Code"
+                    "pytest",
+                    "PostgreSQL",
+                    "ClickHouse",
+                    "Redis",
+                    "Grafana",
+                    "Prometheus"
                 ],
                 "knowsLanguage": ["en", "ru"],
                 "sameAs": [
@@ -59,6 +82,15 @@
                     "https://t.me/hekzory",
                     "https://steamcommunity.com/id/hekzory/"
                 ]
+            },
+            {
+                "@type": "ImageObject",
+                "@id": "{{origin}}/#primaryimage",
+                "url": "{{origin}}/face.webp",
+                "contentUrl": "{{origin}}/face.webp",
+                "width": 788,
+                "height": 788,
+                "caption": "Oleg Tsvetkov"
             }
         ]
     }
