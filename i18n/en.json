@@ -91,8 +91,9 @@
         },
         "edu": {
             "degree": "Bachelor of Software Engineering",
-            "date": "2022 - Present",
-            "school": "RTU MIREA - Institution of Information Technology"
+            "date": "2022 - 2026",
+            "school": "RTU MIREA - Institute of Information Technology",
+            "honors": "Graduated with honors, GPA 4.98/5.0"
         },
         "cat": {
             "languages": "Languages",

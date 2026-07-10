@@ -1571,6 +1571,12 @@ body:has(.terminal-tile.terminal-open) .grid-container>.tile:not(.terminal-tile)
     margin-bottom: 4px;
 }
 
+.education-honors {
+    color: var(--fg);
+    font-size: 0.85rem;
+    margin-bottom: 4px;
+}
+
 .education-location {
     color: var(--fg-dim);
     font-size: 0.85rem;

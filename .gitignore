@@ -33,4 +33,5 @@ dist-ssr
 # ccount key (secret) — never commit
 tsv-one-*.json
 bing.txt
+yandex.txt
 .c*/
