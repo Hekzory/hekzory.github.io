@@ -137,8 +137,9 @@ function displayDate(iso, locale) {
 }
 
 // Posts newest-first, for listings (ISO dates sort lexically); slug breaks ties
-// so equal-date posts have a stable, filesystem-independent order.
-function sortedPosts(posts) {
+// so equal-date posts have a stable, filesystem-independent order. Exported so
+// the feed plugin orders entries exactly like the index cards do.
+export function sortedPosts(posts) {
     return Object.values(posts).sort(
         (a, b) =>
             (b.datePublished || "").localeCompare(a.datePublished || "") ||
@@ -205,6 +206,11 @@ export function buildPostJsonLd({ record, locale, canonical, origin, base, blogN
             headline: d.title,
             description: d.description,
             ...(imageObj ? { image: imageObj } : {}),
+            // Section + tags already drive og:article:section / og:article:tag;
+            // the same locale-resolved values are what schema.org calls
+            // articleSection and keywords, so single-source them here too.
+            ...(d.section ? { articleSection: d.section } : {}),
+            ...(d.tags.length ? { keywords: d.tags } : {}),
             datePublished: d.datePublished,
             dateModified: modified,
             inLanguage: locale,

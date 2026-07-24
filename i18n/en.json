@@ -54,7 +54,8 @@
         "title": "Articles",
         "intro": "Notes, write-ups from personal experience, and breakdowns of what I have built - infrastructure, DevOps, development, and whatever else seems worth recording. Partly subjective.",
         "back": "← All articles",
-        "crumb_home": "Home"
+        "crumb_home": "Home",
+        "feed": "Articles feed"
     },
     "resume": {
         "crumb": "Resume",

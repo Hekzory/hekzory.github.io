@@ -9,6 +9,7 @@
     <link rel="preload" href="/css/martianmono.woff2" as="font" type="font/woff2" crossorigin />
     <link href="/css/style.css" rel="stylesheet" />
     <link href="/css/articles.css" rel="stylesheet" />
+    <link rel="alternate" type="application/atom+xml" title="{{t.art.feed}}" href="{{base}}/feed.xml" />
     <title>Articles | Oleg Tsvetkov</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 </head>
@@ -23,6 +24,7 @@
         <header class="articles-header">
             <h1 class="name-shimmer">{{t.art.title}}</h1>
             <p class="articles-intro">{{t.art.intro}}</p>
+            <a class="articles-feed" href="{{base}}/feed.xml" type="application/atom+xml">{{t.art.feed}}</a>
         </header>
 
         <ul class="articles-list">{{article_list}}</ul>

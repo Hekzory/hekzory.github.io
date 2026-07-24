@@ -7,6 +7,7 @@ import { generateShells } from "./post-data.js";
 import { createHtmlPlugin } from "vite-plugin-html";
 import htmlMetaPlugin from "./vite-plugin-html-meta";
 import sitemapPlugin from "./vite-plugin-sitemap";
+import feedPlugin from "./vite-plugin-feed";
 import minifyInlineJsonPlugin from "./vite-plugin-minify-inline-json";
 import i18nFanoutPlugin from "./vite-plugin-i18n-fanout";
 import injectHtml from "vite-plugin-html-inject";
@@ -46,6 +47,7 @@ export default defineConfig({
         i18nFanoutPlugin(),
         htmlMetaPlugin(),
         sitemapPlugin(),
+        feedPlugin(),
         injectHtml(),
         createHtmlPlugin({
             minify: true,

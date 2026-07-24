@@ -228,15 +228,10 @@
         terminalToggleTile.addEventListener('pointerenter', loadTerminal, { once: true });
         terminalToggleTile.addEventListener('focus', loadTerminal, { once: true });
 
-        const activate = (e) => {
-            if (e.type === 'keydown') {
-                if (e.key !== 'Enter' && e.key !== ' ') return;
-                e.preventDefault();
-            }
+        // The tile is a <button>, so Enter/Space already arrive here as clicks.
+        terminalToggleTile.addEventListener('click', () => {
             loadTerminal().then((openTerminal) => openTerminal());
-        };
-        terminalToggleTile.addEventListener('click', activate);
-        terminalToggleTile.addEventListener('keydown', activate);
+        });
     }
 
     // --- Article code: double-click selects the whole <code> ---

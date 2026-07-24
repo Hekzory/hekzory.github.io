@@ -33,6 +33,27 @@
     line-height: 1.6;
 }
 
+/* Atom feed link. The <link rel="alternate"> in the head covers readers that
+   autodiscover; this is the one humans can actually click. */
+.articles-feed {
+    display: inline-block;
+    margin-top: 12px;
+    color: var(--fg-dim);
+    font-size: 0.8rem;
+    text-decoration: none;
+    border-bottom: 1px dashed var(--border);
+    transition: color var(--duration) var(--ease), border-color var(--duration) var(--ease);
+}
+
+.articles-feed::before {
+    content: "⌁ ";
+}
+
+.articles-feed:hover {
+    color: var(--primary);
+    border-color: var(--primary);
+}
+
 .articles-list {
     list-style: none;
     display: flex;
@@ -116,7 +137,7 @@
 
 /* --- Long-form prose --- */
 .article-content {
-    color: var(--fg-dark);
+    color: var(--fg-dim);
     line-height: 1.75;
 }
 
@@ -256,7 +277,7 @@
     background: var(--surface-highlight);
     border-radius: 0 var(--radius) var(--radius) 0;
     padding: 14px 18px;
-    color: var(--fg-dark);
+    color: var(--fg-dim);
 }
 
 .article-callout-label {

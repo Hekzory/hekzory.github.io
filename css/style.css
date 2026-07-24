@@ -11,7 +11,6 @@
     --bg: #1a1b26;
     --bg-dark: #16161e;
     --fg: #c0caf5;
-    --fg-dark: #a9b1d6;
     --fg-dim: #a9b1d6;
 
     --primary: #7aa2f7;
@@ -145,7 +144,7 @@ li {
 
 .waybar-left .window-title {
     background: transparent;
-    color: var(--fg-dark);
+    color: var(--fg-dim);
     margin-left: 16px;
     /* Extra gap before the breadcrumb */
 }
@@ -257,16 +256,44 @@ li {
     font-weight: bold;
 }
 
-/* First-visit "read in your language" suggestion banner (JS-inserted) */
+/* First-visit "read in your language" suggestion banner (JS-inserted).
+   Overlay, not an in-flow bar: it's appended after load, so laying it out in
+   flow would push the whole page down and register as layout shift — and it
+   would do so for exactly the visitors we're trying to help. Pinned to the
+   bottom so it never covers the waybar it's inserted after. */
 .lang-banner {
+    position: fixed;
+    inset: auto 0 0 0;
+    z-index: 900;
     display: flex;
     align-items: center;
     justify-content: center;
     gap: 12px;
     padding: 8px 12px;
+    /* Clear the home indicator / gesture bar on notched phones. */
+    padding-bottom: calc(8px + env(safe-area-inset-bottom, 0px));
     background: var(--surface-highlight);
-    border-bottom: 1px solid var(--border);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border-top: 1px solid var(--border);
+    box-shadow: 0 -8px 32px 0 rgba(0, 0, 0, 0.3);
     font-size: 0.85rem;
+    translate: 0 0;
+    transition: translate var(--duration) var(--ease);
+}
+
+/* Slide up on insertion instead of appearing mid-screen. Browsers without
+   @starting-style just get the final state. */
+@starting-style {
+    .lang-banner {
+        translate: 0 100%;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .lang-banner {
+        transition: none;
+    }
 }
 
 .lang-banner a {
@@ -632,7 +659,7 @@ mark {
     font-size: 0.8rem;
     font-weight: 500;
     letter-spacing: 0.03em;
-    color: var(--fg-dark);
+    color: var(--fg-dim);
     transition: color 0.3s;
 }
 
@@ -781,10 +808,14 @@ body:has(.terminal-tile.terminal-open) .grid-container>.tile:not(.terminal-tile)
     color: var(--fg-dim);
 }
 
-/* Terminal Toggle Tile */
+/* Terminal Toggle Tile. It's a real <button>, so the UA's own font, sizing and
+   control appearance have to be cleared before it can look like a tile. */
 .terminal-toggle-tile {
     grid-column: 9 / 12;
     grid-row: 6 / 7;
+    appearance: none;
+    font: inherit;
+    width: 100%;
     min-height: 80px;
     display: flex;
     align-items: center;
@@ -883,7 +914,7 @@ body:has(.terminal-tile.terminal-open) .grid-container>.tile:not(.terminal-tile)
 
 /* Terminal syntax highlighting */
 .output {
-    color: var(--fg-dark);
+    color: var(--fg-dim);
     padding-left: 16px;
     margin-bottom: 6px;
     line-height: 1.5;
@@ -1526,7 +1557,7 @@ body:has(.terminal-tile.terminal-open) .grid-container>.tile:not(.terminal-tile)
     padding-left: 16px;
     margin-bottom: 10px;
     font-size: 0.9rem;
-    color: var(--fg-dark);
+    color: var(--fg-dim);
     line-height: 1.6;
 }
 
