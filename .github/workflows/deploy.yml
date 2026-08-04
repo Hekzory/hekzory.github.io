@@ -27,7 +27,7 @@ jobs:
           # full history so sitemap <lastmod> reflects real commit dates
           # (vite-plugin-sitemap.js falls back to build time on shallow clones)
           fetch-depth: 0
-      - uses: pnpm/action-setup@v6
+      - uses: pnpm/action-setup@v6.0.9
         with:
           version: 11
       - uses: actions/setup-node@v7
