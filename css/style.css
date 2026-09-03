@@ -6,10 +6,51 @@
     src: url(/css/martianmono.woff2) format("woff2");
 }
 
+/* Metric-matched fallbacks. While martianmono.woff2 is in flight (swap period)
+   the text is drawn in a local monospace scaled to Martian Mono's exact advance
+   (700/1000 em) and vertical metrics (ascent 1000, descent 200, line gap 0 —
+   its hhea/OS2 tables), so the swap changes glyph shapes but moves nothing:
+   zero layout shift, and no "optional"-style gamble on whether the real font
+   arrives in time. Two faces because Consolas (Chrome's default monospace on
+   Windows) is the one common mono with a 0.55 em advance; everything else
+   (Menlo, SF Mono, DejaVu, Liberation, Noto, Roboto Mono, Courier New) sits at
+   0.6 em. The overrides are divided by size-adjust since they apply to the
+   adjusted em. Both faces claim the full weight range like the real font, so no
+   synthetic bold flashes during the swap either. */
+@font-face {
+    font-family: "Martian Mono Fallback Consolas";
+    font-weight: 100 800;
+    src: local("Consolas");
+    size-adjust: 127.27%;
+    ascent-override: 78.57%;
+    descent-override: 15.71%;
+    line-gap-override: 0%;
+}
+
+@font-face {
+    font-family: "Martian Mono Fallback";
+    font-weight: 100 800;
+    src:
+        local("Menlo Regular"), local("Menlo-Regular"),
+        local("SF Mono Regular"), local("SFMono-Regular"),
+        local("DejaVu Sans Mono"), local("DejaVuSansMono"),
+        local("Liberation Mono"), local("LiberationMono"),
+        local("Noto Sans Mono"), local("NotoSansMono-Regular"),
+        local("Roboto Mono"), local("RobotoMono-Regular"),
+        local("Courier New"), local("CourierNewPSMT");
+    size-adjust: 116.67%;
+    ascent-override: 85.71%;
+    descent-override: 17.14%;
+    line-gap-override: 0%;
+}
+
 :root {
-    /* Tokyo Night Palette */
+    /* Tokyo Night palette. Every translucent tint on the site is derived from
+       these with color-mix(), so the P3 upgrade below reaches the tints too. */
     --bg: #1a1b26;
     --bg-dark: #16161e;
+    --surface: #24283b;
+    --surface-raised: #292e42;
     --fg: #c0caf5;
     --fg-dim: #a9b1d6;
 
@@ -22,10 +63,10 @@
 
     --border: #414868;
 
-    --surface-highlight: rgba(36, 40, 59, 0.8);
+    --surface-highlight: color-mix(in srgb, var(--surface) 80%, transparent);
 
-    --glass: rgba(26, 27, 38, 0.7);
-    --glass-border: rgba(122, 162, 247, 0.2);
+    --glass: color-mix(in srgb, var(--bg) 70%, transparent);
+    --glass-border: color-mix(in srgb, var(--primary) 20%, transparent);
 
     --shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3);
 
@@ -37,6 +78,22 @@
     /* Transitions */
     --ease: cubic-bezier(0.25, 1, 0.5, 1);
     --duration: 0.3s;
+}
+
+/* Wider-gamut accents on P3-capable displays. sRGB screens never match this
+   query and keep the hex tokens, so there is zero change for them. Kept as a
+   top-level block on purpose: nested inside :root, lightningcss lowers the
+   color(display-p3 …) values to their sRGB fallbacks and drops the @supports
+   branch that carries the real P3 colors. */
+@media (color-gamut: p3) {
+    :root {
+        --primary: color(display-p3 0.478 0.635 0.969);
+        --secondary: color(display-p3 0.733 0.604 0.969);
+        --accent: color(display-p3 0.49 0.812 1);
+        --success: color(display-p3 0.62 0.808 0.416);
+        --warning: color(display-p3 0.878 0.686 0.408);
+        --error: color(display-p3 0.969 0.463 0.557);
+    }
 }
 
 * {
@@ -56,14 +113,14 @@ html {
 body {
     background-color: var(--bg);
     color: var(--fg);
-    font-family: "Martian Mono", monospace;
+    font-family: "Martian Mono", "Martian Mono Fallback Consolas", "Martian Mono Fallback", monospace;
     min-height: 100vh;
     /* Tiling WM feel */
     display: flex;
     flex-direction: column;
     background-image:
-        radial-gradient(circle at 10% 20%, rgba(122, 162, 247, 0.05) 0%, transparent 40%),
-        radial-gradient(circle at 90% 80%, rgba(187, 154, 247, 0.05) 0%, transparent 40%);
+        radial-gradient(circle at 10% 20%, color-mix(in srgb, var(--primary) 5%, transparent) 0%, transparent 40%),
+        radial-gradient(circle at 90% 80%, color-mix(in srgb, var(--secondary) 5%, transparent) 0%, transparent 40%);
     background-attachment: fixed;
 }
 
@@ -85,10 +142,10 @@ body {
 ::-webkit-scrollbar-thumb {
     background: var(--fg-dim);
     border-radius: 3px;
-}
 
-::-webkit-scrollbar-thumb:hover {
-    background: var(--primary);
+    &:hover {
+        background: var(--primary);
+    }
 }
 
 /* Utility: hide the SVG sprite sheets. Zero-size instead of display:none —
@@ -120,6 +177,31 @@ li {
     text-decoration: none;
 }
 
+/* Focus states for keyboard accessibility — global, so every interactive element gets a consistent ring */
+:focus-visible {
+    outline: 2px solid var(--primary);
+    outline-offset: 2px;
+    border-radius: 2px;
+}
+
+/* --- Cross-document View Transitions (progressive enhancement) ---
+   Same-origin MPA navigations (home <-> resume <-> 404) crossfade instead of
+   hard-cutting. The shared waybar persists in place and the avatar disc morphs
+   across the navigation (view-transition-name on .waybar and
+   .profile-image-container). Unsupported browsers just navigate normally. */
+@view-transition {
+    navigation: auto;
+}
+
+@media (prefers-reduced-motion: reduce) {
+
+    ::view-transition-group(*),
+    ::view-transition-old(*),
+    ::view-transition-new(*) {
+        animation: none !important;
+    }
+}
+
 /* --- Waybar --- */
 .waybar {
     height: var(--bar-height);
@@ -133,6 +215,15 @@ li {
     z-index: 100;
     user-select: none;
     flex-shrink: 0;
+    view-transition-name: waybar;
+
+    @media (max-width: 768px) {
+        padding: 0 8px;
+
+        & .label {
+            display: none;
+        }
+    }
 }
 
 .waybar-left,
@@ -147,6 +238,10 @@ li {
     color: var(--fg-dim);
     margin-left: 16px;
     /* Extra gap before the breadcrumb */
+
+    @media (max-width: 768px) {
+        display: none;
+    }
 }
 
 /* Breadcrumb: a semantic <ol> styled as a "~ / articles / slug" path. The " / "
@@ -156,33 +251,33 @@ li {
     align-items: center;
     list-style: none;
     gap: 0;
-}
 
-.crumbs li {
-    display: flex;
-    align-items: center;
-}
+    & li {
+        display: flex;
+        align-items: center;
 
-.crumbs li + li::before {
-    content: "/";
-    color: var(--fg-dim);
-    opacity: 0.5;
-    margin: 0 0.5em;
-}
+        & + li::before {
+            content: "/";
+            color: var(--fg-dim);
+            opacity: 0.5;
+            margin: 0 0.5em;
+        }
+    }
 
-.crumbs a {
-    color: var(--fg-dim);
-    text-decoration: none;
-    transition: color 0.2s var(--ease);
-}
+    & a {
+        color: var(--fg-dim);
+        text-decoration: none;
+        transition: color 0.2s var(--ease);
 
-.crumbs a:hover {
-    color: var(--primary);
-}
+        &:hover {
+            color: var(--primary);
+        }
+    }
 
-/* The current page — the leaf crumb. */
-.crumbs [aria-current="page"] {
-    color: var(--fg);
+    /* The current page — the leaf crumb. */
+    & [aria-current="page"] {
+        color: var(--fg);
+    }
 }
 
 .module {
@@ -192,43 +287,53 @@ li {
     display: flex;
     align-items: center;
     gap: 8px;
-    transition: all 0.2s var(--ease);
+    transition: background-color 0.2s var(--ease), border-color 0.2s var(--ease), color 0.2s var(--ease);
     border: 1px solid transparent;
+
+    &:hover {
+        background: var(--border);
+        border-color: var(--fg-dim);
+    }
+
+    &.active {
+        background: var(--primary);
+        color: var(--bg);
+        font-weight: bold;
+
+        /* Dark silhouette like the label text — the logo's gradient otherwise
+           starts at the chip's exact blue and melts into it */
+        & .icon {
+            filter: brightness(0);
+        }
+    }
+
+    & .icon {
+        font-size: 1.1em;
+    }
+
+    /* Workspace links: the module chrome is the whole affordance. */
+    &.workspace[href] {
+        text-decoration: none;
+    }
 }
 
-.module:hover {
-    background: var(--border);
-    border-color: var(--fg-dim);
-}
+.waybar-right {
+    & .module {
+        background: var(--bg);
+        border: 1px solid var(--border);
+    }
 
-.module.active {
-    background: var(--primary);
-    color: var(--bg);
-    font-weight: bold;
-}
+    & .clock {
+        background: var(--secondary);
+        color: var(--bg);
+        font-weight: bold;
+        border: none;
 
-/* Dark silhouette like the label text — the logo's gradient otherwise starts
-   at the chip's exact blue and melts into it */
-.module.active .icon {
-    filter: brightness(0);
-}
-
-.module .icon {
-    font-family: "Martian Mono", monospace;
-    /* Fallback if no nerd font */
-    font-size: 1.1em;
-}
-
-.waybar-right .module {
-    background: var(--bg);
-    border: 1px solid var(--border);
-}
-
-.waybar-right .clock {
-    background: var(--secondary);
-    color: var(--bg);
-    font-weight: bold;
-    border: none;
+        /* Keep the language switcher reachable on mobile; only drop the clock. */
+        @media (max-width: 768px) {
+            display: none;
+        }
+    }
 }
 
 /* Language switcher — segmented EN | RU control in the bar */
@@ -244,16 +349,16 @@ li {
     color: var(--fg-dim);
     text-decoration: none;
     transition: color 0.2s var(--ease), background 0.2s var(--ease);
-}
 
-.lang-link:hover {
-    color: var(--fg);
-}
+    &:hover {
+        color: var(--fg);
+    }
 
-.lang-link.active {
-    background: var(--primary);
-    color: var(--bg);
-    font-weight: bold;
+    &.active {
+        background: var(--primary);
+        color: var(--bg);
+        font-weight: bold;
+    }
 }
 
 /* First-visit "read in your language" suggestion banner (JS-inserted).
@@ -280,30 +385,26 @@ li {
     font-size: 0.85rem;
     translate: 0 0;
     transition: translate var(--duration) var(--ease);
-}
 
-/* Slide up on insertion instead of appearing mid-screen. Browsers without
-   @starting-style just get the final state. */
-@starting-style {
-    .lang-banner {
+    /* Slide up on insertion instead of appearing mid-screen. Browsers without
+       @starting-style just get the final state. */
+    @starting-style {
         translate: 0 100%;
     }
-}
 
-@media (prefers-reduced-motion: reduce) {
-    .lang-banner {
+    @media (prefers-reduced-motion: reduce) {
         transition: none;
     }
-}
 
-.lang-banner a {
-    color: var(--primary);
-    text-decoration: none;
-    font-weight: bold;
-}
+    & a {
+        color: var(--primary);
+        text-decoration: none;
+        font-weight: bold;
 
-.lang-banner a:hover {
-    text-decoration: underline;
+        &:hover {
+            text-decoration: underline;
+        }
+    }
 }
 
 .lang-banner-dismiss {
@@ -314,10 +415,10 @@ li {
     font-size: 1.1rem;
     line-height: 1;
     padding: 0 4px;
-}
 
-.lang-banner-dismiss:hover {
-    color: var(--fg);
+    &:hover {
+        color: var(--fg);
+    }
 }
 
 /* --- Grid Layout --- */
@@ -336,6 +437,22 @@ li {
     width: 100%;
     min-height: 0;
     /* Crucial for nested flex/grid scrolling */
+
+    @media (max-width: 1024px) {
+        display: flex;
+        flex-direction: column;
+        overflow-y: auto;
+        height: auto;
+        padding-bottom: 80px;
+        /* Space for terminal toggle */
+        padding-top: var(--gap);
+    }
+}
+
+@media (max-width: 1024px) {
+    body {
+        overflow: auto;
+    }
 }
 
 /* Tile Base */
@@ -351,15 +468,33 @@ li {
     box-shadow: var(--shadow);
     transition: border-color var(--duration) var(--ease), transform 0.2s var(--ease), opacity 0.4s var(--ease), filter 0.4s var(--ease);
     position: relative;
-}
 
-.tile:hover {
-    border-color: var(--primary);
-    z-index: 10;
+    &:hover {
+        border-color: var(--primary);
+        z-index: 10;
+
+        & .tile-header {
+            color: var(--primary);
+        }
+    }
+
+    @media (max-width: 1024px) {
+        min-height: auto;
+        height: auto;
+        overflow: visible;
+        /* Let content expand the tile */
+        flex-shrink: 0;
+        /* Phones/tablets scroll these layouts — drop the per-tile blur (costly to
+           recomposite each frame). A STATIC gradient surface (painted once, no
+           per-frame recomposite) restores some glass-like depth at zero scroll cost. */
+        backdrop-filter: none;
+        -webkit-backdrop-filter: none;
+        background: linear-gradient(160deg, color-mix(in srgb, var(--surface-raised) 82%, transparent) 0%, color-mix(in srgb, var(--bg) 92%, transparent) 100%);
+    }
 }
 
 .tile-header {
-    background: rgba(26, 27, 38, 0.9);
+    background: color-mix(in srgb, var(--bg) 90%, transparent);
     padding: 8px 12px;
     border-bottom: 1px solid var(--border);
     display: flex;
@@ -369,10 +504,6 @@ li {
     color: var(--fg-dim);
     text-transform: uppercase;
     letter-spacing: 1px;
-}
-
-.tile:hover .tile-header {
-    color: var(--primary);
 }
 
 .tile-title {
@@ -387,6 +518,12 @@ li {
     padding: 20px;
     overflow-y: auto;
     position: relative;
+
+    @media (max-width: 1024px) {
+        overflow: visible;
+        /* Disable internal scroll on mobile */
+        height: auto;
+    }
 }
 
 /* --- Specific Tiles --- */
@@ -401,33 +538,40 @@ li {
     gap: 0;
     overflow: hidden;
     min-height: 380px;
+
+    @media (max-width: 1024px) {
+        /* Keep vertical layout on mobile, just adjust sizing if needed */
+        min-height: auto;
+        order: -1;
+        /* Ensure profile is at top */
+    }
 }
 
 .profile-banner {
     height: 100px;
     background:
-        linear-gradient(135deg, rgba(122, 162, 247, 0.4) 0%, rgba(187, 154, 247, 0.3) 50%, rgba(125, 207, 255, 0.2) 100%);
+        linear-gradient(135deg, color-mix(in srgb, var(--primary) 40%, transparent) 0%, color-mix(in srgb, var(--secondary) 30%, transparent) 50%, color-mix(in srgb, var(--accent) 20%, transparent) 100%);
     width: 100%;
     position: relative;
     overflow: hidden;
-}
 
-.profile-banner::before {
-    content: '';
-    position: absolute;
-    inset: 0;
-    background:
-        radial-gradient(ellipse 80% 50% at 20% 40%, rgba(122, 162, 247, 0.3) 0%, transparent 50%),
-        radial-gradient(ellipse 60% 40% at 80% 60%, rgba(187, 154, 247, 0.25) 0%, transparent 50%);
-}
+    &::before {
+        content: '';
+        position: absolute;
+        inset: 0;
+        background:
+            radial-gradient(ellipse 80% 50% at 20% 40%, color-mix(in srgb, var(--primary) 30%, transparent) 0%, transparent 50%),
+            radial-gradient(ellipse 60% 40% at 80% 60%, color-mix(in srgb, var(--secondary) 25%, transparent) 0%, transparent 50%);
+    }
 
-.profile-banner::after {
-    content: '';
-    position: absolute;
-    inset: 0;
-    background-image: radial-gradient(circle at 50% 50%, rgba(255, 255, 255, 0.1) 1px, transparent 1px);
-    background-size: 12px 12px;
-    opacity: 0.4;
+    &::after {
+        content: '';
+        position: absolute;
+        inset: 0;
+        background-image: radial-gradient(circle at 50% 50%, rgba(255, 255, 255, 0.1) 1px, transparent 1px);
+        background-size: 12px 12px;
+        opacity: 0.4;
+    }
 }
 
 .profile-content {
@@ -439,6 +583,10 @@ li {
     text-align: center;
     position: relative;
     z-index: 2;
+
+    @media (max-width: 1024px) {
+        margin-top: -60px;
+    }
 }
 
 .profile-image-container {
@@ -450,12 +598,27 @@ li {
     height: 200px;
     overflow: hidden;
     border: 3px solid var(--primary);
+    /* The one literal tint left: the alpha is animated through --glow, and
+       calc() inside a color-mix() percentage is not something every engine
+       resolves yet. The token form is rgb(from var(--primary) r g b / calc(…))
+       (relative color syntax), which enters the widely-available baseline in
+       2027 — swap it in then. */
     box-shadow:
         0 0 calc(15px + var(--glow) * 5px) rgb(122 162 247 / calc(0.3 + var(--glow) * 0.2)),
         0 0 calc(40px + var(--glow) * 10px) rgb(122 162 247 / calc(0.1 + var(--glow) * 0.1));
     animation: profile-glow 4s ease-in-out infinite;
     z-index: 2;
     background: var(--bg);
+    view-transition-name: avatar;
+
+    @media (max-width: 1024px) {
+        width: 120px;
+        height: 120px;
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+        animation: none;
+    }
 }
 
 /* Registered so the glow animates as one interpolated number instead of
@@ -490,37 +653,38 @@ li {
     display: flex;
     align-items: center;
     justify-content: center;
+
+    /* 68% keeps the glyph's bounds inside the circular crop (needs <= 70.7%) */
+    & svg {
+        width: 68%;
+        height: 68%;
+    }
 }
 
-/* 68% keeps the glyph's bounds inside the circular crop (needs <= 70.7%) */
-.profile-glyph svg {
-    width: 68%;
-    height: 68%;
-}
+.profile-details {
+    & h1 {
+        font-size: 1.8rem;
+        color: var(--fg);
+        margin-bottom: 6px;
+        line-height: 1.2;
+    }
 
+    & .role {
+        font-size: 0.95rem;
+        color: var(--primary);
+        font-weight: 500;
+        opacity: 0.9;
+        background: color-mix(in srgb, var(--primary) 10%, transparent);
+        padding: 4px 12px;
+        border-radius: 20px;
+        display: inline-block;
+    }
 
-.profile-details h1 {
-    font-size: 1.8rem;
-    color: var(--fg);
-    margin-bottom: 6px;
-    line-height: 1.2;
-}
-
-.profile-details .role {
-    font-size: 0.95rem;
-    color: var(--primary);
-    font-weight: 500;
-    opacity: 0.9;
-    background: rgba(122, 162, 247, 0.1);
-    padding: 4px 12px;
-    border-radius: 20px;
-    display: inline-block;
-}
-
-.profile-details .location {
-    color: var(--fg-dim);
-    font-size: 0.85rem;
-    margin-top: 8px;
+    & .location {
+        color: var(--fg-dim);
+        font-size: 0.85rem;
+        margin-top: 8px;
+    }
 }
 
 /* Icon Sizing */
@@ -538,6 +702,10 @@ li {
     grid-column: 9 / 12;
     grid-row: 1 / 6;
     min-height: 380px;
+
+    @media (max-width: 1024px) {
+        order: 1;
+    }
 }
 
 .info-row {
@@ -546,39 +714,39 @@ li {
     gap: 16px;
     align-items: center;
     padding: 10px 8px;
-    border-bottom: 1px solid rgba(65, 72, 104, 0.3);
+    border-bottom: 1px solid color-mix(in srgb, var(--border) 30%, transparent);
     font-size: 0.9rem;
     transition: background-color 0.2s var(--ease);
     border-radius: 4px;
-}
 
-.info-row:hover {
-    background-color: rgba(122, 162, 247, 0.1);
-}
+    &:hover {
+        background-color: color-mix(in srgb, var(--primary) 10%, transparent);
+    }
 
-.info-row:last-child {
-    border-bottom: none;
-}
+    &:last-child {
+        border-bottom: none;
+    }
 
-.info-row .key {
-    color: var(--fg-dim);
-    font-weight: 500;
-}
+    & .key {
+        color: var(--fg-dim);
+        font-weight: 500;
+    }
 
-.info-row .value {
-    color: var(--accent);
-    text-align: right;
-}
+    & .value {
+        color: var(--accent);
+        text-align: right;
+    }
 
-.info-row.highlight .value {
-    color: var(--fg);
+    &.highlight .value {
+        color: var(--fg);
+    }
 }
 
 mark {
-    background: rgba(122, 162, 247, 0.2);
+    background: color-mix(in srgb, var(--primary) 20%, transparent);
     color: var(--primary);
     font-weight: bold;
-    text-shadow: 0 0 10px rgba(122, 162, 247, 0.4);
+    text-shadow: 0 0 10px color-mix(in srgb, var(--primary) 40%, transparent);
     padding: 2px 8px;
     border-radius: 4px;
 }
@@ -588,17 +756,30 @@ mark {
     grid-column: 2 / 5;
     grid-row: 1 / 6;
     min-height: 380px;
+
+    @media (max-width: 1024px) {
+        order: 0;
+    }
 }
 
 .connections-grid {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
     gap: 10px;
-}
 
-/* Make last odd item span full width for better balance */
-.connections-grid .connection-item:last-child:nth-child(odd) {
-    grid-column: span 2;
+    /* Make last odd item span full width for better balance */
+    & .connection-item:last-child:nth-child(odd) {
+        grid-column: span 2;
+    }
+
+    @media (max-width: 768px) {
+        grid-template-columns: 1fr;
+
+        /* Reset odd-item spanning on single-column mobile layout */
+        & .connection-item:last-child:nth-child(odd) {
+            grid-column: span 1;
+        }
+    }
 }
 
 .connection-item {
@@ -607,37 +788,91 @@ mark {
     align-items: center;
     justify-content: center;
     gap: 4px;
-    background: rgba(36, 40, 59, 0.4);
+    background: color-mix(in srgb, var(--surface) 40%, transparent);
     border: 1px solid var(--border);
     border-radius: 8px;
     padding: 12px 8px;
     text-decoration: none;
     color: var(--fg);
-    transition: all 0.3s var(--ease);
+    transition: background-color 0.3s var(--ease), border-color 0.3s var(--ease), color 0.3s var(--ease), transform 0.3s var(--ease), box-shadow 0.3s var(--ease);
     cursor: pointer;
     position: relative;
     text-align: center;
     overflow: hidden;
-}
 
-.connection-item::before {
-    content: '';
-    position: absolute;
-    inset: 0;
-    background: linear-gradient(45deg, transparent, rgba(122, 162, 247, 0.1), transparent);
-    transform: translateX(-100%);
-    transition: transform 0.5s;
-}
+    &::before {
+        content: '';
+        position: absolute;
+        inset: 0;
+        background: linear-gradient(45deg, transparent, color-mix(in srgb, var(--primary) 10%, transparent), transparent);
+        transform: translateX(-100%);
+        transition: transform 0.5s;
+    }
 
-.connection-item:hover::before {
-    transform: translateX(100%);
-}
+    &:hover {
+        background: color-mix(in srgb, var(--border) 70%, transparent);
+        border-color: var(--primary);
+        transform: translateY(-3px);
+        box-shadow: 0 6px 20px color-mix(in srgb, var(--primary) 15%, transparent);
 
-.connection-item:hover {
-    background: rgba(51, 65, 85, 0.7);
-    border-color: var(--primary);
-    transform: translateY(-3px);
-    box-shadow: 0 6px 20px rgba(122, 162, 247, 0.15);
+        &::before {
+            transform: translateX(100%);
+        }
+
+        & .conn-icon {
+            fill: var(--primary);
+            transform: scale(1.1);
+            filter: drop-shadow(0 0 8px var(--primary));
+
+            @media (forced-colors: active) {
+                filter: none;
+            }
+        }
+
+        & .conn-label {
+            color: var(--fg);
+        }
+    }
+
+    /* Brand-specific hover colors, all from the Tokyo Night palette. */
+    &[data-brand="telegram"]:hover {
+        --brand-color: var(--accent);
+    }
+
+    &[data-brand="github"]:hover {
+        --brand-color: var(--secondary);
+    }
+
+    &[data-brand="vk"]:hover {
+        --brand-color: var(--primary);
+    }
+
+    &[data-brand="steam"]:hover {
+        --brand-color: var(--accent);
+    }
+
+    &[data-brand="discord"]:hover {
+        --brand-color: var(--secondary);
+    }
+
+    &[data-brand="yandex"]:hover {
+        --brand-color: var(--error);
+    }
+
+    &[data-brand="email"]:hover {
+        --brand-color: var(--success);
+    }
+
+    /* Apply brand color to border and icon */
+    &[data-brand]:hover {
+        border-color: var(--brand-color, var(--primary));
+        box-shadow: 0 6px 20px color-mix(in srgb, var(--brand-color, var(--primary)) 25%, transparent);
+
+        & .conn-icon {
+            fill: var(--brand-color, var(--primary));
+            filter: drop-shadow(0 0 8px var(--brand-color, var(--primary)));
+        }
+    }
 }
 
 .conn-icon {
@@ -647,12 +882,11 @@ mark {
     transition: fill 0.3s, transform 0.3s var(--ease);
     flex-shrink: 0;
     filter: drop-shadow(0 0 0 transparent);
-}
 
-.connection-item:hover .conn-icon {
-    fill: var(--primary);
-    transform: scale(1.1);
-    filter: drop-shadow(0 0 8px var(--primary));
+    /* Windows High Contrast: drop the decorative glow. */
+    @media (forced-colors: active) {
+        filter: none;
+    }
 }
 
 .conn-label {
@@ -663,60 +897,11 @@ mark {
     transition: color 0.3s;
 }
 
-.connection-item:hover .conn-label {
-    color: var(--fg);
-}
-
-/* Brand-specific hover colors */
-.connection-item[data-brand="telegram"]:hover {
-    --brand-color: #7dcfff;
-    /* Tokyo Night cyan - matches Telegram */
-}
-
-.connection-item[data-brand="github"]:hover {
-    --brand-color: #bb9af7;
-    /* Tokyo Night purple */
-}
-
-.connection-item[data-brand="vk"]:hover {
-    --brand-color: #7aa2f7;
-    /* Tokyo Night blue */
-}
-
-.connection-item[data-brand="steam"]:hover {
-    --brand-color: #7dcfff;
-    /* Tokyo Night cyan */
-}
-
-.connection-item[data-brand="discord"]:hover {
-    --brand-color: #bb9af7;
-    /* Tokyo Night purple - matches Discord */
-}
-
-.connection-item[data-brand="yandex"]:hover {
-    --brand-color: #f7768e;
-    /* Tokyo Night red/pink */
-}
-
-.connection-item[data-brand="email"]:hover {
-    --brand-color: #9ece6a;
-    /* Tokyo Night green */
-}
-
-/* Apply brand color to border and icon */
-.connection-item[data-brand]:hover {
-    border-color: var(--brand-color, var(--primary));
-    box-shadow: 0 6px 20px color-mix(in srgb, var(--brand-color, var(--primary)) 25%, transparent);
-}
-
-.connection-item[data-brand]:hover .conn-icon {
-    fill: var(--brand-color, var(--primary));
-    filter: drop-shadow(0 0 8px var(--brand-color, var(--primary)));
-}
-
-
-
-/* Terminal Tile (Drawer) */
+/* Terminal Tile (Drawer). Only the shell lives here: it must sit offscreen from
+   the first paint, before anyone hovers the toggle. Everything inside the drawer
+   (header, prompt, output highlighting, the blur on the tiles behind it) is in
+   css/terminal.css, which terminal.js imports — so it ships with the lazy chunk
+   and pages that never open the terminal never download it. */
 .terminal-tile {
     position: fixed;
     inset: auto 0 0 0;
@@ -727,62 +912,17 @@ mark {
     border-radius: var(--radius) var(--radius) 0 0;
     border-bottom: none;
     box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.5);
-    background: rgba(22, 22, 30, 0.98);
-}
+    background: color-mix(in srgb, var(--bg-dark) 98%, transparent);
 
-.terminal-tile.terminal-open {
-    transform: translateY(0);
-}
+    &.terminal-open {
+        transform: translateY(0);
+    }
 
-/* When the terminal drawer is open, recede the other tiles to focus it.
-   Siblings only — never the fixed drawer's ancestor, since filter/opacity on
-   an ancestor would strip the drawer's viewport-fixed positioning. */
-body:has(.terminal-tile.terminal-open) .grid-container>.tile:not(.terminal-tile):not(.terminal-toggle-tile) {
-    opacity: 0.5;
-    filter: blur(2px);
-}
-
-.terminal-tile::before {
-    content: " ";
-    display: block;
-    position: absolute;
-    inset: 0;
-    background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.1) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.03), rgba(0, 255, 0, 0.01), rgba(0, 0, 255, 0.03));
-    z-index: 2;
-    background-size: 100% 2px, 3px 100%;
-    pointer-events: none;
-}
-
-.terminal-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 8px 16px;
-    background: rgba(0, 0, 0, 0.3);
-    border-bottom: 1px solid var(--border);
-    color: var(--fg-dim);
-    font-size: 0.9rem;
-}
-
-.icon-btn {
-    background: none;
-    border: none;
-    color: var(--fg-dim);
-    cursor: pointer;
-    padding: 4px;
-    /* 44x44 minimum hit area (WCAG 2.5.5); the glyph stays small, centered by flex. */
-    min-width: 44px;
-    min-height: 44px;
-    border-radius: 4px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    transition: all 0.2s;
-}
-
-.icon-btn:hover {
-    background: var(--error);
-    color: var(--bg);
+    /* Hidden on phones — this is also what keeps the lazy terminal chunk from
+       ever loading there: no visible tile, no interaction. */
+    @media (max-width: 768px) {
+        display: none;
+    }
 }
 
 /* whoami / bio — left side of the status-bar row, beside the terminal toggle.
@@ -790,6 +930,12 @@ body:has(.terminal-tile.terminal-open) .grid-container>.tile:not(.terminal-tile)
 .whoami-tile {
     grid-column: 2 / 9;
     grid-row: 6 / 7;
+
+    /* Bio reads as the intro: same order as the profile, which precedes it in the
+       DOM, so it lands directly after the photo/name. */
+    @media (max-width: 1024px) {
+        order: -1;
+    }
 }
 
 .whoami-bio {
@@ -797,15 +943,6 @@ body:has(.terminal-tile.terminal-open) .grid-container>.tile:not(.terminal-tile)
     color: var(--fg-dim);
     line-height: 1.7;
     font-size: 0.95rem;
-}
-
-/* Resume/CV document label under the role on the resume header */
-.resume-doc-label {
-    margin: 2px 0 0;
-    font-size: 0.75rem;
-    letter-spacing: 1px;
-    text-transform: uppercase;
-    color: var(--fg-dim);
 }
 
 /* Terminal Toggle Tile. It's a real <button>, so the UA's own font, sizing and
@@ -824,181 +961,28 @@ body:has(.terminal-tile.terminal-open) .grid-container>.tile:not(.terminal-tile)
     cursor: pointer;
     color: var(--fg-dim);
     font-weight: bold;
-    transition: all 0.3s var(--ease);
+    transition: background-color 0.3s var(--ease), color 0.3s var(--ease), border-color 0.3s var(--ease);
     border: 1px solid var(--border);
-    background: rgba(26, 27, 38, 0.4);
-}
+    background: color-mix(in srgb, var(--bg) 40%, transparent);
 
-.terminal-toggle-tile:hover {
-    background: var(--surface-highlight);
-    color: var(--primary);
-    border-color: var(--primary);
-    border-style: solid;
-}
-
-.terminal-toggle-tile .icon {
-    width: 20px;
-    height: 20px;
-}
-
-.terminal-toggle-tile.hidden {
-    visibility: hidden;
-}
-
-.terminal-output {
-    font-size: 0.95rem;
-    line-height: 1.6;
-    height: 100%;
-    overflow-y: auto;
-    /* Reaching the end of the log must not chain-scroll the page behind the drawer */
-    overscroll-behavior: contain;
-    padding-bottom: 20px;
-    /* Space for the last line */
-}
-
-.line {
-    margin-bottom: 4px;
-}
-
-.prompt {
-    color: var(--secondary);
-    margin-right: 8px;
-    font-weight: bold;
-}
-
-.cmd {
-    color: var(--success);
-}
-
-.cursor {
-    color: var(--success);
-    font-weight: bold;
-    animation: blink 1s step-end infinite;
-}
-
-@keyframes blink {
-    50% {
-        opacity: 0;
-    }
-}
-
-/* Oh-My-Posh style prompt blocks */
-.posh-prompt-block {
-    margin-bottom: 8px;
-    padding-top: 6px;
-}
-
-.posh-line1 {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 6px;
-    align-items: center;
-    margin-bottom: 2px;
-}
-
-.posh-line2 {
-    display: flex;
-    align-items: center;
-    gap: 6px;
-    margin-top: 2px;
-}
-
-.posh-line2 .cmd {
-    color: var(--success);
-    font-weight: 500;
-}
-
-.git-branch {
-    font-style: italic;
-}
-
-/* Terminal syntax highlighting */
-.output {
-    color: var(--fg-dim);
-    padding-left: 16px;
-    margin-bottom: 6px;
-    line-height: 1.5;
-}
-
-/* Highlight patterns in output */
-.terminal-output .output {
-    /* File paths */
-    word-break: break-word;
-}
-
-/* Text Color Utilities */
-.text-success {
-    color: var(--success);
-}
-
-.text-warning {
-    color: var(--warning);
-}
-
-.text-error {
-    color: var(--error);
-}
-
-.text-accent {
-    color: var(--accent);
-}
-
-.text-secondary {
-    color: var(--secondary);
-}
-
-.text-primary {
-    color: var(--primary);
-}
-
-.text-dim {
-    color: var(--fg-dim);
-}
-
-.text-fg {
-    color: var(--fg);
-}
-
-.font-bold {
-    font-weight: bold;
-}
-
-/* Terminal selection */
-.terminal-output ::selection {
-    background: var(--primary);
-    color: var(--bg);
-}
-
-/* Mobile terminal styling (hidden on phones — this is also what keeps the
-   lazy terminal chunk from ever loading there: no visible tile, no interaction) */
-@media (max-width: 768px) {
-
-    .terminal-tile,
-    .terminal-toggle-tile {
-        display: none !important;
+    &:hover {
+        background: var(--surface-highlight);
+        color: var(--primary);
+        border-color: var(--primary);
+        border-style: solid;
     }
 
-    .terminal-header {
-        flex-shrink: 0;
+    & .icon {
+        width: 20px;
+        height: 20px;
     }
 
-    .terminal-output {
-        font-size: 0.85rem;
-        -webkit-overflow-scrolling: touch;
-        flex: 1;
-        height: auto !important;
-        min-height: 0;
-        overflow-y: auto;
+    &.hidden {
+        visibility: hidden;
     }
 
-    .posh-line1 {
-        font-size: 0.8rem;
-        gap: 4px;
-    }
-
-    .posh-prompt-block {
-        margin-bottom: 6px;
-        padding-top: 4px;
+    @media (max-width: 768px) {
+        display: none;
     }
 }
 
@@ -1024,42 +1008,38 @@ body:has(.terminal-tile.terminal-open) .grid-container>.tile:not(.terminal-tile)
        display:none, or the invisible full-screen overlay eats every click. */
     transition: opacity 0.2s, display 0.2s allow-discrete, overlay 0.2s allow-discrete;
     z-index: 1001;
-}
 
-.clipboard[open] {
-    display: flex;
-    opacity: 1;
-}
+    &[open] {
+        display: flex;
+        opacity: 1;
 
-/* Starting state for the entry transition (first paint in the top layer). */
-@starting-style {
-    .clipboard[open] {
-        opacity: 0;
+        /* Starting state for the entry transition (first paint in the top layer). */
+        @starting-style {
+            opacity: 0;
+        }
+
+        & .wrapper {
+            transform: scale(1);
+
+            @starting-style {
+                transform: scale(0.95);
+            }
+        }
     }
-}
 
-.clipboard::backdrop {
-    background: transparent;
-}
+    &::backdrop {
+        background: transparent;
+    }
 
-.clipboard .wrapper {
-    background: var(--bg);
-    border: 1px solid var(--primary);
-    border-radius: var(--radius);
-    width: 400px;
-    max-width: 90vw;
-    box-shadow: 0 0 40px rgba(122, 162, 247, 0.2);
-    transform: scale(0.95);
-    transition: transform 0.2s;
-}
-
-.clipboard[open] .wrapper {
-    transform: scale(1);
-}
-
-@starting-style {
-    .clipboard[open] .wrapper {
+    & .wrapper {
+        background: var(--bg);
+        border: 1px solid var(--primary);
+        border-radius: var(--radius);
+        width: 400px;
+        max-width: 90vw;
+        box-shadow: 0 0 40px color-mix(in srgb, var(--primary) 20%, transparent);
         transform: scale(0.95);
+        transition: transform 0.2s;
     }
 }
 
@@ -1084,10 +1064,10 @@ body:has(.terminal-tile.terminal-open) .grid-container>.tile:not(.terminal-tile)
     font-size: 1.5rem;
     cursor: pointer;
     line-height: 1;
-}
 
-.close-btn:hover {
-    color: var(--error);
+    &:hover {
+        color: var(--error);
+    }
 }
 
 .dialog-body {
@@ -1102,107 +1082,10 @@ body:has(.terminal-tile.terminal-open) .grid-container>.tile:not(.terminal-tile)
     border: 1px dashed var(--border);
     margin-top: 12px;
     color: var(--success);
-    font-family: monospace;
+    /* The body font is already monospace; a bare `monospace` here would swap
+       in a different system face for the one line that should match. */
+    font-family: inherit;
     word-break: break-all;
-}
-
-/* --- Responsive --- */
-@media (max-width: 1024px) {
-    .grid-container {
-        display: flex;
-        flex-direction: column;
-        overflow-y: auto;
-        height: auto;
-        padding-bottom: 80px;
-        /* Space for terminal toggle */
-        padding-top: var(--gap);
-    }
-
-    body {
-        overflow: auto;
-    }
-
-    .tile {
-        min-height: auto;
-        height: auto;
-        overflow: visible;
-        /* Let content expand the tile */
-        flex-shrink: 0;
-        /* Phones/tablets scroll these layouts — drop the per-tile blur (costly to
-           recomposite each frame). A STATIC gradient surface (painted once, no
-           per-frame recomposite) restores some glass-like depth at zero scroll cost. */
-        backdrop-filter: none;
-        -webkit-backdrop-filter: none;
-        background: linear-gradient(160deg, rgba(41, 46, 66, 0.82) 0%, rgba(26, 27, 38, 0.92) 100%);
-    }
-
-    .tile-content {
-        overflow: visible;
-        /* Disable internal scroll on mobile */
-        height: auto;
-    }
-
-    .profile-tile {
-        /* Keep vertical layout on mobile, just adjust sizing if needed */
-        min-height: auto;
-        order: -1;
-        /* Ensure profile is at top */
-    }
-
-    .terminal-toggle-tile {
-        min-height: 80px;
-    }
-
-    .profile-image-container {
-        width: 120px;
-        height: 120px;
-    }
-
-    .profile-content {
-        margin-top: -60px;
-    }
-
-    .work-tile {
-        order: 1;
-    }
-
-    .connections-tile {
-        order: 0;
-    }
-
-    /* Bio reads as the intro: same order as the profile, which precedes it in the
-       DOM, so it lands directly after the photo/name. */
-    .whoami-tile {
-        order: -1;
-    }
-}
-
-@media (max-width: 768px) {
-    .waybar {
-        padding: 0 8px;
-    }
-
-    .waybar .label {
-        display: none;
-    }
-
-    /* Keep the language switcher reachable on mobile; only drop the clock. */
-    .waybar-right .clock {
-        display: none;
-    }
-
-    .waybar-left .window-title {
-        display: none;
-    }
-
-    .connections-grid {
-        grid-template-columns: 1fr;
-    }
-
-    /* Reset odd-item spanning on single-column mobile layout */
-    .connections-grid .connection-item:last-child:nth-child(odd) {
-        grid-column: span 1;
-    }
 }
 
 /* Name Shimmer Effect (Subtle) */
@@ -1222,6 +1105,21 @@ body:has(.terminal-tile.terminal-open) .grid-container>.tile:not(.terminal-tile)
     padding-bottom: 4px;
     /* Prevent clipping */
     line-height: 1.2;
+
+    @media (prefers-reduced-motion: reduce) {
+        animation: none;
+        background: var(--fg);
+        -webkit-text-fill-color: var(--fg);
+    }
+
+    /* Windows High Contrast / forced-colors: the transparent text-fill otherwise
+       wins over the forced system color and renders the name invisible. */
+    @media (forced-colors: active) {
+        background: none;
+        -webkit-text-fill-color: revert;
+        color: CanvasText;
+        animation: none;
+    }
 }
 
 @keyframes shimmer {
@@ -1231,51 +1129,6 @@ body:has(.terminal-tile.terminal-open) .grid-container>.tile:not(.terminal-tile)
 
     100% {
         background-position: -200% center;
-    }
-}
-
-/* Reduce motion */
-@media (prefers-reduced-motion: reduce) {
-
-    .name-shimmer,
-    .profile-image-container {
-        animation: none;
-    }
-
-    .name-shimmer {
-        background: var(--fg);
-        -webkit-text-fill-color: var(--fg);
-    }
-}
-
-/* Windows High Contrast / forced-colors: the transparent text-fill on the
-   shimmer otherwise wins over the forced system color and renders the name
-   invisible. Reset it to a system color and drop decorative glows. */
-@media (forced-colors: active) {
-
-    .name-shimmer {
-        background: none;
-        -webkit-text-fill-color: revert;
-        color: CanvasText;
-        animation: none;
-    }
-
-    .conn-icon,
-    .connection-item:hover .conn-icon {
-        filter: none;
-    }
-}
-
-/* Wider-gamut accents on P3-capable displays. sRGB screens never match this
-   query and keep the hex tokens, so there is zero change for them. */
-@media (color-gamut: p3) {
-    :root {
-        --primary: color(display-p3 0.478 0.635 0.969);
-        --secondary: color(display-p3 0.733 0.604 0.969);
-        --accent: color(display-p3 0.49 0.812 1);
-        --success: color(display-p3 0.62 0.808 0.416);
-        --warning: color(display-p3 0.878 0.686 0.408);
-        --error: color(display-p3 0.969 0.463 0.557);
     }
 }
 
@@ -1296,487 +1149,4 @@ body:has(.terminal-tile.terminal-open) .grid-container>.tile:not(.terminal-tile)
     100% {
         transform: scale(1);
     }
-}
-
-/* Focus states for keyboard accessibility — global, so every interactive element gets a consistent ring */
-:focus-visible {
-    outline: 2px solid var(--primary);
-    outline-offset: 2px;
-    border-radius: 2px;
-}
-
-/* --- Cross-document View Transitions (progressive enhancement) ---
-   Same-origin MPA navigations (home <-> resume <-> 404) crossfade instead of
-   hard-cutting. The shared waybar persists in place and the avatar disc morphs
-   across the navigation. Unsupported browsers just navigate normally — zero JS. */
-@view-transition {
-    navigation: auto;
-}
-
-.waybar {
-    view-transition-name: waybar;
-}
-
-.profile-image-container {
-    view-transition-name: avatar;
-}
-
-@media (prefers-reduced-motion: reduce) {
-
-    ::view-transition-group(*),
-    ::view-transition-old(*),
-    ::view-transition-new(*) {
-        animation: none !important;
-    }
-}
-
-/* ========================================
-   RESUME PAGE STYLES
-   ======================================== */
-
-/* Resume Page Body - Inherits standard scrolling from html/body now */
-
-/* Resume Container */
-.resume-container {
-    padding: var(--gap);
-    min-height: calc(100vh - var(--bar-height));
-    /* Align with index.html grid */
-    display: grid;
-    grid-template-columns: repeat(12, 1fr);
-    gap: var(--gap);
-    max-width: 1920px;
-    margin: 0 auto;
-    width: 100%;
-    align-content: start;
-    padding-top: 12vh;
-    /* Match .grid-container top spacing */
-}
-
-/* Resume Header */
-.resume-header {
-    padding: 0;
-    /* Background handled by .tile and .profile-banner */
-}
-
-/* Compact contact row inside the resume profile header.
-   Reuses .connection-item brand hover styles but overrides to a tight horizontal layout. */
-.profile-contact {
-    display: flex;
-    justify-content: center;
-    flex-wrap: wrap;
-    gap: 8px;
-    margin-top: 14px;
-}
-
-.profile-contact .connection-item {
-    flex: 0 0 auto;
-    flex-direction: row;
-    padding: 8px 14px;
-    gap: 8px;
-}
-
-.profile-contact .conn-icon {
-    width: 18px;
-    height: 18px;
-}
-
-.profile-contact .conn-label {
-    font-size: 0.8rem;
-}
-
-
-
-
-
-
-
-/* Resume Grid Major Layout */
-
-/* Left Major Column (Cols 2-9) */
-.resume-major-left {
-    grid-column: 2 / 9;
-    display: flex;
-    flex-direction: column;
-    gap: var(--gap);
-}
-
-/* Right Major Column (Cols 9-12) */
-.resume-major-right {
-    grid-column: 9 / 12;
-    display: flex;
-    flex-direction: column;
-    gap: var(--gap);
-}
-
-/* Header Row - REMOVED (Profile now full width) */
-
-/* Section overrides for specific placement */
-.id-2-profile {
-    margin-bottom: 0;
-}
-
-
-/* Resume Sections */
-.resume-section {
-    padding: 0;
-    /* Handled by .tile-content */
-    margin-bottom: var(--gap);
-    /* Skip rendering off-screen sections; the placeholder size keeps the
-       scrollbar stable and is remembered after first render (the `auto`). */
-    content-visibility: auto;
-    contain-intrinsic-size: auto 400px;
-}
-
-.resume-section .tile-content {
-    padding: 16px;
-}
-
-.resume-section:last-child {
-    margin-bottom: 0;
-}
-
-
-
-/* Experience Timeline */
-.experience-timeline {
-    position: relative;
-    padding-left: 20px;
-}
-
-.experience-timeline::before {
-    content: '';
-    position: absolute;
-    left: 0;
-    top: 8px;
-    bottom: 8px;
-    width: 2px;
-    background: linear-gradient(180deg, var(--primary) 0%, var(--secondary) 50%, var(--accent) 100%);
-    border-radius: 1px;
-}
-
-.experience-item {
-    position: relative;
-    padding-bottom: 24px;
-    margin-bottom: 0;
-}
-
-.experience-item:last-child {
-    padding-bottom: 0;
-}
-
-.experience-item::before {
-    content: '';
-    position: absolute;
-    left: -24px;
-    top: 8px;
-    width: 10px;
-    height: 10px;
-    background: var(--primary);
-    border: 2px solid var(--bg);
-    border-radius: 50%;
-    box-shadow: 0 0 10px rgba(122, 162, 247, 0.5);
-}
-
-.experience-header {
-    margin-bottom: 12px;
-}
-
-.experience-title-row {
-    display: flex;
-    justify-content: space-between;
-    align-items: flex-start;
-    flex-wrap: wrap;
-    gap: 8px;
-    margin-bottom: 6px;
-}
-
-.experience-role {
-    font-size: 1.05rem;
-    color: var(--fg);
-    font-weight: 600;
-}
-
-.experience-date {
-    font-size: 0.85rem;
-    color: var(--fg-dim);
-    white-space: nowrap;
-}
-
-.experience-company {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 8px 16px;
-    align-items: center;
-    margin-bottom: 10px;
-}
-
-.company-name {
-    color: var(--accent);
-    font-weight: 600;
-    font-size: 0.95rem;
-}
-
-.company-team {
-    color: var(--secondary);
-    font-size: 0.85rem;
-    padding: 2px 8px;
-    background: rgba(187, 154, 247, 0.15);
-    border-radius: 4px;
-}
-
-.company-location {
-    color: var(--fg-dim);
-    font-size: 0.85rem;
-}
-
-.tech-stack {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 6px;
-    margin-bottom: 4px;
-}
-
-.tech-tag {
-    font-size: 0.75rem;
-    padding: 3px 10px;
-    background: rgba(125, 207, 255, 0.1);
-    color: var(--accent);
-    border: 1px solid rgba(125, 207, 255, 0.3);
-    border-radius: 12px;
-    font-weight: 500;
-}
-
-.experience-details {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-}
-
-.experience-details li {
-    position: relative;
-    padding-left: 16px;
-    margin-bottom: 10px;
-    font-size: 0.9rem;
-    color: var(--fg-dim);
-    line-height: 1.6;
-}
-
-.experience-details li::before {
-    content: '▸';
-    position: absolute;
-    left: 0;
-    color: var(--primary);
-}
-
-/* Education */
-.education-item {
-    padding: 16px;
-    background: rgba(36, 40, 59, 0.4);
-    border-radius: 8px;
-    border-left: 3px solid var(--primary);
-}
-
-.education-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: flex-start;
-    flex-wrap: wrap;
-    gap: 8px;
-    margin-bottom: 8px;
-}
-
-.education-degree {
-    font-size: 1rem;
-    color: var(--fg);
-    font-weight: 600;
-}
-
-.education-date {
-    font-size: 0.85rem;
-    color: var(--fg-dim);
-}
-
-.education-school {
-    color: var(--accent);
-    font-size: 0.9rem;
-    margin-bottom: 4px;
-}
-
-.education-honors {
-    color: var(--fg);
-    font-size: 0.85rem;
-    margin-bottom: 4px;
-}
-
-.education-location {
-    color: var(--fg-dim);
-    font-size: 0.85rem;
-}
-
-/* Skills */
-.skills-grid {
-    display: flex;
-    flex-direction: column;
-    gap: 16px;
-}
-
-.skill-category {
-    padding: 12px 16px;
-    background: rgba(36, 40, 59, 0.3);
-    border-radius: 8px;
-    border: 1px solid rgba(65, 72, 104, 0.3);
-    transition: border-color 0.2s;
-}
-
-.skill-category:hover {
-    border-color: var(--primary);
-}
-
-.skill-category-title {
-    font-size: 0.85rem;
-    color: var(--fg-dim);
-    margin-bottom: 10px;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-    font-weight: 500;
-}
-
-.skill-tags {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 6px;
-}
-
-.skill-tag {
-    font-size: 0.8rem;
-    padding: 4px 10px;
-    background: rgba(122, 162, 247, 0.1);
-    color: var(--fg);
-    border-radius: 4px;
-    border: 1px solid rgba(122, 162, 247, 0.2);
-    transition: all 0.2s;
-}
-
-.skill-tag:hover {
-    background: rgba(122, 162, 247, 0.2);
-    border-color: var(--primary);
-}
-
-.skill-tag.primary {
-    background: rgba(122, 162, 247, 0.25);
-    color: var(--primary);
-    font-weight: 600;
-    border-color: var(--primary);
-}
-
-/* Languages */
-.language-list {
-    display: flex;
-    flex-direction: column;
-    gap: 16px;
-}
-
-.language-item {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: center;
-    gap: 8px;
-    padding: 12px 16px;
-    background: rgba(36, 40, 59, 0.3);
-    border-radius: 8px;
-    border: 1px solid rgba(65, 72, 104, 0.3);
-}
-
-.language-name {
-    font-weight: 600;
-    color: var(--fg);
-    flex: 1;
-}
-
-.language-level {
-    font-size: 0.85rem;
-    padding: 3px 10px;
-    background: rgba(158, 206, 106, 0.15);
-    color: var(--success);
-    border-radius: 12px;
-    font-weight: 500;
-}
-
-.language-cert {
-    font-size: 0.8rem;
-    color: var(--fg-dim);
-    width: 100%;
-    margin-top: 4px;
-}
-
-/* Soft Skills */
-.soft-skills-list {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 8px;
-    margin-bottom: 12px;
-}
-
-.soft-skill-tag {
-    font-size: 0.85rem;
-    padding: 6px 14px;
-    background: rgba(187, 154, 247, 0.1);
-    color: var(--secondary);
-    border-radius: 20px;
-    border: 1px solid rgba(187, 154, 247, 0.25);
-    transition: all 0.2s;
-}
-
-.soft-skill-tag:hover {
-    background: rgba(187, 154, 247, 0.2);
-    border-color: var(--secondary);
-}
-
-.soft-skill-note {
-    font-size: 0.8rem;
-    color: var(--fg-dim);
-    font-style: italic;
-    padding-top: 8px;
-    border-top: 1px solid rgba(65, 72, 104, 0.3);
-}
-
-@media (max-width: 1024px) {
-    .resume-container {
-        display: flex;
-        flex-direction: column;
-        max-width: 1400px;
-        padding-top: var(--gap);
-    }
-
-    .resume-major-left,
-    .resume-major-right {
-        grid-column: 1 / -1;
-    }
-}
-
-@media (max-width: 768px) {
-    .experience-title-row {
-        flex-direction: column;
-    }
-
-    .experience-timeline {
-        padding-left: 16px;
-    }
-
-    .experience-item::before {
-        left: -20px;
-        width: 8px;
-        height: 8px;
-    }
-}
-
-/* Waybar link styling for resume page */
-.waybar .module.workspace[href] {
-    text-decoration: none;
-    cursor: pointer;
-}
-
-.waybar .module.workspace[href]:hover {
-    background: var(--border);
-    border-color: var(--fg-dim);
 }

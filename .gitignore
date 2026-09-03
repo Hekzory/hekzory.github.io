@@ -30,7 +30,8 @@ dist-ssr
 /ru/articles/*.html
 !/ru/articles/index.html
 
-# ccount key (secret) — never commit
+# SEO API creds (GSC service account, Bing key, Yandex token) live OUTSIDE the
+# repo in ~/.config/tsv-one-seo/; these patterns stay as a safety net.
 tsv-one-*.json
 bing.txt
 yandex.txt

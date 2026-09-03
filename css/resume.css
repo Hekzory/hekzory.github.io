@@ -1,0 +1,435 @@
+/* Resume page — loaded only by /resume (and /ru/resume), the same way
+   articles.css is loaded only by /articles/. Tokens, .tile, the profile header
+   pieces, the waybar, base reset and responsive rules all come from style.css;
+   this sheet adds only the CV layout so / and the articles never download it. */
+
+/* Resume Container */
+.resume-container {
+    padding: var(--gap);
+    min-height: calc(100vh - var(--bar-height));
+    /* Align with index.html grid */
+    display: grid;
+    grid-template-columns: repeat(12, 1fr);
+    gap: var(--gap);
+    max-width: 1920px;
+    margin: 0 auto;
+    width: 100%;
+    align-content: start;
+    padding-top: 12vh;
+    /* Match .grid-container top spacing */
+
+    @media (max-width: 1024px) {
+        display: flex;
+        flex-direction: column;
+        max-width: 1400px;
+        padding-top: var(--gap);
+    }
+}
+
+/* Resume Header */
+.resume-header {
+    padding: 0;
+    /* Background handled by .tile and .profile-banner */
+}
+
+/* Resume/CV document label under the role on the resume header */
+.resume-doc-label {
+    margin: 2px 0 0;
+    font-size: 0.75rem;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: var(--fg-dim);
+}
+
+/* Compact contact row inside the resume profile header.
+   Reuses .connection-item brand hover styles but overrides to a tight horizontal layout. */
+.profile-contact {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 14px;
+
+    & .connection-item {
+        flex: 0 0 auto;
+        flex-direction: row;
+        padding: 8px 14px;
+        gap: 8px;
+    }
+
+    & .conn-icon {
+        width: 18px;
+        height: 18px;
+    }
+
+    & .conn-label {
+        font-size: 0.8rem;
+    }
+}
+
+/* Resume Grid Major Layout */
+
+/* Left Major Column (Cols 2-9) */
+.resume-major-left {
+    grid-column: 2 / 9;
+    display: flex;
+    flex-direction: column;
+    gap: var(--gap);
+}
+
+/* Right Major Column (Cols 9-12) */
+.resume-major-right {
+    grid-column: 9 / 12;
+    display: flex;
+    flex-direction: column;
+    gap: var(--gap);
+}
+
+@media (max-width: 1024px) {
+
+    .resume-major-left,
+    .resume-major-right {
+        grid-column: 1 / -1;
+    }
+}
+
+/* Section overrides for specific placement */
+.id-2-profile {
+    margin-bottom: 0;
+}
+
+/* Resume Sections */
+.resume-section {
+    padding: 0;
+    /* Handled by .tile-content */
+    margin-bottom: var(--gap);
+    /* Skip rendering off-screen sections; the placeholder size keeps the
+       scrollbar stable and is remembered after first render (the `auto`). */
+    content-visibility: auto;
+    contain-intrinsic-size: auto 400px;
+
+    & .tile-content {
+        padding: 16px;
+    }
+
+    &:last-child {
+        margin-bottom: 0;
+    }
+}
+
+/* Experience Timeline */
+.experience-timeline {
+    position: relative;
+    padding-left: 20px;
+
+    &::before {
+        content: '';
+        position: absolute;
+        left: 0;
+        top: 8px;
+        bottom: 8px;
+        width: 2px;
+        background: linear-gradient(180deg, var(--primary) 0%, var(--secondary) 50%, var(--accent) 100%);
+        border-radius: 1px;
+    }
+
+    @media (max-width: 768px) {
+        padding-left: 16px;
+    }
+}
+
+.experience-item {
+    position: relative;
+    padding-bottom: 24px;
+    margin-bottom: 0;
+
+    &:last-child {
+        padding-bottom: 0;
+    }
+
+    &::before {
+        content: '';
+        position: absolute;
+        left: -24px;
+        top: 8px;
+        width: 10px;
+        height: 10px;
+        background: var(--primary);
+        border: 2px solid var(--bg);
+        border-radius: 50%;
+        box-shadow: 0 0 10px color-mix(in srgb, var(--primary) 50%, transparent);
+
+        @media (max-width: 768px) {
+            left: -20px;
+            width: 8px;
+            height: 8px;
+        }
+    }
+}
+
+.experience-header {
+    margin-bottom: 12px;
+}
+
+.experience-title-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 6px;
+
+    @media (max-width: 768px) {
+        flex-direction: column;
+    }
+}
+
+.experience-role {
+    font-size: 1.05rem;
+    color: var(--fg);
+    font-weight: 600;
+}
+
+.experience-date {
+    font-size: 0.85rem;
+    color: var(--fg-dim);
+    white-space: nowrap;
+}
+
+.experience-company {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px 16px;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.company-name {
+    color: var(--accent);
+    font-weight: 600;
+    font-size: 0.95rem;
+}
+
+.company-team {
+    color: var(--secondary);
+    font-size: 0.85rem;
+    padding: 2px 8px;
+    background: color-mix(in srgb, var(--secondary) 15%, transparent);
+    border-radius: 4px;
+}
+
+.company-location {
+    color: var(--fg-dim);
+    font-size: 0.85rem;
+}
+
+.tech-stack {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-bottom: 4px;
+}
+
+.tech-tag {
+    font-size: 0.75rem;
+    padding: 3px 10px;
+    background: color-mix(in srgb, var(--accent) 10%, transparent);
+    color: var(--accent);
+    border: 1px solid color-mix(in srgb, var(--accent) 30%, transparent);
+    border-radius: 12px;
+    font-weight: 500;
+}
+
+.experience-details {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+
+    & li {
+        position: relative;
+        padding-left: 16px;
+        margin-bottom: 10px;
+        font-size: 0.9rem;
+        color: var(--fg-dim);
+        line-height: 1.6;
+
+        &::before {
+            content: '▸';
+            position: absolute;
+            left: 0;
+            color: var(--primary);
+        }
+    }
+}
+
+/* Education */
+.education-item {
+    padding: 16px;
+    background: color-mix(in srgb, var(--surface) 40%, transparent);
+    border-radius: 8px;
+    border-left: 3px solid var(--primary);
+}
+
+.education-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 8px;
+}
+
+.education-degree {
+    font-size: 1rem;
+    color: var(--fg);
+    font-weight: 600;
+}
+
+.education-date {
+    font-size: 0.85rem;
+    color: var(--fg-dim);
+}
+
+.education-school {
+    color: var(--accent);
+    font-size: 0.9rem;
+    margin-bottom: 4px;
+}
+
+.education-honors {
+    color: var(--fg);
+    font-size: 0.85rem;
+    margin-bottom: 4px;
+}
+
+.education-location {
+    color: var(--fg-dim);
+    font-size: 0.85rem;
+}
+
+/* Skills */
+.skills-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.skill-category {
+    padding: 12px 16px;
+    background: color-mix(in srgb, var(--surface) 30%, transparent);
+    border-radius: 8px;
+    border: 1px solid color-mix(in srgb, var(--border) 30%, transparent);
+    transition: border-color 0.2s;
+
+    &:hover {
+        border-color: var(--primary);
+    }
+}
+
+.skill-category-title {
+    font-size: 0.85rem;
+    color: var(--fg-dim);
+    margin-bottom: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    font-weight: 500;
+}
+
+.skill-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+}
+
+.skill-tag {
+    font-size: 0.8rem;
+    padding: 4px 10px;
+    background: color-mix(in srgb, var(--primary) 10%, transparent);
+    color: var(--fg);
+    border-radius: 4px;
+    border: 1px solid color-mix(in srgb, var(--primary) 20%, transparent);
+    transition: background-color 0.2s, border-color 0.2s;
+
+    &:hover {
+        background: color-mix(in srgb, var(--primary) 20%, transparent);
+        border-color: var(--primary);
+    }
+
+    &.primary {
+        background: color-mix(in srgb, var(--primary) 25%, transparent);
+        color: var(--primary);
+        font-weight: 600;
+        border-color: var(--primary);
+    }
+}
+
+/* Languages */
+.language-list {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.language-item {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 8px;
+    padding: 12px 16px;
+    background: color-mix(in srgb, var(--surface) 30%, transparent);
+    border-radius: 8px;
+    border: 1px solid color-mix(in srgb, var(--border) 30%, transparent);
+}
+
+.language-name {
+    font-weight: 600;
+    color: var(--fg);
+    flex: 1;
+}
+
+.language-level {
+    font-size: 0.85rem;
+    padding: 3px 10px;
+    background: color-mix(in srgb, var(--success) 15%, transparent);
+    color: var(--success);
+    border-radius: 12px;
+    font-weight: 500;
+}
+
+.language-cert {
+    font-size: 0.8rem;
+    color: var(--fg-dim);
+    width: 100%;
+    margin-top: 4px;
+}
+
+/* Soft Skills */
+.soft-skills-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 12px;
+}
+
+.soft-skill-tag {
+    font-size: 0.85rem;
+    padding: 6px 14px;
+    background: color-mix(in srgb, var(--secondary) 10%, transparent);
+    color: var(--secondary);
+    border-radius: 20px;
+    border: 1px solid color-mix(in srgb, var(--secondary) 25%, transparent);
+    transition: background-color 0.2s, border-color 0.2s;
+
+    &:hover {
+        background: color-mix(in srgb, var(--secondary) 20%, transparent);
+        border-color: var(--secondary);
+    }
+}
+
+.soft-skill-note {
+    font-size: 0.8rem;
+    color: var(--fg-dim);
+    font-style: italic;
+    padding-top: 8px;
+    border-top: 1px solid color-mix(in srgb, var(--border) 30%, transparent);
+}

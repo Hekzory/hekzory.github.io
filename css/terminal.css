@@ -1,0 +1,178 @@
+/* Terminal drawer internals — imported by js/terminal.js, so Vite ships this as
+   the lazy chunk's own stylesheet: it loads on first hover/focus of the toggle
+   tile, right before the module runs, and never on pages (or phones) that don't
+   open the terminal. The drawer shell (.terminal-tile: fixed, offscreen,
+   .terminal-open) stays in style.css because it has to be positioned from the
+   first paint. Tokens come from style.css. */
+
+/* When the terminal drawer is open, recede the other tiles to focus it.
+   Siblings only — never the fixed drawer's ancestor, since filter/opacity on
+   an ancestor would strip the drawer's viewport-fixed positioning. */
+body:has(.terminal-tile.terminal-open) .grid-container > .tile:not(.terminal-tile):not(.terminal-toggle-tile) {
+    opacity: 0.5;
+    filter: blur(2px);
+}
+
+/* CRT scanlines + faint RGB stripe over the whole drawer. */
+.terminal-tile::before {
+    content: " ";
+    display: block;
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.1) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.03), rgba(0, 255, 0, 0.01), rgba(0, 0, 255, 0.03));
+    z-index: 2;
+    background-size: 100% 2px, 3px 100%;
+    pointer-events: none;
+}
+
+.terminal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 8px 16px;
+    background: rgba(0, 0, 0, 0.3);
+    border-bottom: 1px solid var(--border);
+    color: var(--fg-dim);
+    font-size: 0.9rem;
+}
+
+.icon-btn {
+    background: none;
+    border: none;
+    color: var(--fg-dim);
+    cursor: pointer;
+    padding: 4px;
+    /* 44x44 minimum hit area (WCAG 2.5.5); the glyph stays small, centered by flex. */
+    min-width: 44px;
+    min-height: 44px;
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background-color 0.2s, color 0.2s;
+
+    &:hover {
+        background: var(--error);
+        color: var(--bg);
+    }
+}
+
+.terminal-output {
+    font-size: 0.95rem;
+    line-height: 1.6;
+    height: 100%;
+    overflow-y: auto;
+    /* Reaching the end of the log must not chain-scroll the page behind the drawer */
+    overscroll-behavior: contain;
+    padding-bottom: 20px;
+    /* Space for the last line */
+
+    /* Terminal selection */
+    & ::selection {
+        background: var(--primary);
+        color: var(--bg);
+    }
+}
+
+.line {
+    margin-bottom: 4px;
+}
+
+.prompt {
+    color: var(--secondary);
+    margin-right: 8px;
+    font-weight: bold;
+}
+
+.cmd {
+    color: var(--success);
+}
+
+.cursor {
+    color: var(--success);
+    font-weight: bold;
+    animation: blink 1s step-end infinite;
+}
+
+@keyframes blink {
+    50% {
+        opacity: 0;
+    }
+}
+
+/* Oh-My-Posh style prompt blocks */
+.posh-prompt-block {
+    margin-bottom: 8px;
+    padding-top: 6px;
+}
+
+.posh-line1 {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    align-items: center;
+    margin-bottom: 2px;
+}
+
+.posh-line2 {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    margin-top: 2px;
+
+    & .cmd {
+        color: var(--success);
+        font-weight: 500;
+    }
+}
+
+.git-branch {
+    font-style: italic;
+}
+
+/* Terminal syntax highlighting */
+.output {
+    color: var(--fg-dim);
+    padding-left: 16px;
+    margin-bottom: 6px;
+    line-height: 1.5;
+    /* File paths */
+    word-break: break-word;
+}
+
+/* Text Color Utilities */
+.text-success {
+    color: var(--success);
+}
+
+.text-warning {
+    color: var(--warning);
+}
+
+.text-error {
+    color: var(--error);
+}
+
+.text-accent {
+    color: var(--accent);
+}
+
+.text-secondary {
+    color: var(--secondary);
+}
+
+.text-primary {
+    color: var(--primary);
+}
+
+.text-dim {
+    color: var(--fg-dim);
+}
+
+.text-fg {
+    color: var(--fg);
+}
+
+.font-bold {
+    font-weight: bold;
+}

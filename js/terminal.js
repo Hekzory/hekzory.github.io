@@ -1,5 +1,10 @@
 // Terminal system — lazy-loaded on desktop + index only.
 // SYS is injected by initTerminal() from main.js.
+// The drawer's own styles ride along with this chunk (Vite emits them as a
+// separate CSS file and loads it before the module runs), so pages that never
+// open the terminal never download them.
+import "../css/terminal.css";
+
 let SYS;
 
 // Fresh-element HTML injection helper. Used instead of `.innerHTML = ...` so

@@ -107,34 +107,16 @@
             });
         }
 
+        // Async Clipboard API only — every baseline browser has it in a secure
+        // context, so the old execCommand('copy') textarea dance is gone. If the
+        // write is denied nothing was copied, so no "copied" dialog either.
         async copyToClipboard(text) {
             try {
-                if (navigator.clipboard) {
-                    await navigator.clipboard.writeText(text);
-                    this.open(text);
-                } else {
-                    this.fallbackCopy(text);
-                }
-            } catch (err) {
-                this.fallbackCopy(text);
-            }
-        }
-
-        fallbackCopy(text) {
-            const textArea = document.createElement("textarea");
-            textArea.value = text;
-            textArea.style.position = "fixed";
-            textArea.style.left = "-9999px";
-            document.body.appendChild(textArea);
-            textArea.focus();
-            textArea.select();
-            try {
-                document.execCommand('copy');
+                await navigator.clipboard.writeText(text);
                 this.open(text);
-            } catch (err) {
-                console.error('Fallback copy failed', err);
+            } catch {
+                /* permission denied / insecure context */
             }
-            document.body.removeChild(textArea);
         }
 
         open(text) {

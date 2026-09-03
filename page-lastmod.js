@@ -12,9 +12,9 @@
 //     monolithic dict is shared, so we walk its history per-key, not per-file;
 //   - the meta.json title/description/type it renders: same per-key treatment.
 // Whichever changed most recently wins. CSS/JS (<link>/<script> refs) and the
-// shared chrome on every page (nav/icons/speculation) are presentation, not page
-// content, so they're kept out of the date — CSS/JS by construction, chrome via
-// CHROME_FILES below (still walked for the i18n keys it contributes). Falls back
+// shared chrome on every page (nav/icons/speculation, and for posts the page
+// template itself) are presentation, not page content, so they're kept out of
+// the date — CSS/JS by construction, chrome via isChrome() below. Falls back
 // to a caller-supplied build time when git can't answer honestly (no repo,
 // shallow clone, uncommitted/untracked files).
 
@@ -122,13 +122,12 @@ const ATTR_RE = /([\w-]+)\s*=\s*"([^"]*)"/g;
 const T_RE = /\{\{t\.([\w.]+)\}\}/g;
 
 // Resolve an entry's recursive <load> graph: the set of HTML source files it
-// composes from, plus every i18n leaf key referenced across that composed
-// markup. Mirrors how injectHtml expands shells -> templates -> components and
+// composes from, plus the i18n leaf keys each of those files references. Mirrors how injectHtml expands shells -> templates -> components and
 // substitutes {=$attr} params before recursing (so interpolated srcs resolve and
 // per-post i18n keys like art.posts.<slug>.title are tracked concretely).
 function resolveGraph(root, entryRel) {
     const files = new Set();
-    const keys = new Set();
+    const keysByFile = new Map();
     const visit = (rel, params) => {
         const norm = rel.replace(/^\.?\//, "").replace(/\\/g, "/");
         if (files.has(norm)) return;
@@ -147,9 +146,12 @@ function resolveGraph(root, entryRel) {
         }
         // Collect tokens, then nested loads (with their params), before recursing:
         // each exec loop on a shared /g regex must finish before the next call.
+        // Keys are recorded per file so chrome's keys can be dropped with it.
+        const own = new Set();
+        keysByFile.set(norm, own);
         let m;
         T_RE.lastIndex = 0;
-        while ((m = T_RE.exec(html))) keys.add(m[1]);
+        while ((m = T_RE.exec(html))) own.add(m[1]);
         const loads = [];
         LOAD_TAG_RE.lastIndex = 0;
         while ((m = LOAD_TAG_RE.exec(html))) {
@@ -165,7 +167,7 @@ function resolveGraph(root, entryRel) {
         for (const [src, attrs] of loads) visit(src, attrs);
     };
     visit(entryRel, null);
-    return { files: [...files], keys: [...keys] };
+    return { files: [...files], keysByFile };
 }
 
 // The meta.json keys a STATIC page renders into <title>/description/og. (Article
@@ -193,23 +195,37 @@ function metaPaths(entryRel, locale, meta) {
 
 // Shared site furniture that sits in every page's <load> graph (nav bar, icon
 // defs, speculation rules). Like CSS/JS, it's chrome, not page content, so a
-// tweak to it must not re-date every page's "content last changed". It's still
-// walked for the i18n keys it contributes; only its file mtime is dropped.
+// tweak to it must not re-date every page's "content last changed": neither
+// its file mtime nor the i18n keys it references (a nav label rename is not a
+// content change either) count towards the date.
 const CHROME_FILES = new Set([
     "components/waybar.html",
     "components/icons_common.html",
     "components/speculation.html",
 ]);
 
+// For an article post the page template is chrome too: its content is the prose
+// partial plus the single-source record, and everything the template adds (the
+// back link, the feed <link>, the JSON-LD scaffold) is shared by every post.
+// Without this, one template edit re-dated every article's <lastmod>,
+// article:modified_time, dateModified and feed <updated> at once. Static pages
+// (home, resume, 404, the articles index) keep their templates as content —
+// there the template IS the page.
+function isChrome(file, isPost) {
+    return CHROME_FILES.has(file) || (isPost && file.startsWith("templates/"));
+}
+
 // Newest of a page's real inputs (composed HTML files + referenced i18n keys +
 // rendered meta keys), or `buildTime` when git can't answer honestly.
 export function pageLastMod(root, entryRel, { meta = {}, i18nDir = "i18n", buildTime } = {}) {
     const locale = localeOf(entryRel);
-    const { files, keys } = resolveGraph(root, entryRel);
+    const { files, keysByFile } = resolveGraph(root, entryRel);
     // An article post's prose + per-post strings live in its content partial and
     // its single-source record; the generated route shell is gitignored (no git
     // date), so the record carries the post's own metadata changes into the date.
     const slug = postSlug(entryRel);
+    const contentFiles = files.filter((f) => !isChrome(f, slug !== null));
+    const keys = [...new Set(contentFiles.flatMap((f) => [...keysByFile.get(f)]))];
     // The articles index is built from {{article_list}}/{{article_items}} (not a
     // <load> graph the walker sees), so fold every post record's date in — adding
     // or editing a post must freshen the index too.
@@ -218,7 +234,7 @@ export function pageLastMod(root, entryRel, { meta = {}, i18nDir = "i18n", build
         ? Object.keys(loadPosts(root)).map((s) => fileLastMod(`articles/${s}.post.json`))
         : [];
     const candidates = [
-        ...files.filter((f) => !CHROME_FILES.has(f)).map(fileLastMod),
+        ...contentFiles.map(fileLastMod),
         slug ? fileLastMod(`articles/${slug}.post.json`) : null,
         ...postDates,
         jsonSubtreeLastMod(path.posix.join(i18nDir, `${locale}.json`), keys),

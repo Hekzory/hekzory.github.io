@@ -1,11 +1,40 @@
 import fs from "fs/promises";
 import { existsSync } from "node:fs";
+import { randomBytes } from "node:crypto";
 import path from "path";
 import { Window } from "happy-dom";
 import { siblings, localeOf, abs, availableLocales } from "./i18n-paths.js";
 import { resolvePageMeta, pick } from "./meta-resolve.js";
 import { pageLastMod } from "./page-lastmod.js";
 import { loadPosts, postSlug, postLocaleData } from "./post-data.js";
+
+// Dev server only. Vite's client injects JS-imported CSS as <style> elements
+// and keeps an HMR WebSocket open; neither passes the production policy, and a
+// blocked <style> fails silently (the terminal drawer just rendered unstyled).
+// The client stamps whatever nonce it finds in <meta property="csp-nonce"> on
+// everything it injects, so a per-request nonce keeps dev on the production
+// policy's shape instead of 'unsafe-inline'. Never reaches the build.
+function devCsp(csp, document) {
+    const nonce = randomBytes(16).toString("base64");
+    const meta = document.createElement("meta");
+    meta.setAttribute("property", "csp-nonce");
+    meta.setAttribute("nonce", nonce);
+    document.head.appendChild(meta);
+
+    const directives = new Map();
+    for (const d of csp.split(";")) {
+        const [name, ...values] = d.trim().split(/\s+/);
+        if (name) directives.set(name, values);
+    }
+    // Extend a directive, seeding a missing one from default-src.
+    const allow = (name, ...extra) => {
+        const base = directives.get(name) ?? directives.get("default-src") ?? [];
+        directives.set(name, [...new Set([...base.filter((v) => v !== "'none'"), ...extra])]);
+    };
+    allow("style-src", `'nonce-${nonce}'`);
+    allow("connect-src", "'self'", "ws:", "wss:");
+    return [...directives].map(([name, values]) => [name, ...values].join(" ")).join("; ");
+}
 
 export default function htmlMetaPlugin(options = {}) {
     const {
@@ -36,11 +65,13 @@ export default function htmlMetaPlugin(options = {}) {
     };
 
     let root = process.cwd();
+    let isDev = false;
 
     return {
         name: "vite-plugin-html-meta",
         configResolved(config) {
             root = config.root;
+            isDev = config.command === "serve";
         },
         async transformIndexHtml(html, ctx) {
             const metaData = JSON.parse(await fs.readFile(path.resolve(metaFile), encoding));
@@ -131,7 +162,8 @@ export default function htmlMetaPlugin(options = {}) {
 
             // CSP ships as a meta tag because GitHub Pages cannot send custom
             // HTTP headers; frame-ancestors is ignored in meta CSP, so omitted.
-            const csp = meta.csp || metaData.csp;
+            const prodCsp = meta.csp || metaData.csp;
+            const csp = prodCsp && isDev ? devCsp(prodCsp, document) : prodCsp;
             if (csp) {
                 let cspMeta = document.head.querySelector('meta[http-equiv="Content-Security-Policy"]');
                 if (!cspMeta) {

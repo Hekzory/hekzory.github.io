@@ -6,14 +6,13 @@
     "scripts": {
         "dev": "pnpm exec vite",
         "build": "pnpm exec vite build",
+        "check": "node scripts/check-dist.js",
         "preview": "pnpm exec vite preview"
     },
     "devDependencies": {
         "happy-dom": "^20.11.1",
-        "terser": "^5.49.0",
-        "vite": "^8.1.5",
-        "vite-plugin-compression2": "^2.5.3",
-        "vite-plugin-html": "^3.2.2",
+        "html-minifier-terser": "^7.2.0",
+        "vite": "^8.2.2",
         "vite-plugin-html-inject": "^1.1.2"
     }
 }

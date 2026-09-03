@@ -20,10 +20,10 @@
 /* ============================ List page ============================ */
 .articles-header {
     margin-bottom: calc(var(--gap) * 1.5);
-}
 
-.articles-header .name-shimmer {
-    font-size: clamp(1.8rem, 5vw, 2.6rem);
+    & .name-shimmer {
+        font-size: clamp(1.8rem, 5vw, 2.6rem);
+    }
 }
 
 .articles-intro {
@@ -43,15 +43,15 @@
     text-decoration: none;
     border-bottom: 1px dashed var(--border);
     transition: color var(--duration) var(--ease), border-color var(--duration) var(--ease);
-}
 
-.articles-feed::before {
-    content: "⌁ ";
-}
+    &::before {
+        content: "⌁ ";
+    }
 
-.articles-feed:hover {
-    color: var(--primary);
-    border-color: var(--primary);
+    &:hover {
+        color: var(--primary);
+        border-color: var(--primary);
+    }
 }
 
 .articles-list {
@@ -68,10 +68,14 @@
     gap: 8px;
     text-decoration: none;
     color: inherit;
-}
 
-.article-card:hover {
-    transform: translateY(-3px);
+    &:hover {
+        transform: translateY(-3px);
+
+        & .article-card-title {
+            color: var(--primary);
+        }
+    }
 }
 
 .article-card-meta {
@@ -85,10 +89,6 @@
     font-weight: bold;
     color: var(--fg);
     transition: color var(--duration) var(--ease);
-}
-
-.article-card:hover .article-card-title {
-    color: var(--primary);
 }
 
 .article-card-excerpt {
@@ -110,10 +110,10 @@
     text-decoration: none;
     font-size: 0.85rem;
     transition: color var(--duration) var(--ease);
-}
 
-.article-back:hover {
-    color: var(--primary);
+    &:hover {
+        color: var(--primary);
+    }
 }
 
 .article-header {
@@ -139,61 +139,94 @@
 .article-content {
     color: var(--fg-dim);
     line-height: 1.75;
-}
 
-.article-content > * + * {
-    margin-top: 1.1em;
-}
+    & > * + * {
+        margin-top: 1.1em;
+    }
 
-.article-content h2 {
-    margin-top: 1.8em;
-    font-size: 1.4rem;
-    color: var(--fg);
-}
+    & h2 {
+        margin-top: 1.8em;
+        font-size: 1.4rem;
+        color: var(--fg);
+    }
 
-.article-content h3 {
-    margin-top: 1.5em;
-    font-size: 1.15rem;
-    color: var(--fg);
-}
+    & h3 {
+        margin-top: 1.5em;
+        font-size: 1.15rem;
+        color: var(--fg);
+    }
 
-.article-content a {
-    color: var(--primary);
-    text-decoration: underline;
-    text-underline-offset: 3px;
-    transition: color var(--duration) var(--ease);
-}
+    & a {
+        color: var(--primary);
+        text-decoration: underline;
+        text-underline-offset: 3px;
+        transition: color var(--duration) var(--ease);
 
-.article-content a:hover {
-    color: var(--accent);
-}
+        &:hover {
+            color: var(--accent);
+        }
+    }
 
-.article-content ul,
-.article-content ol {
-    padding-left: 1.5em;
-}
+    & ul,
+    & ol {
+        padding-left: 1.5em;
+    }
 
-.article-content li + li {
-    margin-top: 0.4em;
-}
+    & li + li {
+        margin-top: 0.4em;
+    }
 
-.article-content blockquote {
-    border-left: 3px solid var(--primary);
-    padding-left: 1em;
-    color: var(--fg-dim);
-    font-style: italic;
-}
+    & blockquote {
+        border-left: 3px solid var(--primary);
+        padding-left: 1em;
+        color: var(--fg-dim);
+        font-style: italic;
+    }
 
-.article-content hr {
-    border: none;
-    border-top: 1px solid var(--border);
-    margin: 2em 0;
-}
+    & hr {
+        border: none;
+        border-top: 1px solid var(--border);
+        margin: 2em 0;
+    }
 
-.article-content img {
-    max-width: 100%;
-    height: auto;
-    border-radius: var(--radius);
+    & img {
+        max-width: 100%;
+        height: auto;
+        border-radius: var(--radius);
+    }
+
+    /* Inline code + fenced blocks reuse the dashed terminal look of .code-block.
+       font-family stays inherited: the body is already Martian Mono, and a bare
+       `monospace` here swapped in a different system face for every token. */
+    & code {
+        background: var(--bg-dark);
+        padding: 2px 6px;
+        border-radius: 4px;
+        color: var(--accent);
+        /* Slightly larger than body text so monospace tokens stay legible, not shrunk. */
+        font-size: 1.1em;
+    }
+
+    & pre {
+        background: var(--bg-dark);
+        border: 1px dashed var(--border);
+        border-radius: 6px;
+        padding: 14px 16px;
+        line-height: 1.55;
+        /* Long verbatim lines (error strings, paths) wrap to the box instead of
+           forcing a horizontal scrollbar; overflow-wrap breaks unbreakable tokens
+           (long paths/URLs) so nothing spills past the edge. */
+        white-space: pre-wrap;
+        overflow-wrap: anywhere;
+
+        & code {
+            background: none;
+            padding: 0;
+            border-radius: 0;
+            color: var(--success);
+            font-size: 1rem;
+        }
+    }
 }
 
 /* Record-driven figures ({{article_figure}}): centered, framed, with a caption.
@@ -202,52 +235,20 @@
    reserve space (no layout shift). */
 .article-figure {
     margin: 1.6em 0;
-}
 
-.article-figure img {
-    display: block;
-    margin-inline: auto;
-    border: 1px solid var(--border);
-}
+    & img {
+        display: block;
+        margin-inline: auto;
+        border: 1px solid var(--border);
+    }
 
-.article-figure figcaption {
-    margin-top: 10px;
-    font-size: 0.85rem;
-    line-height: 1.5;
-    color: var(--fg-dim);
-    text-align: center;
-}
-
-/* Inline code + fenced blocks reuse the dashed terminal look of .code-block. */
-.article-content code {
-    background: var(--bg-dark);
-    padding: 2px 6px;
-    border-radius: 4px;
-    color: var(--accent);
-    font-family: monospace;
-    /* Slightly larger than body text so monospace tokens stay legible, not shrunk. */
-    font-size: 1.1em;
-}
-
-.article-content pre {
-    background: var(--bg-dark);
-    border: 1px dashed var(--border);
-    border-radius: 6px;
-    padding: 14px 16px;
-    line-height: 1.55;
-    /* Long verbatim lines (error strings, paths) wrap to the box instead of
-       forcing a horizontal scrollbar; overflow-wrap breaks unbreakable tokens
-       (long paths/URLs) so nothing spills past the edge. */
-    white-space: pre-wrap;
-    overflow-wrap: anywhere;
-}
-
-.article-content pre code {
-    background: none;
-    padding: 0;
-    border-radius: 0;
-    color: var(--success);
-    font-size: 1rem;
+    & figcaption {
+        margin-top: 10px;
+        font-size: 0.85rem;
+        line-height: 1.5;
+        color: var(--fg-dim);
+        text-align: center;
+    }
 }
 
 /* --- Long-form furniture (reusable across posts) --- */
@@ -278,30 +279,30 @@
     border-radius: 0 var(--radius) var(--radius) 0;
     padding: 14px 18px;
     color: var(--fg-dim);
+
+    /* A callout can hold its own <pre>/<code>; keep those readable on the tint. */
+    & > :first-child {
+        margin-top: 0;
+    }
+
+    &.is-key {
+        border-left-color: var(--secondary);
+
+        & .article-callout-label {
+            color: var(--secondary);
+        }
+    }
+
+    &.is-warning {
+        border-left-color: var(--warning);
+
+        & .article-callout-label {
+            color: var(--warning);
+        }
+    }
 }
 
 .article-callout-label {
     color: var(--primary);
     font-weight: bold;
-}
-
-.article-callout.is-key {
-    border-left-color: var(--secondary);
-}
-
-.article-callout.is-key .article-callout-label {
-    color: var(--secondary);
-}
-
-.article-callout.is-warning {
-    border-left-color: var(--warning);
-}
-
-.article-callout.is-warning .article-callout-label {
-    color: var(--warning);
-}
-
-/* A callout can hold its own <pre>/<code>; keep those readable on the tint. */
-.article-callout > :first-child {
-    margin-top: 0;
 }

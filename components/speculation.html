@@ -3,7 +3,12 @@
         "prerender": [
             {
                 "source": "document",
-                "where": { "href_matches": "/*" },
+                "where": {
+                    "and": [
+                        { "href_matches": "/*" },
+                        { "not": { "href_matches": "/*.xml" } }
+                    ]
+                },
                 "eagerness": "moderate"
             }
         ]

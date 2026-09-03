@@ -36,6 +36,11 @@ jobs:
           cache: pnpm
       - run: pnpm install
       - run: pnpm run build
+      # Zero-dependency sanity check of dist/: every inline JSON-LD and
+      # speculation-rules block parses, every internal link/asset/sitemap
+      # <loc>/feed href resolves to a built file, every page has lang/title/
+      # canonical. Catches a broken hreflang twin or a typo'd href before deploy.
+      - run: pnpm run check
       - uses: actions/upload-pages-artifact@v5
         if: github.event_name != 'pull_request'
         with:
