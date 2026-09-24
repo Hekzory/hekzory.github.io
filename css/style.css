@@ -1230,9 +1230,14 @@ mark {
     }
 }
 
-/* Clock pulse animation */
-.clock-tick {
-    animation: clock-pulse 1s ease-out;
+/* Clock pulse on each minute change. main.js drops the class on animationend,
+   so the pulse always plays out in full (it used to be a 1s animation cut off
+   by a 200ms timer, snapping back from scale ~1.12 once a minute). Motion
+   only: under reduced motion the digits just change. */
+@media (prefers-reduced-motion: no-preference) {
+    .clock-tick {
+        animation: clock-pulse 0.3s ease-out;
+    }
 }
 
 @keyframes clock-pulse {

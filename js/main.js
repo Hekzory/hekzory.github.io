@@ -31,11 +31,17 @@
         if (clockEl) {
             if (clockEl.textContent !== timeString) {
                 clockEl.classList.add('clock-tick');
-                setTimeout(() => clockEl.classList.remove('clock-tick'), 200);
             }
             clockEl.textContent = timeString;
         }
     }
+
+    // The pulse's length lives in CSS alone: the class comes off when the
+    // animation ends. Under reduced motion there's no animation, so the class
+    // just stays on (and re-adding it next minute is a no-op).
+    document.getElementById('clock')?.addEventListener('animationend', (e) => {
+        e.currentTarget.classList.remove('clock-tick');
+    });
 
     // Sync clock ticks to minute boundaries — display is HH:MM, so per-second updates are wasted work
     updateClock();
