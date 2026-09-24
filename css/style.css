@@ -172,6 +172,14 @@ body {
     overflow: hidden !important;
 }
 
+/* Utility: content that only makes sense on paper (see the print block at the
+   end of this file). */
+@media not print {
+    .print-only {
+        display: none !important;
+    }
+}
+
 /* Typography niceties (no-ops where unsupported):
    balance — multi-line headings wrap to even-length lines instead of a long
    line plus an orphan word; pretty — body text avoids single-word last lines. */
@@ -1175,5 +1183,104 @@ mark {
 
     100% {
         transform: scale(1);
+    }
+}
+
+/* --- Print ---
+   Paper gets dark ink on white: the palette tokens are swapped (the screen
+   --fg is a pale lavender that vanishes on paper) and everything that only
+   works on a screen goes — the bar with its clock and EN/RU switch, the
+   language banner, the terminal, the clipboard dialog, decorative banners,
+   glows and animations. Backgrounds aren't printed by default, so nothing may
+   depend on one: the gradient-clipped name gets a solid fill like under
+   reduced motion. This block sits after the P3 upgrade on purpose, so its
+   tokens win if a printer also matches (color-gamut: p3). Page-specific print
+   layout lives next to the page's own styles (resume.css). */
+@media print {
+    :root {
+        --bg: #fff;
+        --bg-dark: #fff;
+        --surface: #fff;
+        --surface-raised: #fff;
+        --surface-highlight: transparent;
+        --glass: transparent;
+        --glass-border: #c8c8c8;
+        --fg: #111;
+        --fg-dim: #444;
+        --primary: #1d4ed8;
+        --secondary: #6d28d9;
+        --accent: #0e7490;
+        --success: #15803d;
+        --warning: #a16207;
+        --error: #b91c1c;
+        --border: #c8c8c8;
+        --shadow: none;
+    }
+
+    /* The page declares color-scheme: dark, and with "Background graphics"
+       ticked the dark UA canvas would fill the page margins. */
+    html {
+        color-scheme: light;
+        background: #fff;
+        width: auto;
+        overflow: visible;
+        scrollbar-gutter: auto;
+    }
+
+    body {
+        display: block;
+        min-height: 0;
+        background: #fff;
+        color: var(--fg);
+    }
+
+    .waybar,
+    .lang-banner,
+    .terminal-tile,
+    .terminal-toggle-tile,
+    .clipboard,
+    .profile-banner {
+        display: none !important;
+    }
+
+    *,
+    *::before,
+    *::after {
+        animation: none !important;
+        transition: none !important;
+    }
+
+    .tile {
+        background: none;
+        box-shadow: none;
+        backdrop-filter: none;
+        -webkit-backdrop-filter: none;
+    }
+
+    .name-shimmer {
+        background-image: none;
+        -webkit-text-fill-color: currentColor;
+        color: var(--fg);
+    }
+
+    .profile-image-container {
+        box-shadow: none;
+
+        &::after {
+            display: none;
+        }
+    }
+
+    /* Glow effects print as smudges. */
+    mark {
+        text-shadow: none;
+    }
+
+    .conn-icon {
+        filter: none;
+    }
+
+    .connection-item::before {
+        content: none;
     }
 }

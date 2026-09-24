@@ -433,3 +433,372 @@
     padding-top: 8px;
     border-top: 1px solid color-mix(in srgb, var(--border) 30%, transparent);
 }
+
+/* --- Print: a one-page, single-column CV ---
+   The screen layout (glass tiles, a 200px avatar under a banner, two columns
+   of tag clouds) turns into a plain document: compact header with the
+   contacts spelled out as text (links can't be clicked on paper), ruled
+   section headings, experience as dated entries, and skills/languages as
+   one-line lists. The global print block in style.css has already swapped
+   the palette to ink-on-white and dropped the bar, banner and animations. */
+@media print {
+    @page {
+        margin: 12mm 14mm;
+    }
+
+    body.resume-page {
+        font-size: 8.6pt;
+        line-height: 1.4;
+    }
+
+    .resume-container {
+        display: block;
+        padding: 0;
+        max-width: none;
+        min-height: 0;
+    }
+
+    .resume-major-left {
+        display: block;
+    }
+
+    /* Skills keep the full width (their rows are long); the two short lists
+       under them share a row instead of stacking. */
+    .resume-major-right {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        column-gap: 6mm;
+
+        & .id-3-skills {
+            grid-column: 1 / -1;
+        }
+    }
+
+    .resume-section,
+    .resume-section:last-child,
+    .resume-header {
+        margin: 0 0 2.6mm;
+        border: 0;
+        border-radius: 0;
+        overflow: visible;
+        content-visibility: visible;
+    }
+
+    /* A4 fits on one page. Where it doesn't (US Letter is 18mm shorter), the
+       break should fall between sections, never inside a short one. */
+    .id-4-education,
+    .id-3-skills,
+    .id-1-languages,
+    .id-5-soft-skills {
+        break-inside: avoid;
+    }
+
+    /* Section heading: the tile's title bar becomes a ruled small-caps label. */
+    .resume-section .tile-header {
+        padding: 0 0 0.8mm;
+        margin-bottom: 1.8mm;
+        background: none;
+        border-bottom: 0.6pt solid #888;
+        color: var(--fg);
+        font-size: 8.4pt;
+        letter-spacing: 0.08em;
+        break-after: avoid;
+    }
+
+    .resume-section .tile-content {
+        padding: 0;
+    }
+
+    .tile-icon {
+        display: none;
+    }
+
+    /* --- Header: photo left, name + contacts right --- */
+    .profile-content {
+        flex-direction: row;
+        align-items: center;
+        gap: 5mm;
+        margin: 0;
+        padding: 0 0 2mm;
+        text-align: left;
+    }
+
+    .profile-image-container {
+        width: 19mm;
+        height: 19mm;
+        flex: none;
+        margin: 0;
+        padding: 0;
+        border: 0.6pt solid #888;
+    }
+
+    .profile-details {
+        & h1 {
+            font-size: 17pt;
+            margin: 0 0 0.6mm;
+            padding: 0;
+        }
+
+        & .role {
+            padding: 0;
+            background: none;
+            font-size: 9.5pt;
+            color: var(--primary);
+            opacity: 1;
+        }
+
+        & .location {
+            margin-top: 0.6mm;
+            font-size: 8.4pt;
+        }
+    }
+
+    .resume-doc-label {
+        display: none;
+    }
+
+    .profile-contact {
+        justify-content: flex-start;
+        gap: 0.6mm 5mm;
+        margin-top: 1.4mm;
+
+        & .connection-item {
+            display: inline;
+            padding: 0;
+            border: 0;
+            border-radius: 0;
+            background: none;
+            color: var(--fg);
+            font-size: 8.4pt;
+        }
+
+        & .conn-icon,
+        & .conn-label {
+            display: none;
+        }
+
+        /* Screen labels ("GitHub") become the address itself. */
+        & .connection-item[data-print]::after {
+            content: attr(data-print);
+        }
+    }
+
+    /* --- Experience --- */
+    .experience-timeline {
+        padding-left: 0;
+
+        &::before {
+            display: none;
+        }
+    }
+
+    .experience-item {
+        padding-bottom: 2mm;
+        break-inside: avoid;
+
+        &::before {
+            display: none;
+        }
+    }
+
+    .experience-header {
+        margin-bottom: 1mm;
+    }
+
+    .experience-title-row {
+        flex-direction: row;
+        align-items: baseline;
+        flex-wrap: nowrap;
+        margin-bottom: 0.4mm;
+    }
+
+    .experience-role {
+        font-size: 9.4pt;
+    }
+
+    .experience-date,
+    .company-location,
+    .company-team {
+        font-size: 8.2pt;
+    }
+
+    .experience-company {
+        gap: 0 3mm;
+        margin-bottom: 0.4mm;
+    }
+
+    .company-name {
+        font-size: 8.6pt;
+    }
+
+    .company-team {
+        padding: 0;
+        background: none;
+    }
+
+    /* Tag pills -> one comma-separated line. Flex rows, because in a flex
+       container the source whitespace between the tags is dropped (inline
+       tags would print as "TeamCity , Jenkins"); the comma trails its item so
+       a wrapped line never starts with one, and the gap is the space after it. */
+    .tech-stack,
+    .skill-tags,
+    .soft-skills-list {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0 1ch;
+        margin: 0;
+    }
+
+    .tech-stack {
+        color: var(--fg-dim);
+    }
+
+    .tech-tag,
+    .skill-tag,
+    .soft-skill-tag {
+        display: inline;
+        padding: 0;
+        border: 0;
+        border-radius: 0;
+        background: none;
+        font-size: inherit;
+        font-weight: normal;
+    }
+
+    .tech-tag {
+        color: var(--fg-dim);
+        font-size: 8pt;
+    }
+
+    .tech-tag:not(:last-child)::after,
+    .skill-tag:not(:last-child)::after,
+    .soft-skill-tag:not(:last-child)::after {
+        content: ",";
+    }
+
+    .experience-details li {
+        margin-bottom: 0.4mm;
+        padding-left: 3.4mm;
+        font-size: 8.4pt;
+        line-height: 1.32;
+        color: var(--fg);
+
+        &::before {
+            content: "•";
+        }
+    }
+
+    /* --- Education --- */
+    .education-item {
+        padding: 0;
+        background: none;
+        border: 0;
+        border-radius: 0;
+    }
+
+    .education-header {
+        align-items: baseline;
+        margin-bottom: 0.4mm;
+    }
+
+    .education-degree {
+        font-size: 9.4pt;
+    }
+
+    .education-date {
+        font-size: 8.2pt;
+    }
+
+    .education-school,
+    .education-honors,
+    .education-location {
+        display: inline;
+        margin: 0;
+        font-size: 8.4pt;
+    }
+
+    .education-school {
+        display: block;
+    }
+
+    .education-location::before {
+        content: " · ";
+        color: var(--fg-dim);
+    }
+
+    /* --- Skills: "CATEGORY   item, item, item" rows --- */
+    .skills-grid {
+        display: grid;
+        grid-template-columns: max-content 1fr;
+        gap: 0.5mm 4mm;
+    }
+
+    .skill-category {
+        display: contents;
+    }
+
+    .skill-category-title {
+        margin: 0;
+        font-size: 8pt;
+        letter-spacing: 0.04em;
+        color: var(--fg-dim);
+    }
+
+    .skill-tags {
+        font-size: 8.4pt;
+    }
+
+    .skill-tag {
+        color: var(--fg);
+    }
+
+    /* --- Languages / soft skills --- */
+    .language-list {
+        gap: 0.4mm;
+    }
+
+    .language-item {
+        display: block;
+        padding: 0;
+        background: none;
+        border: 0;
+        border-radius: 0;
+        font-size: 8.4pt;
+    }
+
+    .language-level,
+    .language-cert {
+        display: inline;
+        width: auto;
+        margin: 0;
+        padding: 0;
+        background: none;
+        font-size: inherit;
+        font-weight: normal;
+        color: var(--fg-dim);
+    }
+
+    .language-level::before {
+        content: " — ";
+    }
+
+    .language-cert {
+        display: block;
+        font-size: 8pt;
+    }
+
+    .soft-skills-list {
+        margin-bottom: 0.6mm;
+        font-size: 8.4pt;
+    }
+
+    .soft-skill-tag {
+        color: var(--fg);
+    }
+
+    .soft-skill-note {
+        padding-top: 0;
+        border-top: 0;
+        font-size: 8pt;
+    }
+}

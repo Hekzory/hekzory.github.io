@@ -42,18 +42,20 @@
                         <p class="location">📍 {{t.home.location}}</p>
                         <p class="resume-doc-label">{{t.resume.doc_label}}</p>
                         <div class="profile-contact">
-                            <a href="https://github.com/hekzory/" class="connection-item" target="_blank" rel="me noopener" title="GitHub" aria-label="GitHub" data-brand="github">
+                            <a href="https://github.com/hekzory/" class="connection-item" target="_blank" rel="me noopener" title="GitHub" aria-label="GitHub" data-brand="github" data-print="github.com/hekzory">
                                 <svg class="conn-icon"><use href="#i-gh"></use></svg>
                                 <span class="conn-label">GitHub</span>
                             </a>
-                            <a href="https://t.me/hekzory" class="connection-item" target="_blank" rel="me noopener" title="Telegram" aria-label="Telegram" data-brand="telegram">
+                            <a href="https://t.me/hekzory" class="connection-item" target="_blank" rel="me noopener" title="Telegram" aria-label="Telegram" data-brand="telegram" data-print="t.me/hekzory">
                                 <svg class="conn-icon"><use href="#i-tg"></use></svg>
                                 <span class="conn-label">Telegram</span>
                             </a>
-                            <button class="connection-item contact-btn" data-content="oleg@tsv.one" title="Email" aria-label="Copy Email" data-brand="email">
+                            <button class="connection-item contact-btn" data-content="oleg@tsv.one" title="Email" aria-label="Copy Email" data-brand="email" data-print="oleg@tsv.one">
                                 <svg class="conn-icon"><use href="#i-ml"></use></svg>
                                 <span class="conn-label">Email</span>
                             </button>
+                            <!-- Paper only: the one link a reader of a printout can actually type. -->
+                            <a href="{{canonical}}" class="connection-item print-only">tsv.one{{base}}/resume</a>
                         </div>
                     </div>
                 </div>
