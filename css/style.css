@@ -187,16 +187,19 @@ body {
 
 /* Typography niceties (no-ops where unsupported):
    balance — multi-line headings wrap to even-length lines instead of a long
-   line plus an orphan word; pretty — body text avoids single-word last lines. */
+   line plus an orphan word; pretty — body text avoids single-word last lines.
+   Longhands on purpose: the `text-wrap` shorthand also sets text-wrap-mode:
+   wrap, and declared on every li/p/h* it beat any inherited nowrap — which is
+   how the waybar breadcrumb ended up wrapping by the hyphens of a post slug. */
 h1,
 h2,
 h3 {
-    text-wrap: balance;
+    text-wrap-style: balance;
 }
 
 p,
 li {
-    text-wrap: pretty;
+    text-wrap-style: pretty;
 }
 
 .resume-link {
@@ -260,11 +263,23 @@ li {
     align-items: center;
 }
 
+/* The left side gives way when the bar runs out of room (a long post slug at
+   769–1000px): the breadcrumb shrinks, the right side (EN/RU + clock) never
+   does. min-width: 0 lets the flex items go below their content width. */
+.waybar-left {
+    min-width: 0;
+}
+
+.waybar-right {
+    flex-shrink: 0;
+}
+
 .waybar-left .window-title {
     background: transparent;
     color: var(--fg-dim);
     margin-left: 16px;
     /* Extra gap before the breadcrumb */
+    min-width: 0;
 
     @media (max-width: 768px) {
         display: none;
@@ -278,10 +293,25 @@ li {
     align-items: center;
     list-style: none;
     gap: 0;
+    min-width: 0;
 
+    /* One line, always: the bar is 36px tall. Only the leaf crumb (the one
+       that can be a long slug) may shrink, and it ends in an ellipsis. */
     & li {
         display: flex;
         align-items: center;
+        white-space: nowrap;
+
+        &:last-child {
+            min-width: 0;
+            overflow: hidden;
+
+            & > * {
+                min-width: 0;
+                overflow: hidden;
+                text-overflow: ellipsis;
+            }
+        }
 
         & + li::before {
             content: "/";
