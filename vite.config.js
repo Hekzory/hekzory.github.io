@@ -6,7 +6,6 @@ import { generateShells } from "./post-data.js";
 import htmlMetaPlugin from "./vite-plugin-html-meta.js";
 import sitemapPlugin from "./vite-plugin-sitemap.js";
 import feedPlugin from "./vite-plugin-feed.js";
-import minifyInlineJsonPlugin from "./vite-plugin-minify-inline-json.js";
 import i18nFanoutPlugin from "./vite-plugin-i18n-fanout.js";
 import htmlMinifyPlugin from "./vite-plugin-html-minify.js";
 import cleanUrlsPlugin from "./vite-plugin-clean-urls.js";
@@ -49,8 +48,8 @@ export default defineConfig({
         sitemapPlugin(),
         feedPlugin(),
         injectHtml(),
-        minifyInlineJsonPlugin(),
-        // Final HTML minification (generateBundle, after every transform above).
+        // Final HTML minification (generateBundle, after every transform above);
+        // it also compacts the inline JSON-LD and speculation rules.
         htmlMinifyPlugin(),
         // Dev server only: GitHub Pages-style clean URLs.
         cleanUrlsPlugin(),
