@@ -2,7 +2,6 @@ import fs from "fs/promises";
 import { existsSync } from "node:fs";
 import { randomBytes } from "node:crypto";
 import path from "path";
-import { Window } from "happy-dom";
 import { siblings, localeOf, abs, availableLocales } from "./i18n-paths.js";
 import { resolvePageMeta, pick } from "./meta-resolve.js";
 import { pageLastMod } from "./page-lastmod.js";
@@ -14,13 +13,7 @@ import { loadPosts, postSlug, postLocaleData } from "./post-data.js";
 // The client stamps whatever nonce it finds in <meta property="csp-nonce"> on
 // everything it injects, so a per-request nonce keeps dev on the production
 // policy's shape instead of 'unsafe-inline'. Never reaches the build.
-function devCsp(csp, document) {
-    const nonce = randomBytes(16).toString("base64");
-    const meta = document.createElement("meta");
-    meta.setAttribute("property", "csp-nonce");
-    meta.setAttribute("nonce", nonce);
-    document.head.appendChild(meta);
-
+function devCsp(csp, nonce) {
     const directives = new Map();
     for (const d of csp.split(";")) {
         const [name, ...values] = d.trim().split(/\s+/);
@@ -36,6 +29,10 @@ function devCsp(csp, document) {
     return [...directives].map(([name, values]) => [name, ...values].join(" ")).join("; ");
 }
 
+// <title> text. The one piece of markup written by hand: Vite escapes the
+// attribute values of the tags it injects.
+const escapeText = (s) => String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+
 export default function htmlMetaPlugin(options = {}) {
     const {
         metaFile = "meta.json",
@@ -43,26 +40,6 @@ export default function htmlMetaPlugin(options = {}) {
         defaultViewport = "width=device-width,initial-scale=1",
         defaultCharset = "utf-8",
     } = options;
-
-    // Helper function to create or update a meta tag
-    const insertMetaTag = (document, name, content, property = false) => {
-        let meta = document.head.querySelector(`meta[name="${name}"], meta[property="${name}"]`);
-        if (!meta) {
-            meta = document.createElement("meta");
-            meta.setAttribute(property ? "property" : "name", name);
-            document.head.appendChild(meta);
-        }
-        meta.setAttribute("content", content);
-    };
-
-    // Append an alternate-link (hreflang cluster).
-    const insertAlternate = (document, hreflang, href) => {
-        const link = document.createElement("link");
-        link.setAttribute("rel", "alternate");
-        link.setAttribute("hreflang", hreflang);
-        link.setAttribute("href", href);
-        document.head.appendChild(link);
-    };
 
     let root = process.cwd();
     let isDev = false;
@@ -126,12 +103,17 @@ export default function htmlMetaPlugin(options = {}) {
             const robots = meta.robots;
             const indexable = !(robots && /noindex/i.test(robots));
 
-            const window = new Window();
-            const document = window.document;
-            document.documentElement.innerHTML = html;
-
-            // Per-locale lang attribute (templates ship a static placeholder value).
-            document.documentElement.setAttribute("lang", locale);
+            // The templates are the project's own: their <head> has placeholders
+            // for <html lang>, <title> and the viewport, rewritten in place below
+            // (not fixed in the templates: for static pages the template is
+            // content, so editing it would move their sitemap <lastmod>), and no
+            // other meta. Everything else is a tag descriptor that Vite serialises
+            // and injects: "head-prepend" right after <head>, "head" right before
+            // </head> (i.e. after the entry's script and stylesheet).
+            const tags = [];
+            const add = (tag, attrs, injectTo = "head") => tags.push({ tag, attrs, injectTo });
+            const name = (key, content) => add("meta", { name: key, content });
+            const property = (key, content) => add("meta", { property: key, content });
 
             // RDFa prefix declarations for the OGP vocabularies this page emits.
             // Strict validators (e.g. Yandex) don't assume the article:/profile:
@@ -140,91 +122,68 @@ export default function htmlMetaPlugin(options = {}) {
             const prefixes = ["og: https://ogp.me/ns#"];
             if (type === "article") prefixes.push("article: https://ogp.me/ns/article#");
             if (type === "profile") prefixes.push("profile: https://ogp.me/ns/profile#");
-            document.documentElement.setAttribute("prefix", prefixes.join(" "));
 
             // <title>/og:title: an article reads its record's title (single-sourced
             // with the <h1> and JSON-LD headline); every other page uses its
             // resolved meta.json title.
             const pageTitle = pd ? `${pd.title} | ${siteName}` : meta.title;
 
-            // Update or set title if none present
-            const t = document.head.querySelector("title") || document.createElement("title");
-            t.textContent = pageTitle;
-            if (!t.parentNode) {
-                document.head.insertBefore(t, document.head.firstChild);
-            }
+            // Per-locale lang plus the prefix list (any other <html> attribute is
+            // kept), the title and the viewport. Function replacements, so a "$"
+            // in a title is never read as a replacement pattern.
+            html = html
+                .replace(/<html\b([^>]*)>/i, (_, attrs) =>
+                    `<html${attrs.replace(/\s+(?:lang|prefix)="[^"]*"/gi, "")} lang="${locale}" prefix="${prefixes.join(" ")}">`
+                )
+                .replace(/<title>[^<]*<\/title>/i, () => `<title>${escapeText(pageTitle)}</title>`)
+                .replace(/<meta name="viewport"[^>]*>/i, () => `<meta name="viewport" content="${defaultViewport}">`);
 
-            insertMetaTag(document, "viewport", defaultViewport);
-
-            // Ensure charset meta tag is present
-            if (!document.head.querySelector("meta[charset]")) {
-                const charsetMeta = document.createElement("meta");
-                charsetMeta.setAttribute("charset", defaultCharset);
-                document.head.insertBefore(charsetMeta, document.head.firstChild);
-            }
-
-            // CSP ships as a meta tag because GitHub Pages cannot send custom
-            // HTTP headers; frame-ancestors is ignored in meta CSP, so omitted.
-            const prodCsp = meta.csp || metaData.csp;
-            const csp = prodCsp && isDev ? devCsp(prodCsp, document) : prodCsp;
-            if (csp) {
-                let cspMeta = document.head.querySelector('meta[http-equiv="Content-Security-Policy"]');
-                if (!cspMeta) {
-                    cspMeta = document.createElement("meta");
-                    cspMeta.setAttribute("http-equiv", "Content-Security-Policy");
-                    const charsetMeta = document.head.querySelector("meta[charset]");
-                    document.head.insertBefore(cspMeta, charsetMeta.nextSibling);
-                }
-                cspMeta.setAttribute("content", csp);
-            }
-
-            // Referrer-Policy ships as a meta tag for the same reason as the CSP
-            // (GitHub Pages cannot send custom HTTP headers). Placed high in <head>
-            // so it governs every subsequent request; overridable via meta.json.
+            // First in <head>, in this order: the charset, then the two policies,
+            // which only govern what comes after them. Both ship as meta tags
+            // because GitHub Pages cannot send custom HTTP headers (frame-ancestors
+            // is ignored in meta CSP, so it's omitted); both overridable via
+            // meta.json.
+            add("meta", { charset: defaultCharset }, "head-prepend");
             const referrer = meta.referrer || metaData.referrer;
-            if (referrer) {
-                let refMeta = document.head.querySelector('meta[name="referrer"]');
-                if (!refMeta) {
-                    refMeta = document.createElement("meta");
-                    refMeta.setAttribute("name", "referrer");
-                    const charsetMeta = document.head.querySelector("meta[charset]");
-                    document.head.insertBefore(refMeta, charsetMeta.nextSibling);
-                }
-                refMeta.setAttribute("content", referrer);
+            if (referrer) add("meta", { name: "referrer", content: referrer }, "head-prepend");
+            let csp = meta.csp || metaData.csp;
+            if (csp && isDev) {
+                const nonce = randomBytes(16).toString("base64");
+                csp = devCsp(csp, nonce);
+                add("meta", { property: "csp-nonce", nonce });
             }
+            if (csp) add("meta", { "http-equiv": "Content-Security-Policy", content: csp }, "head-prepend");
 
             // Crawler directives, only when a page opts in (e.g. 404).
-            if (robots) {
-                insertMetaTag(document, "robots", robots);
-            }
+            if (robots) name("robots", robots);
 
             // Basic metatags for proper presentation on the web
-            insertMetaTag(document, "description", description);
-            insertMetaTag(document, "og:site_name", siteName, true); // Locale-resolved site name
-            insertMetaTag(document, "og:title", pageTitle, true);
-            insertMetaTag(document, "og:description", description, true);
-            insertMetaTag(document, "og:url", url, true);
+            name("description", description);
+            property("og:site_name", siteName); // Locale-resolved site name
+            property("og:title", pageTitle);
+            property("og:description", description);
+            property("og:url", url);
             // og:image — only on pages that honestly own a preview (see showImage).
             // Refinements emitted only when defined so a card never ships
             // content="undefined"; dimensions/type let scrapers render the card
             // without first fetching the image.
             if (showImage) {
-                insertMetaTag(document, "og:image", imageUrl, true);
-                if (imageType) insertMetaTag(document, "og:image:type", imageType, true);
-                if (imageWidth) insertMetaTag(document, "og:image:width", String(imageWidth), true);
-                if (imageHeight) insertMetaTag(document, "og:image:height", String(imageHeight), true);
-                if (imageAlt) insertMetaTag(document, "og:image:alt", imageAlt, true);
+                property("og:image", imageUrl);
+                if (imageType) property("og:image:type", imageType);
+                if (imageWidth) property("og:image:width", imageWidth);
+                if (imageHeight) property("og:image:height", imageHeight);
+                if (imageAlt) property("og:image:alt", imageAlt);
             }
-            insertMetaTag(document, "og:type", type, true);
+            property("og:type", type);
             // Profile-specific OG tags — emitted only when og:type is "profile"
             // so non-profile pages (e.g. 404) never ship stray profile:* tags.
             if (type === "profile") {
                 const firstName = meta.profileFirstName || metaData.profileFirstName;
                 const lastName = meta.profileLastName || metaData.profileLastName;
                 const username = meta.profileUsername || metaData.profileUsername;
-                if (firstName) insertMetaTag(document, "profile:first_name", firstName, true);
-                if (lastName) insertMetaTag(document, "profile:last_name", lastName, true);
-                if (username) insertMetaTag(document, "profile:username", username, true);
+                if (firstName) property("profile:first_name", firstName);
+                if (lastName) property("profile:last_name", lastName);
+                if (username) property("profile:username", username);
             }
             // Article-specific OG tags — emitted only when og:type is "article" so
             // non-article pages never ship stray article:* tags. published/section/
@@ -233,60 +192,48 @@ export default function htmlMetaPlugin(options = {}) {
             if (type === "article") {
                 const buildTime = new Date().toISOString().replace(/\.\d{3}Z$/, "Z");
                 const modified = pageLastMod(root, rel, { meta: metaData, buildTime });
-                if (pd.datePublished) insertMetaTag(document, "article:published_time", pd.datePublished, true);
-                if (modified) insertMetaTag(document, "article:modified_time", modified, true);
+                if (pd.datePublished) property("article:published_time", pd.datePublished);
+                if (modified) property("article:modified_time", modified);
                 // Author as the canonical profile URL (matches the JSON-LD #person url).
-                insertMetaTag(document, "article:author", abs("/"), true);
-                if (pd.section) insertMetaTag(document, "article:section", pd.section, true);
-                // article:tag repeats; the name-keyed dedup helper would collapse
-                // them, so append each as a fresh element.
-                for (const tag of pd.tags || []) {
-                    const t = document.createElement("meta");
-                    t.setAttribute("property", "article:tag");
-                    t.setAttribute("content", tag);
-                    document.head.appendChild(t);
-                }
+                property("article:author", abs("/"));
+                if (pd.section) property("article:section", pd.section);
+                for (const tag of pd.tags || []) property("article:tag", tag);
             }
-            insertMetaTag(document, "og:locale", ogLocale, true);
+            property("og:locale", ogLocale);
             // Only advertise the alternate locale when it actually exists.
-            if (have[altLocale]) insertMetaTag(document, "og:locale:alternate", ogLocaleAlt, true);
-            insertMetaTag(document, "theme-color", meta.themeColor || metaData.themeColor);
+            if (have[altLocale]) property("og:locale:alternate", ogLocaleAlt);
+            name("theme-color", meta.themeColor || metaData.themeColor);
 
             // Color scheme hint (helps UA pick native UI colors)
-            insertMetaTag(document, "color-scheme", meta.colorScheme || metaData.colorScheme || "dark");
+            name("color-scheme", meta.colorScheme || metaData.colorScheme || "dark");
 
             // Twitter card (uses same meta values by default)
-            insertMetaTag(document, "twitter:card", meta.twitterCard || metaData.twitterCard || "summary_large_image");
-            insertMetaTag(document, "twitter:title", pageTitle);
-            insertMetaTag(document, "twitter:description", description);
+            name("twitter:card", meta.twitterCard || metaData.twitterCard || "summary_large_image");
+            name("twitter:title", pageTitle);
+            name("twitter:description", description);
             if (showImage) {
-                insertMetaTag(document, "twitter:image", imageUrl);
-                if (imageAlt) insertMetaTag(document, "twitter:image:alt", imageAlt);
+                name("twitter:image", imageUrl);
+                if (imageAlt) name("twitter:image:alt", imageAlt);
             }
             // twitter:site requires an @username; only emit when one is configured.
             const twitterSite = meta.twitterSite || metaData.twitterSite;
-            if (twitterSite) insertMetaTag(document, "twitter:site", twitterSite);
+            if (twitterSite) name("twitter:site", twitterSite);
 
-            // Update or create canonical link (self-referential, derived from path)
-            let canonical = document.head.querySelector('link[rel="canonical"]');
-            if (!canonical) {
-                canonical = document.createElement("link");
-                canonical.setAttribute("rel", "canonical");
-                document.head.appendChild(canonical);
-            }
-            canonical.setAttribute("href", url);
+            // Canonical link (self-referential, derived from path)
+            add("link", { rel: "canonical", href: url });
 
             // Reciprocal hreflang cluster — only for locales that actually ship a
             // page (a single-language post lists just its own + x-default). Skipped
             // for noindex pages so we never advertise a page we've asked crawlers to
             // drop. x-default points at English when present, else the locale that is.
             if (indexable) {
-                if (have.en) insertAlternate(document, "en", abs(sib.enPath));
-                if (have.ru) insertAlternate(document, "ru", abs(sib.ruPath));
-                insertAlternate(document, "x-default", abs(have.en ? sib.enPath : sib.ruPath));
+                const alternate = (hreflang, href) => add("link", { rel: "alternate", hreflang, href });
+                if (have.en) alternate("en", abs(sib.enPath));
+                if (have.ru) alternate("ru", abs(sib.ruPath));
+                alternate("x-default", abs(have.en ? sib.enPath : sib.ruPath));
             }
 
-            return `<!DOCTYPE html>\n${document.documentElement.outerHTML}`;
+            return { html, tags };
         },
     };
 }

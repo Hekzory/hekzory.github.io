@@ -8,15 +8,12 @@ importers:
 
   .:
     devDependencies:
-      happy-dom:
-        specifier: ^20.14.5
-        version: 20.14.5
       html-minifier-next:
         specifier: ^8.5.3
         version: 8.5.3
       vite:
         specifier: ^8.3.0
-        version: 8.3.0(@types/node@26.4.1)(terser@5.51.2)
+        version: 8.3.0(terser@5.51.2)
       vite-plugin-html-inject:
         specifier: ^1.1.2
         version: 1.1.2
@@ -141,15 +138,6 @@ packages:
   '@rolldown/pluginutils@1.0.1':
     resolution: {integrity: sha512-2j9bGt5Jh8hj+vPtgzPtl72j0yRxHAyumoo6TNfAjsLB04UtpSvPbPcDcBMxz7n+9CYB0c1GxQFxYRg2jimqGw==}
 
-  '@types/node@26.4.1':
-    resolution: {integrity: sha512-k97ENvZWtvA6yqz5/FS6a7duDgOPEeOQOc2iKS/nY6mX6qJUKtLnWzQS+Xj6tXweyj6ZcTAK2Qecetnvi9nCLA==}
-
-  '@types/whatwg-mimetype@3.0.2':
-    resolution: {integrity: sha512-c2AKvDT8ToxLIOUlN51gTiHXflsfIFisS4pO7pDPoKouJCESkhZnEy623gwP9laCy5lnLDAw1vAzu2vM2YLOrA==}
-
-  '@types/ws@8.18.1':
-    resolution: {integrity: sha512-ThVF6DCVhA8kUGy+aazFQ4kXQ7E1Ty7A3ypFOe0IcJV8O/M511G99AW24irKrW56Wt44yG9+ij8FaqoBGkuBXg==}
-
   acorn@8.17.0:
     resolution: {integrity: sha512-xRQbDb9BnwDafYNn6Vwl839DYVjqXYb1XVGtWAZ1kcDc6iwAL4hg3B1dZlRiuENFeO2H53gFG3in621AdERVAg==}
     engines: {node: '>=0.4.0'}
@@ -160,10 +148,6 @@ packages:
 
   buffer-from@1.1.2:
     resolution: {integrity: sha512-E+XQCRwSbaaiChtv6k6Dwgc+bx+Bs6vuKJHHl5kox/BaKbhiXzqQOwK4cO22yElGp2OCmjwVhT3HmxgyPGnJfQ==}
-
-  buffer-image-size@0.6.4:
-    resolution: {integrity: sha512-nEh+kZOPY1w+gcCMobZ6ETUp9WfibndnosbpwB1iJk/8Gt5ZF2bhS6+B6bPYz424KtwsR6Rflc3tCz1/ghX2dQ==}
-    engines: {node: '>=4.0'}
 
   commander@11.1.0:
     resolution: {integrity: sha512-yPVavfyCcRhmorC7rWlkHn15b4wDVgVmBA7kV4QVBsF7kv/9TKJAbAXVTxvTnwP8HHKjRCJDClKbciiYS7p0DQ==}
@@ -216,10 +200,6 @@ packages:
     resolution: {integrity: sha512-V0hjH4dGPh9Ao5p0MoRY6BVqtwCjhz6vI5LT8AJ55H+4g9/4vbHx1I54fS0XuclLhDHArPQCiMjDxjaL8fPxhw==}
     engines: {node: '>=0.12'}
 
-  entities@7.0.1:
-    resolution: {integrity: sha512-TWrgLOFUQTH994YUyl1yT4uyavY5nNB5muff+RtWaqNVCAK408b5ZnnbNAUEWLTCpum9w6arT70i1XdQ4UeOPA==}
-    engines: {node: '>=0.12'}
-
   entities@8.1.0:
     resolution: {integrity: sha512-kxL7msIffSuh9aaFAMD7rxAIuTRMAHMeBtgHW2yUdWw732ZNh4MehkF2gdjvtdmikkaIP9bFDDJOPlsvm7avrA==}
     engines: {node: '>=20.19.0'}
@@ -237,10 +217,6 @@ packages:
     resolution: {integrity: sha512-5xoDfX+fL7faATnagmWPpbFtwh/R77WmMMqqHGS65C3vvB0YHrgF+B1YmZ3441tMj5n63k0212XNoJwzlhffQw==}
     engines: {node: ^8.16.0 || ^10.6.0 || >=11.0.0}
     os: [darwin]
-
-  happy-dom@20.14.5:
-    resolution: {integrity: sha512-x/RzkpWO40bTjIoT30iQtt64FLLmH/iRcUCN2X//bLx7H3ifkdfPXyqsro/OYtqzIAhiLMMA7mmiOR9C3NOKjQ==}
-    engines: {node: '>=20.0.0'}
 
   html-minifier-next@8.5.3:
     resolution: {integrity: sha512-KCpMJENWMEhujHHn4cWnOTzGQCXGrsA2rTIxNyDZuca9uWonBiqW2b55NissJy59CtQLzMm+Pww3XLlW9hOLCQ==}
@@ -385,9 +361,6 @@ packages:
     resolution: {integrity: sha512-wXR/dYpcqKmfWpEdZjiKJOwCNFndD0DMnrW/cYjVGttEkBfVgcLFHoNrlj47mjOVic9yyNu65alsgF4NQyTa2g==}
     engines: {node: '>=12.0.0'}
 
-  undici-types@8.3.0:
-    resolution: {integrity: sha512-j375ScV60dom+YkPFIfTLcOiPxkN/buHz5GobjLhixFuANaNs3C9l4GmrWqejgXWJ7BbJcFYpTEUkS1Ge8bpZQ==}
-
   vite-plugin-html-inject@1.1.2:
     resolution: {integrity: sha512-4DWANEcAw73H5JLWTAI4EvXdSyoGqGq/Is9fTRjpF+SJLor58LNdqB+YYnK3FOLwx6LMTAn4z1hkiRyc52lYLg==}
 
@@ -432,22 +405,6 @@ packages:
       tsx:
         optional: true
       yaml:
-        optional: true
-
-  whatwg-mimetype@3.0.0:
-    resolution: {integrity: sha512-nt+N2dzIutVRxARx1nghPKGv1xHikU7HKdfafKkLNLindmPU/ch3U31NOCGGA/dmPcmb1VlofO0vnKAcsm0o/Q==}
-    engines: {node: '>=12'}
-
-  ws@8.21.3:
-    resolution: {integrity: sha512-201TZ/kPWxoPr/OKWjquZR1SWKXcvxdH+e1xrx89b3YbmzLMFCLfnaG1HFIgWzJOEWZ7MvpK++odZufgYR50Rw==}
-    engines: {node: '>=10.0.0'}
-    peerDependencies:
-      bufferutil: ^4.0.1
-      utf-8-validate: '>=5.0.2'
-    peerDependenciesMeta:
-      bufferutil:
-        optional: true
-      utf-8-validate:
         optional: true
 
 snapshots:
@@ -520,25 +477,11 @@ snapshots:
 
   '@rolldown/pluginutils@1.0.1': {}
 
-  '@types/node@26.4.1':
-    dependencies:
-      undici-types: 8.3.0
-
-  '@types/whatwg-mimetype@3.0.2': {}
-
-  '@types/ws@8.18.1':
-    dependencies:
-      '@types/node': 26.4.1
-
   acorn@8.17.0: {}
 
   boolbase@1.0.0: {}
 
   buffer-from@1.1.2: {}
-
-  buffer-image-size@0.6.4:
-    dependencies:
-      '@types/node': 26.4.1
 
   commander@11.1.0: {}
 
@@ -592,8 +535,6 @@ snapshots:
 
   entities@4.5.0: {}
 
-  entities@7.0.1: {}
-
   entities@8.1.0: {}
 
   fdir@6.5.0(picomatch@4.0.7):
@@ -602,19 +543,6 @@ snapshots:
 
   fsevents@2.3.3:
     optional: true
-
-  happy-dom@20.14.5:
-    dependencies:
-      '@types/node': 26.4.1
-      '@types/whatwg-mimetype': 3.0.2
-      '@types/ws': 8.18.1
-      buffer-image-size: 0.6.4
-      entities: 7.0.1
-      whatwg-mimetype: 3.0.0
-      ws: 8.21.3
-    transitivePeerDependencies:
-      - bufferutil
-      - utf-8-validate
 
   html-minifier-next@8.5.3:
     dependencies:
@@ -747,11 +675,9 @@ snapshots:
       fdir: 6.5.0(picomatch@4.0.7)
       picomatch: 4.0.7
 
-  undici-types@8.3.0: {}
-
   vite-plugin-html-inject@1.1.2: {}
 
-  vite@8.3.0(@types/node@26.4.1)(terser@5.51.2):
+  vite@8.3.0(terser@5.51.2):
     dependencies:
       lightningcss: 1.33.0
       picomatch: 4.0.7
@@ -759,10 +685,5 @@ snapshots:
       rolldown: 1.2.8
       tinyglobby: 0.2.17
     optionalDependencies:
-      '@types/node': 26.4.1
       fsevents: 2.3.3
       terser: 5.51.2
-
-  whatwg-mimetype@3.0.0: {}
-
-  ws@8.21.3: {}
