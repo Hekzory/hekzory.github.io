@@ -10,7 +10,7 @@ import i18nFanoutPlugin from "./vite-plugin-i18n-fanout.js";
 import htmlMinifyPlugin from "./vite-plugin-html-minify.js";
 import cleanUrlsPlugin from "./vite-plugin-clean-urls.js";
 import devtoolsJsonPlugin from "./vite-plugin-devtools-json.js";
-import injectHtml from "vite-plugin-html-inject";
+import injectHtml from "./vite-plugin-html-inject.js";
 
 // Collect every *.html build entry across both language trees. Static pages are
 // real files; article posts come from articles/*.post.json, whose route shells
