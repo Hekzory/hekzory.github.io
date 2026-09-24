@@ -29,6 +29,11 @@ const OPTIONS = {
     removeDefaultTypeAttributes: true,
     removeOptionalTags: true,
     useShortDoctype: true,
+    // Vite escapes the attribute values of injected tags (every ' in the CSP
+    // becomes &#39;); decode entities back wherever that's safe, and keep
+    // double quotes, escaping any " inside as &quot;.
+    decodeEntities: true,
+    quoteCharacter: '"',
     minifySVG: {
         plugins: [
             {
