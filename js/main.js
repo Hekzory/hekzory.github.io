@@ -157,41 +157,54 @@
             if (link) store(link.getAttribute('lang'));
         });
 
-        let stored = null;
-        try { stored = localStorage.getItem(KEY); } catch (_) { /* private mode */ }
-        if (stored) return; // user already chose — never nag
-
-        const navs = navigator.languages || [navigator.language || ''];
-        let preferred = null;
-        for (const l of navs) {
-            const base = (l || '').toLowerCase().split('-')[0];
-            if (SUPPORTED.includes(base)) { preferred = base; break; }
+        // The banner decision waits for the page to be shown. Speculation rules
+        // prerender a hovered EN/RU link, and a prerendered page runs this
+        // script right away: before the click that stores the choice, it saw no
+        // choice yet and put up "Read in English" on the very page the visitor
+        // was switching to. Reading the choice at activation sees that click.
+        if (document.prerendering) {
+            document.addEventListener('prerenderingchange', suggest, { once: true });
+        } else {
+            suggest();
         }
-        if (!preferred || preferred === curLang) return;
 
-        const altHref = sw.dataset.altHref;
-        const text = sw.dataset.banner;
-        if (!altHref || !text) return;
+        function suggest() {
+            let stored = null;
+            try { stored = localStorage.getItem(KEY); } catch (_) { /* private mode */ }
+            if (stored) return; // user already chose — never nag
 
-        const banner = document.createElement('div');
-        banner.className = 'lang-banner';
+            const navs = navigator.languages || [navigator.language || ''];
+            let preferred = null;
+            for (const l of navs) {
+                const base = (l || '').toLowerCase().split('-')[0];
+                if (SUPPORTED.includes(base)) { preferred = base; break; }
+            }
+            if (!preferred || preferred === curLang) return;
 
-        const link = document.createElement('a');
-        link.href = altHref;
-        link.textContent = text;
-        link.addEventListener('click', () => store(otherLang));
+            const altHref = sw.dataset.altHref;
+            const text = sw.dataset.banner;
+            if (!altHref || !text) return;
 
-        const dismiss = document.createElement('button');
-        dismiss.type = 'button';
-        dismiss.className = 'lang-banner-dismiss';
-        dismiss.textContent = '×';
-        dismiss.setAttribute('aria-label', sw.dataset.dismiss || 'Dismiss');
-        dismiss.addEventListener('click', () => { store(curLang); banner.remove(); });
+            const banner = document.createElement('div');
+            banner.className = 'lang-banner';
 
-        banner.append(link, dismiss);
-        const bar = document.querySelector('.waybar');
-        if (bar) bar.insertAdjacentElement('afterend', banner);
-        else document.body.insertBefore(banner, document.body.firstChild);
+            const link = document.createElement('a');
+            link.href = altHref;
+            link.textContent = text;
+            link.addEventListener('click', () => store(otherLang));
+
+            const dismiss = document.createElement('button');
+            dismiss.type = 'button';
+            dismiss.className = 'lang-banner-dismiss';
+            dismiss.textContent = '×';
+            dismiss.setAttribute('aria-label', sw.dataset.dismiss || 'Dismiss');
+            dismiss.addEventListener('click', () => { store(curLang); banner.remove(); });
+
+            banner.append(link, dismiss);
+            const bar = document.querySelector('.waybar');
+            if (bar) bar.insertAdjacentElement('afterend', banner);
+            else document.body.insertBefore(banner, document.body.firstChild);
+        }
     })();
 
     // --- Terminal (lazy-loaded on first interaction; index page only) ---
