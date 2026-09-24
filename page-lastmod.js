@@ -24,6 +24,7 @@ import { execFileSync } from "node:child_process";
 import { localeOf } from "./i18n-paths.js";
 import { pageKey } from "./meta-resolve.js";
 import { postSlug, loadPosts } from "./post-data.js";
+import { expandLoads } from "./vite-plugin-html-inject.js";
 
 function git(args) {
     return execFileSync("git", args, { encoding: "utf-8" }).trim();
@@ -112,62 +113,28 @@ function jsonSubtreeLastMod(file, keyPaths) {
     return hist[hist.length - 1].date;
 }
 
-// A self-closing <load .../> tag (the attrs blob in group 1), each attr inside
-// it, and the i18n-fanout's {{t.dotted.key}}. We mirror html-inject closely
-// enough to thread {=$param} values from a parent into a child's srcs/tokens —
-// without that, an article template's content="{=$slug}" load (the prose) would
-// never enter the graph, so prose edits wouldn't move <lastmod>/dateModified.
-const LOAD_TAG_RE = /<load\b([^>]*?)\/>/gi;
-const ATTR_RE = /([\w-]+)\s*=\s*"([^"]*)"/g;
+// The i18n-fanout's {{t.dotted.key}} tokens.
 const T_RE = /\{\{t\.([\w.]+)\}\}/g;
 
 // Resolve an entry's recursive <load> graph: the set of HTML source files it
-// composes from, plus the i18n leaf keys each of those files references. Mirrors how injectHtml expands shells -> templates -> components and
-// substitutes {=$attr} params before recursing (so interpolated srcs resolve and
-// per-post i18n keys like art.posts.<slug>.title are tracked concretely).
+// composes from, plus the i18n leaf keys each of those files references. The
+// walk is the build's own expandLoads(), so every file is read with its {=$key}
+// params already substituted: an article template's src="{=$content}.html" load
+// (the prose) enters the graph, and per-post keys like art.posts.<slug>.title
+// are tracked concretely. Keys are recorded per file so chrome's keys can be
+// dropped with it.
 function resolveGraph(root, entryRel) {
-    const files = new Set();
     const keysByFile = new Map();
-    const visit = (rel, params) => {
-        const norm = rel.replace(/^\.?\//, "").replace(/\\/g, "/");
-        if (files.has(norm)) return;
-        let html;
-        try {
-            html = readFileSync(path.resolve(root, norm), "utf-8");
-        } catch {
-            return; // missing partial -> skip (build would surface it anyway)
-        }
-        files.add(norm);
-        // Substitute parent-provided params first (html-inject does this before it
-        // recurses), so {=$slug}-interpolated srcs and {{t.art.posts.{=$key}...}}
-        // tokens become concrete and followable.
-        if (params) {
-            for (const [k, v] of Object.entries(params)) html = html.split(`{=$${k}}`).join(v);
-        }
-        // Collect tokens, then nested loads (with their params), before recursing:
-        // each exec loop on a shared /g regex must finish before the next call.
-        // Keys are recorded per file so chrome's keys can be dropped with it.
-        const own = new Set();
-        keysByFile.set(norm, own);
-        let m;
-        T_RE.lastIndex = 0;
-        while ((m = T_RE.exec(html))) own.add(m[1]);
-        const loads = [];
-        LOAD_TAG_RE.lastIndex = 0;
-        while ((m = LOAD_TAG_RE.exec(html))) {
-            const attrs = {};
-            let a;
-            ATTR_RE.lastIndex = 0;
-            while ((a = ATTR_RE.exec(m[1]))) attrs[a[1]] = a[2];
-            const src = attrs.src;
-            if (!src || src.includes("{=$")) continue; // missing/unresolved src
-            delete attrs.src;
-            loads.push([src, attrs]);
-        }
-        for (const [src, attrs] of loads) visit(src, attrs);
+    const collect = (file, html) => {
+        const own = keysByFile.get(file) ?? new Set();
+        for (const [, key] of html.matchAll(T_RE)) own.add(key);
+        keysByFile.set(file, own);
     };
-    visit(entryRel, null);
-    return { files: [...files], keysByFile };
+    const entry = entryRel.replace(/\\/g, "/");
+    const html = readFileSync(path.resolve(root, entry), "utf-8");
+    collect(entry, html);
+    expandLoads(root, html, collect);
+    return { files: [...keysByFile.keys()], keysByFile };
 }
 
 // The meta.json keys a STATIC page renders into <title>/description/og. (Article
