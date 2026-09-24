@@ -514,11 +514,14 @@ li {
     }
 }
 
-/* Tile Base */
+/* Tile Base. No backdrop-filter: nothing but the page's own static gradient
+   ever sits behind a tile, and blurring a smooth gradient gives back the same
+   gradient. Measured at 1440x900 with animations stopped: the home page
+   rendered byte-identical with and without blur(10px), while every tile paid
+   for its own compositor surface and blur pass. The blur stays where there
+   is content underneath: the language banner and the clipboard dialog. */
 .tile {
     background: var(--glass);
-    backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(10px);
     border: 1px solid var(--glass-border);
     border-radius: var(--radius);
     display: flex;
@@ -543,11 +546,8 @@ li {
         overflow: visible;
         /* Let content expand the tile */
         flex-shrink: 0;
-        /* Phones/tablets scroll these layouts — drop the per-tile blur (costly to
-           recomposite each frame). A STATIC gradient surface (painted once, no
-           per-frame recomposite) restores some glass-like depth at zero scroll cost. */
-        backdrop-filter: none;
-        -webkit-backdrop-filter: none;
+        /* Phones/tablets: a static gradient surface for some depth where the
+           tiles stack into one long scrolling column. */
         background: linear-gradient(160deg, color-mix(in srgb, var(--surface-raised) 82%, transparent) 0%, color-mix(in srgb, var(--bg) 92%, transparent) 100%);
     }
 }
@@ -1321,8 +1321,6 @@ mark {
     .tile {
         background: none;
         box-shadow: none;
-        backdrop-filter: none;
-        -webkit-backdrop-filter: none;
     }
 
     .name-shimmer {
