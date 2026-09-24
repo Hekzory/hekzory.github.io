@@ -10,6 +10,11 @@ on:
     branches:
       - 'main'
   workflow_dispatch:
+    inputs:
+      indexnow_all:
+        description: "Submit every sitemap URL to IndexNow, not just the changed ones"
+        type: boolean
+        default: false
 
 permissions:
   contents: read
@@ -21,6 +26,8 @@ concurrency:
 jobs:
   build:
     runs-on: ubuntu-latest
+    outputs:
+      indexnow-urls: ${{ steps.indexnow.outputs.urls }}
     steps:
       - uses: actions/checkout@v7
         with:
@@ -40,6 +47,27 @@ jobs:
       # <loc>/feed href resolves to a built file, every page has lang/title/
       # canonical. Catches a broken hreflang twin or a typo'd href before deploy.
       - run: pnpm run check
+      # IndexNow wants only what changed. Diff the live sitemap (= the previous
+      # deploy: runs of this workflow are serialized per ref) against the one
+      # just built: new and removed URLs plus every URL whose <lastmod> moved.
+      # <lastmod> is the git "content last changed" date (page-lastmod.js), so
+      # a Dependabot bump, a CSS tweak or a CI edit yields [] and the deploy
+      # pings nothing. No live sitemap (first deploy, fetch failure) or the
+      # indexnow_all input submits everything. The ?run= query sidesteps the
+      # Pages CDN cache. Runs on PRs too, so a PR's log shows what its merge
+      # would submit. Never blocks the build.
+      - name: URLs changed since the live deploy
+        id: indexnow
+        continue-on-error: true
+        env:
+          ALL: ${{ inputs.indexnow_all }}
+        run: |
+          if [ "$ALL" = "true" ] || ! curl -sf --retry 2 "https://tsv.one/sitemap.xml?run=$GITHUB_RUN_ID" -o live-sitemap.xml; then
+            rm -f live-sitemap.xml
+          fi
+          urls=$(node scripts/indexnow-urls.js live-sitemap.xml dist/sitemap.xml)
+          echo "urls=$urls" >> "$GITHUB_OUTPUT"
+          echo "IndexNow URLs for this deploy: $urls"
       - uses: actions/upload-pages-artifact@v5
         if: github.event_name != 'pull_request'
         with:
@@ -60,15 +88,19 @@ jobs:
     steps:
       - id: deployment
         uses: actions/deploy-pages@v5
-      # Tell IndexNow-participating engines (Bing, Yandex, Seznam, ...) the
-      # site changed. URL list comes from the live sitemap so it never drifts
-      # from vite-plugin-sitemap.js. Best-effort: a failed ping must not fail
-      # the deploy. The key is public by design (served at its keyLocation).
+      # Tell IndexNow-participating engines (Bing, Yandex, Seznam, ...) which
+      # pages changed: the list the build job diffed out of the sitemaps, and
+      # nothing at all when it's empty. Best-effort: a failed ping must not
+      # fail the deploy. The key is public by design (served at keyLocation).
       - name: Ping IndexNow
+        if: needs.build.outputs.indexnow-urls != '' && needs.build.outputs.indexnow-urls != '[]'
         continue-on-error: true
+        env:
+          URLS: ${{ needs.build.outputs.indexnow-urls }}
         run: |
           key=ec5433724775ed2bbe6e7d5ea943683d
-          urls=$(curl -sf https://tsv.one/sitemap.xml | grep -oP '(?<=<loc>)[^<]+' | jq -R . | jq -sc .)
-          curl -sS -X POST https://api.indexnow.org/indexnow \
-            -H 'Content-Type: application/json; charset=utf-8' \
-            -d "{\"host\":\"tsv.one\",\"key\":\"$key\",\"keyLocation\":\"https://tsv.one/$key.txt\",\"urlList\":$urls}"
+          jq -nc --arg key "$key" --argjson urls "$URLS" \
+            '{host: "tsv.one", key: $key, keyLocation: ("https://tsv.one/" + $key + ".txt"), urlList: $urls}' > indexnow.json
+          echo "Submitting: $URLS"
+          curl -sS --fail-with-body -X POST https://api.indexnow.org/indexnow \
+            -H 'Content-Type: application/json; charset=utf-8' --data @indexnow.json

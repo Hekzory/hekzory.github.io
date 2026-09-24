@@ -190,6 +190,7 @@ function metaPaths(entryRel, locale, meta) {
         paths.push(`pages.${pageName}.robots`);
     }
     paths.push("siteName"); // og:site_name, shown on every page
+    paths.push(`locales.${locale}.siteName`); // its per-locale override, if any
     return paths;
 }
 

@@ -1,4 +1,5 @@
 {
+    "person": { "name": "Олег Цветков", "given": "Олег", "family": "Цветков", "name_alt": "Oleg Tsvetkov" },
     "nav": { "home": "ГЛАВНАЯ", "resume": "РЕЗЮМЕ", "articles": "СТАТЬИ", "primary_aria": "Основная навигация", "breadcrumb_aria": "Навигационная цепочка" },
     "lang": {
         "switch_aria": "Сменить язык",
@@ -6,9 +7,10 @@
         "dismiss": "Закрыть"
     },
     "schema": {
+        "site_desc": "Личный сайт Олега Цветкова, разработчика в VK.",
         "person_desc": "Разработчик в VK Ads (команда DevExp), занимается DevOps, CI/CD и инфраструктурой.",
-        "page_home": "Oleg Tsvetkov | Разработчик",
-        "page_resume": "Oleg Tsvetkov | Резюме"
+        "page_home": "Олег Цветков | Разработчик",
+        "page_resume": "Олег Цветков | Резюме"
     },
     "ui": {
         "clipboard_title": "Буфер обмена",

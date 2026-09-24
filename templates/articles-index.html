@@ -38,14 +38,14 @@
                     "@type": "Blog",
                     "@id": "{{canonical}}#blog",
                     "url": "{{canonical}}",
-                    "name": "{{t.art.title}} - Oleg Tsvetkov",
+                    "name": "{{t.art.title}} - {{t.person.name}}",
                     "description": "{{t.art.intro}}",
                     "inLanguage": "{{locale}}",
                     "isPartOf": { "@id": "{{origin}}/#website" },
                     "author": {
                         "@type": "Person",
                         "@id": "{{origin}}/#person",
-                        "name": "Oleg Tsvetkov",
+                        "name": "{{t.person.name}}",
                         "url": "{{origin}}/"
                     },
                     "mainEntity": { "@id": "{{canonical}}#postlist" }

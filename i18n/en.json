@@ -1,4 +1,5 @@
 {
+    "person": { "name": "Oleg Tsvetkov", "given": "Oleg", "family": "Tsvetkov", "name_alt": "Олег Цветков" },
     "nav": { "home": "HOME", "resume": "RESUME", "articles": "ARTICLES", "primary_aria": "Primary navigation", "breadcrumb_aria": "Breadcrumb" },
     "lang": {
         "switch_aria": "Switch language",
@@ -6,6 +7,7 @@
         "dismiss": "Dismiss"
     },
     "schema": {
+        "site_desc": "Personal website of Oleg Tsvetkov, Software Engineer at VK.",
         "person_desc": "Software Engineer at VK Ads (DevExp team), working on DevOps, CI/CD, and infrastructure.",
         "page_home": "Oleg Tsvetkov | Software Engineer",
         "page_resume": "Oleg Tsvetkov | Resume"

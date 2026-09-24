@@ -116,7 +116,10 @@ export default function htmlMetaPlugin(options = {}) {
             const imageHeight = postImage?.height || meta.imageHeight || metaData.imageHeight;
             const imageAlt = postImage ? pick(postImage.alt, locale) || pd.title : meta.imageAlt || metaData.imageAlt;
 
-            const siteName = metaData.siteName || pick(metaData.title, locale);
+            // Per-locale override (locales.ru.siteName: the name in Cyrillic, which
+            // is what Russian-language search matches), else the global one.
+            const siteName =
+                metaData.locales?.[locale]?.siteName || metaData.siteName || pick(metaData.title, locale);
             const altLocale = locale === "ru" ? "en" : "ru";
             const ogLocale = metaData.locales?.[locale]?.ogLocale || (locale === "ru" ? "ru_RU" : "en_US");
             const ogLocaleAlt = metaData.locales?.[altLocale]?.ogLocale || (altLocale === "ru" ? "ru_RU" : "en_US");
