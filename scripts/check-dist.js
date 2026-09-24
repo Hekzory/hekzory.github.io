@@ -139,13 +139,14 @@ function woff2Codepoints(file) {
     return out;
 }
 
-// The text a page actually renders in its body font: <body> minus scripts,
-// styles and inline SVG, tags stripped, entities decoded. (<title> and
-// attributes like alt/aria-label are drawn by the browser UI, not the page.)
+// The text a page actually renders in its body font: the document minus
+// <title>, scripts, styles and inline SVG, tags stripped, entities decoded.
+// (<title> and attributes like alt/aria-label are drawn by the browser UI, not
+// the page.) Not split on <body>: its start tag is optional and the minifier
+// may drop it, which would silently skip this check.
 function visibleText(html) {
-    const body = html.split(/<body[^>]*>/)[1] ?? "";
-    return body
-        .replace(/<(script|style|svg)\b[\s\S]*?<\/\1>/g, " ")
+    return html
+        .replace(/<(title|script|style|svg)\b[\s\S]*?<\/\1>/g, " ")
         .replace(/<[^>]+>/g, " ")
         .replace(/&#x([0-9a-f]+);/gi, (_, h) => String.fromCodePoint(parseInt(h, 16)))
         .replace(/&#(\d+);/g, (_, d) => String.fromCodePoint(Number(d)))
