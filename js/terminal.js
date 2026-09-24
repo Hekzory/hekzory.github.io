@@ -16,6 +16,21 @@ const injectHTML = (el, html) => {
     el.insertAdjacentHTML('beforeend', html);
 };
 
+// localStorage that never throws. With site data blocked (Firefox with cookies
+// off, Chromium's "block all site data") merely reading window.localStorage
+// throws SecurityError — which used to escape the Terminal constructor and
+// leave the drawer unopenable. Visit counting is garnish: without storage the
+// terminal still plays, it just never sees a return visitor.
+const store = {
+    get(key) {
+        try { return localStorage.getItem(key); } catch { return null; }
+    },
+    set(key, value) {
+        try { localStorage.setItem(key, value); } catch { /* storage blocked */ }
+    },
+};
+const visitCount = () => parseInt(store.get('terminal_visits') || '0', 10);
+
 /**
  * Weighted random selection — shared by scenario & easter egg pickers.
  * Accepts an array of objects with a `weight` property.
@@ -359,10 +374,7 @@ const EASTER_EGGS = {
 
     // Return visitor (has been here before)
     return_visitor: {
-        condition: () => {
-            const visits = parseInt(localStorage.getItem('terminal_visits') || '0', 10);
-            return visits > 2;
-        },
+        condition: () => visitCount() > 2,
         weight: 10,
         commands: (ctx) => [
             { cmd: 'cd projects/hekzory.github.io', effect: () => ctx.cd(['~', 'projects', 'hekzory.github.io']), gitBranch: 'main' },
@@ -492,13 +504,10 @@ const EASTER_EGGS = {
 
     // Frequent visitor — dynamic visit count
     power_user: {
-        condition: () => {
-            const visits = parseInt(localStorage.getItem('terminal_visits') || '0', 10);
-            return visits > 10;
-        },
+        condition: () => visitCount() > 10,
         weight: 10,
         commands: (ctx) => {
-            const visits = parseInt(localStorage.getItem('terminal_visits') || '0', 10);
+            const visits = visitCount();
             return [
                 { cmd: 'cd projects/hekzory.github.io', effect: () => ctx.cd(['~', 'projects', 'hekzory.github.io']), gitBranch: 'main' },
                 { cmd: 'git shortlog -sn --all | head -4', output: `   142  Oleg Tsvetkov\n    ${visits}  You (frequent visitor)\n     3  dependabot[bot]\n     1  GitHub Actions` },
@@ -658,9 +667,8 @@ class Terminal {
     }
 
     trackVisit() {
-        const visits = parseInt(localStorage.getItem('terminal_visits') || '0', 10);
-        localStorage.setItem('terminal_visits', String(visits + 1));
-        localStorage.setItem('terminal_last_visit', new Date().toISOString());
+        store.set('terminal_visits', String(visitCount() + 1));
+        store.set('terminal_last_visit', new Date().toISOString());
     }
 
     /**
