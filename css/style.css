@@ -1,7 +1,13 @@
+/* martianmono.woff2 is a STATIC Regular instance (no fvar/wght axis) subset to
+   Latin + Cyrillic — see assets-src/README.md. Declare it as the 400 face only:
+   a weight range here (e.g. 100 800) tells the browser this one face already
+   covers bold, so it never synthesizes it and every bold/600/700 on the site
+   renders as regular. With a single 400 face, bold is synthesized (Chromium
+   keeps the advance width, so the monospace grid holds). */
 @font-face {
     font-family: "Martian Mono";
     font-style: normal;
-    font-weight: 100 800;
+    font-weight: 400;
     font-display: swap;
     src: url(/css/martianmono.woff2) format("woff2");
 }
@@ -15,11 +21,11 @@
    Windows) is the one common mono with a 0.55 em advance; everything else
    (Menlo, SF Mono, DejaVu, Liberation, Noto, Roboto Mono, Courier New) sits at
    0.6 em. The overrides are divided by size-adjust since they apply to the
-   adjusted em. Both faces claim the full weight range like the real font, so no
-   synthetic bold flashes during the swap either. */
+   adjusted em. Both faces are declared 400 like the real font, so bold is
+   synthesized the same way before and after the swap. */
 @font-face {
     font-family: "Martian Mono Fallback Consolas";
-    font-weight: 100 800;
+    font-weight: 400;
     src: local("Consolas");
     size-adjust: 127.27%;
     ascent-override: 78.57%;
@@ -29,7 +35,7 @@
 
 @font-face {
     font-family: "Martian Mono Fallback";
-    font-weight: 100 800;
+    font-weight: 400;
     src:
         local("Menlo Regular"), local("Menlo-Regular"),
         local("SF Mono Regular"), local("SFMono-Regular"),
@@ -100,6 +106,14 @@
     margin: 0;
     padding: 0;
     box-sizing: border-box;
+}
+
+/* Form controls don't inherit font from the page (the UA gives <button> its own
+   system face), which is how the Discord/Yandex/Email contact buttons ended up
+   in Arial next to monospace links. Classes still override size/weight. */
+button {
+    font: inherit;
+    color: inherit;
 }
 
 html {
@@ -427,7 +441,9 @@ li {
     padding: var(--gap);
     display: grid;
     grid-template-columns: repeat(12, 1fr);
-    grid-template-rows: repeat(12, auto);
+    /* No explicit rows: the tiles' grid-row placements create exactly the rows
+       they use. A fixed repeat(12, auto) left six empty rows whose gaps still
+       added 6 × --gap = 96px, enough to make the dashboard scroll at 1366×768. */
     align-content: start;
     padding-top: 12vh;
     /* Desktop spacer to center content */
@@ -596,20 +612,35 @@ li {
     padding: 4px;
     width: 200px;
     height: 200px;
-    overflow: hidden;
     border: 3px solid var(--primary);
-    /* The one literal tint left: the alpha is animated through --glow, and
-       calc() inside a color-mix() percentage is not something every engine
-       resolves yet. The token form is rgb(from var(--primary) r g b / calc(…))
-       (relative color syntax), which enters the widely-available baseline in
-       2027 — swap it in then. */
+    /* Resting glow. The pulse on top of it (::after) animates opacity only, which
+       runs on the compositor; animating the box-shadow itself (the old --glow
+       custom property) forced a main-thread repaint every frame, forever.
+       No overflow: hidden here: the photo and the 404 glyph are already round
+       (.profile-img has border-radius: 50%), and clipping would cut ::after's
+       shadow off. */
     box-shadow:
-        0 0 calc(15px + var(--glow) * 5px) rgb(122 162 247 / calc(0.3 + var(--glow) * 0.2)),
-        0 0 calc(40px + var(--glow) * 10px) rgb(122 162 247 / calc(0.1 + var(--glow) * 0.1));
-    animation: profile-glow 4s ease-in-out infinite;
+        0 0 15px color-mix(in srgb, var(--primary) 30%, transparent),
+        0 0 40px color-mix(in srgb, var(--primary) 10%, transparent);
     z-index: 2;
     background: var(--bg);
     view-transition-name: avatar;
+
+    /* Peak glow layered over the resting one. Its alphas are chosen so that
+       resting + pulse composite to the old peak (20px @ 0.5, 50px @ 0.2):
+       1 - (1 - 0.3)(1 - 0.29) ≈ 0.5, 1 - (1 - 0.1)(1 - 0.11) ≈ 0.2. */
+    &::after {
+        content: "";
+        position: absolute;
+        inset: -3px;
+        border-radius: 50%;
+        pointer-events: none;
+        box-shadow:
+            0 0 20px color-mix(in srgb, var(--primary) 29%, transparent),
+            0 0 50px color-mix(in srgb, var(--primary) 11%, transparent);
+        opacity: 0;
+        animation: profile-glow 4s ease-in-out infinite;
+    }
 
     @media (max-width: 1024px) {
         width: 120px;
@@ -617,27 +648,15 @@ li {
     }
 
     @media (prefers-reduced-motion: reduce) {
-        animation: none;
+        &::after {
+            animation: none;
+        }
     }
-}
-
-/* Registered so the glow animates as one interpolated number instead of
-   swapping whole box-shadow strings each keyframe — single source of truth. */
-@property --glow {
-    syntax: "<number>";
-    inherits: false;
-    initial-value: 0;
 }
 
 @keyframes profile-glow {
-
-    0%,
-    100% {
-        --glow: 0;
-    }
-
     50% {
-        --glow: 1;
+        opacity: 1;
     }
 }
 
@@ -945,13 +964,13 @@ mark {
     font-size: 0.95rem;
 }
 
-/* Terminal Toggle Tile. It's a real <button>, so the UA's own font, sizing and
-   control appearance have to be cleared before it can look like a tile. */
+/* Terminal Toggle Tile. It's a real <button>, so the UA's sizing and control
+   appearance have to be cleared before it can look like a tile (the font comes
+   from the global button reset). */
 .terminal-toggle-tile {
     grid-column: 9 / 12;
     grid-row: 6 / 7;
     appearance: none;
-    font: inherit;
     width: 100%;
     min-height: 80px;
     display: flex;
@@ -1088,7 +1107,12 @@ mark {
     word-break: break-all;
 }
 
-/* Name Shimmer Effect (Subtle) */
+/* Name Shimmer Effect (Subtle). Two sweeps after load, then it rests: a
+   background-position animation repaints on the main thread every frame (it
+   can't run on the compositor), so an infinite loop kept the page re-styling
+   ~60 times a second while idle. The rest frame (position 0) is the same as
+   every keyframe boundary (the image is 200% wide and repeats), so the stop is
+   seamless. */
 .name-shimmer {
     position: relative;
     background: linear-gradient(90deg,
@@ -1101,14 +1125,17 @@ mark {
     background-clip: text;
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
-    animation: shimmer 8s linear infinite;
+    animation: shimmer 8s linear 2;
     padding-bottom: 4px;
     /* Prevent clipping */
     line-height: 1.2;
 
+    /* Longhand on purpose: the `background` shorthand would also reset
+       background-clip to border-box and paint the whole box in --fg, turning
+       the name into a solid bar under reduced motion. */
     @media (prefers-reduced-motion: reduce) {
         animation: none;
-        background: var(--fg);
+        background-image: none;
         -webkit-text-fill-color: var(--fg);
     }
 
