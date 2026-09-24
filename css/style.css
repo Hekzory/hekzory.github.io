@@ -84,6 +84,11 @@
     /* Transitions */
     --ease: cubic-bezier(0.25, 1, 0.5, 1);
     --duration: 0.3s;
+
+    /* The site face with its metric-matched fallbacks (see the @font-face
+       blocks above). A token so that inside text set in another face (article
+       prose on phones, articles.css) headings can keep this one. */
+    --font-mono: "Martian Mono", "Martian Mono Fallback Consolas", "Martian Mono Fallback", monospace;
 }
 
 /* Wider-gamut accents on P3-capable displays. sRGB screens never match this
@@ -127,7 +132,7 @@ html {
 body {
     background-color: var(--bg);
     color: var(--fg);
-    font-family: "Martian Mono", "Martian Mono Fallback Consolas", "Martian Mono Fallback", monospace;
+    font-family: var(--font-mono);
     min-height: 100vh;
     /* Tiling WM feel */
     display: flex;
