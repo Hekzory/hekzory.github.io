@@ -306,3 +306,32 @@
     color: var(--primary);
     font-weight: bold;
 }
+
+/* --- Phones: long-form readability ---
+   Martian Mono SemiExpanded advances 0.7em per glyph, and the prose column
+   sat inside two paddings (container + tile) plus the tile's border: at 390px
+   that was a 316px column holding 21–27 characters per line, about half of a
+   readable measure. On phones the article runs edge to edge and its prose is
+   set in the platform's own sans-serif (zero bytes to download); headings and
+   the version stamp keep the site face, so the page still reads as this site.
+   <code>/<pre> are untouched and render exactly as on desktop. Measured at
+   390px on the uv post: 32–40 characters per line (en), 26–34 (ru). */
+@media (max-width: 600px) {
+    .article-container {
+        padding-inline: 0;
+    }
+
+    .article {
+        padding: 20px 16px;
+        border-inline: 0;
+        border-radius: 0;
+    }
+
+    .article-content {
+        font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+
+        & :is(h2, h3, .article-stamp) {
+            font-family: var(--font-mono);
+        }
+    }
+}

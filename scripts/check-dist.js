@@ -7,7 +7,9 @@
 //     block is valid JSON (a broken one silently disables structured data);
 //   - every same-site href/src (root-relative or https://tsv.one/...) resolves
 //     to a file in dist/, using GitHub Pages' clean-URL rules — so a typo'd
-//     link, a missing hreflang twin or a renamed asset fails the build.
+//     link, a missing hreflang twin or a renamed asset fails the build;
+//   - every <use href="#id"> points at an id on the same page (the icon
+//     sprites are pruned per page at build time).
 // Plus: every sitemap <loc>/<xhtml:link>, and every feed <link href>/<id>,
 // resolves the same way. And every letter/digit/mark in the visible text of
 // every page is in the subset web font (see assets-src/README.md): a missing
@@ -196,6 +198,14 @@ for (const file of files.filter((f) => f.endsWith(".html"))) {
             const list = [...missing].map((c) => `${c} U+${c.codePointAt(0).toString(16).toUpperCase().padStart(4, "0")}`);
             problems.push(`${rel}: letter(s) not in the web font subset (add them, see assets-src/README.md): ${list.join(", ")}`);
         }
+    }
+
+    // Every sprite reference resolves on its own page: the build prunes the
+    // <symbol>s a page doesn't <use> (vite-plugin-html-minify.js), so a
+    // reference it missed would render as an empty icon.
+    const ids = new Set(Array.from(html.matchAll(/\sid="([^"]+)"/g), (m) => m[1]));
+    for (const m of html.matchAll(/<use\b[^>]*\shref="#([^"]+)"/g)) {
+        if (!ids.has(m[1])) problems.push(`${rel}: <use href="#${m[1]}"> has no matching id on the page`);
     }
 
     for (const m of html.matchAll(/\s(?:href|src)="([^"]+)"/g)) checkUrl(m[1], rel);

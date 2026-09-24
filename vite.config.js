@@ -68,6 +68,8 @@ export default defineConfig({
         target: "baseline-widely-available",
         // JS minifier: Vite 8's default (Oxc). Measured against the previous
         // terser passes:5 setup on this codebase: main.js +11 B, terminal.js
-        // −59 B gzip — parity, minus a 2.4 MB dependency and a slower build.
+        // −59 B gzip — parity, and a faster build. terser itself is still
+        // installed: html-minifier-next depends on it, and Vite resolves it as
+        // its optional peer. The build just never calls it.
     },
 });

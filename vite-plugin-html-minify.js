@@ -19,6 +19,14 @@
 //   (icon-only elements, spaces between inline elements).
 // JSON <script> blocks (JSON-LD, speculation rules) need no option: they are
 // always re-serialised compactly, with "<" escaped.
+//
+// Before minifying, each page's icon sprites lose the <symbol>s it never
+// <use>s. The sprite components are shared (icons_index.html ships all nine
+// contact/tile icons to the resume and the 404 too), so this is what keeps a
+// page from carrying Steam and Discord paths it doesn't draw: -784 B gzip on
+// /resume, -1.3 KB on /404. Only static markup is considered: neither main.js
+// nor terminal.js creates <use> elements, and scripts/check-dist.js fails the
+// build if a <use href="#id"> on any page no longer resolves.
 import { minify } from "html-minifier-next";
 
 const OPTIONS = {
@@ -67,6 +75,17 @@ const OPTIONS = {
     },
 };
 
+// Drop every <symbol> no <use href="#id"> on the page points at, then any
+// sprite <svg> left without symbols. Symbols are matched whole (they never
+// nest), and a url(#id) paint server defined inside a kept symbol (the logo
+// gradient) goes along with it.
+function pruneSprites(html) {
+    const used = new Set(Array.from(html.matchAll(/<use\b[^>]*\bhref="#([\w-]+)"/g), (m) => m[1]));
+    return html
+        .replace(/<symbol\b[^>]*\bid="([\w-]+)"[^>]*>[\s\S]*?<\/symbol>/g, (symbol, id) => (used.has(id) ? symbol : ""))
+        .replace(/<svg\b[^>]*\bclass="d-n-d"[^>]*>\s*<\/svg>/g, "");
+}
+
 export default function htmlMinifyPlugin() {
     return {
         name: "vite-plugin-html-minify",
@@ -75,7 +94,7 @@ export default function htmlMinifyPlugin() {
         async generateBundle(_, bundle) {
             for (const item of Object.values(bundle)) {
                 if (item.type === "asset" && item.fileName.endsWith(".html")) {
-                    item.source = await minify(String(item.source), OPTIONS);
+                    item.source = await minify(pruneSprites(String(item.source)), OPTIONS);
                 }
             }
         },

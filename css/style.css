@@ -84,6 +84,11 @@
     /* Transitions */
     --ease: cubic-bezier(0.25, 1, 0.5, 1);
     --duration: 0.3s;
+
+    /* The site face with its metric-matched fallbacks (see the @font-face
+       blocks above). A token so that inside text set in another face (article
+       prose on phones, articles.css) headings can keep this one. */
+    --font-mono: "Martian Mono", "Martian Mono Fallback Consolas", "Martian Mono Fallback", monospace;
 }
 
 /* Wider-gamut accents on P3-capable displays. sRGB screens never match this
@@ -127,7 +132,7 @@ html {
 body {
     background-color: var(--bg);
     color: var(--fg);
-    font-family: "Martian Mono", "Martian Mono Fallback Consolas", "Martian Mono Fallback", monospace;
+    font-family: var(--font-mono);
     min-height: 100vh;
     /* Tiling WM feel */
     display: flex;
@@ -182,16 +187,19 @@ body {
 
 /* Typography niceties (no-ops where unsupported):
    balance — multi-line headings wrap to even-length lines instead of a long
-   line plus an orphan word; pretty — body text avoids single-word last lines. */
+   line plus an orphan word; pretty — body text avoids single-word last lines.
+   Longhands on purpose: the `text-wrap` shorthand also sets text-wrap-mode:
+   wrap, and declared on every li/p/h* it beat any inherited nowrap — which is
+   how the waybar breadcrumb ended up wrapping by the hyphens of a post slug. */
 h1,
 h2,
 h3 {
-    text-wrap: balance;
+    text-wrap-style: balance;
 }
 
 p,
 li {
-    text-wrap: pretty;
+    text-wrap-style: pretty;
 }
 
 .resume-link {
@@ -255,11 +263,23 @@ li {
     align-items: center;
 }
 
+/* The left side gives way when the bar runs out of room (a long post slug at
+   769–1000px): the breadcrumb shrinks, the right side (EN/RU + clock) never
+   does. min-width: 0 lets the flex items go below their content width. */
+.waybar-left {
+    min-width: 0;
+}
+
+.waybar-right {
+    flex-shrink: 0;
+}
+
 .waybar-left .window-title {
     background: transparent;
     color: var(--fg-dim);
     margin-left: 16px;
     /* Extra gap before the breadcrumb */
+    min-width: 0;
 
     @media (max-width: 768px) {
         display: none;
@@ -273,10 +293,25 @@ li {
     align-items: center;
     list-style: none;
     gap: 0;
+    min-width: 0;
 
+    /* One line, always: the bar is 36px tall. Only the leaf crumb (the one
+       that can be a long slug) may shrink, and it ends in an ellipsis. */
     & li {
         display: flex;
         align-items: center;
+        white-space: nowrap;
+
+        &:last-child {
+            min-width: 0;
+            overflow: hidden;
+
+            & > * {
+                min-width: 0;
+                overflow: hidden;
+                text-overflow: ellipsis;
+            }
+        }
 
         & + li::before {
             content: "/";
@@ -479,11 +514,14 @@ li {
     }
 }
 
-/* Tile Base */
+/* Tile Base. No backdrop-filter: nothing but the page's own static gradient
+   ever sits behind a tile, and blurring a smooth gradient gives back the same
+   gradient. Measured at 1440x900 with animations stopped: the home page
+   rendered byte-identical with and without blur(10px), while every tile paid
+   for its own compositor surface and blur pass. The blur stays where there
+   is content underneath: the language banner and the clipboard dialog. */
 .tile {
     background: var(--glass);
-    backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(10px);
     border: 1px solid var(--glass-border);
     border-radius: var(--radius);
     display: flex;
@@ -508,11 +546,8 @@ li {
         overflow: visible;
         /* Let content expand the tile */
         flex-shrink: 0;
-        /* Phones/tablets scroll these layouts — drop the per-tile blur (costly to
-           recomposite each frame). A STATIC gradient surface (painted once, no
-           per-frame recomposite) restores some glass-like depth at zero scroll cost. */
-        backdrop-filter: none;
-        -webkit-backdrop-filter: none;
+        /* Phones/tablets: a static gradient surface for some depth where the
+           tiles stack into one long scrolling column. */
         background: linear-gradient(160deg, color-mix(in srgb, var(--surface-raised) 82%, transparent) 0%, color-mix(in srgb, var(--bg) 92%, transparent) 100%);
     }
 }
@@ -776,6 +811,11 @@ mark {
     text-shadow: 0 0 10px color-mix(in srgb, var(--primary) 40%, transparent);
     padding: 2px 8px;
     border-radius: 4px;
+    /* A highlight that wraps ("View / resume" in a narrow tile) keeps its
+       padding and rounded ends on every line instead of splitting into two
+       lopsided halves. */
+    -webkit-box-decoration-break: clone;
+    box-decoration-break: clone;
 }
 
 /* Connections Tile (Compact 2-Column Design) */
@@ -1013,6 +1053,29 @@ mark {
     }
 }
 
+/* Narrow desktops (1025–1400px): the dashboard's side columns 1 and 12 stay
+   empty on wide screens as margins, but here they're worth ~70–100px each to
+   the side tiles. Without them System Info was ~255px wide at 1100px (300px
+   at 1281px) and broke the kernel version at its hyphens and "View resume"
+   across two lines; the three-column tile only fits both from ~1360px up. */
+@media (min-width: 1025px) and (max-width: 1400px) {
+    .connections-tile {
+        grid-column: 1 / 5;
+    }
+
+    .work-tile {
+        grid-column: 9 / 13;
+    }
+
+    .whoami-tile {
+        grid-column: 1 / 9;
+    }
+
+    .terminal-toggle-tile {
+        grid-column: 9 / 13;
+    }
+}
+
 /* --- Clipboard Dialog --- */
 .clipboard {
     position: fixed;
@@ -1167,9 +1230,14 @@ mark {
     }
 }
 
-/* Clock pulse animation */
-.clock-tick {
-    animation: clock-pulse 1s ease-out;
+/* Clock pulse on each minute change. main.js drops the class on animationend,
+   so the pulse always plays out in full (it used to be a 1s animation cut off
+   by a 200ms timer, snapping back from scale ~1.12 once a minute). Motion
+   only: under reduced motion the digits just change. */
+@media (prefers-reduced-motion: no-preference) {
+    .clock-tick {
+        animation: clock-pulse 0.3s ease-out;
+    }
 }
 
 @keyframes clock-pulse {
@@ -1253,8 +1321,6 @@ mark {
     .tile {
         background: none;
         box-shadow: none;
-        backdrop-filter: none;
-        -webkit-backdrop-filter: none;
     }
 
     .name-shimmer {

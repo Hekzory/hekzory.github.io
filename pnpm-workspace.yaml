@@ -1,7 +1,9 @@
 # esbuild is only an OPTIONAL peer of Vite 8 (Vite 8 bundles with Rolldown/Oxc,
-# not esbuild); it is pulled in by peer auto-install but the build never invokes
-# it. pnpm 11 blocks dependency build scripts by default and errors on any that
-# aren't explicitly decided, so we explicitly decline esbuild's postinstall.
+# not esbuild), and today it isn't installed at all: the lockfile lists it only
+# in Vite's peer metadata. This entry is a guard, not a fix: pnpm 11+ blocks
+# dependency build scripts by default and fails the install on any it hasn't
+# been told about, so if a future resolution does pull esbuild in, its
+# postinstall is already declined instead of breaking CI.
 # (false = do not run its build scripts.)
 allowBuilds:
   esbuild: false

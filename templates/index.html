@@ -161,8 +161,10 @@
             <span>{{t.home.terminal_open}}</span>
         </button>
 
-        <!-- Terminal / Footer Tile -->
-        <article class="tile terminal-tile">
+        <!-- Terminal / Footer Tile. Parked offscreen with a transform while
+             closed, so `inert` keeps it out of the Tab order and the
+             accessibility tree until terminal.js opens it. -->
+        <article class="tile terminal-tile" inert>
             <div class="terminal-header">
                 <span>{{t.home.terminal_title}}</span>
                 <button id="terminal-close" class="icon-btn" aria-label="{{t.home.terminal_close}}">
