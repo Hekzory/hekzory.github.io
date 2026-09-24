@@ -1153,6 +1153,7 @@ export function initTerminal(systemConfig) {
     const openTerminal = () => {
         if (!terminalTile) return;
 
+        terminalTile.inert = false;
         terminalTile.classList.add('terminal-open');
         if (terminalToggleTile) {
             terminalToggleTile.classList.add('hidden');
@@ -1165,6 +1166,9 @@ export function initTerminal(systemConfig) {
     const closeTerminal = () => {
         if (!terminalTile) return;
 
+        // Closed means offscreen: take it back out of the Tab order (the
+        // template ships it inert for the same reason).
+        terminalTile.inert = true;
         terminalTile.classList.remove('terminal-open');
         if (terminalToggleTile) {
             terminalToggleTile.classList.remove('hidden');
