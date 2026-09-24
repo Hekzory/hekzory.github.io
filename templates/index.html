@@ -31,11 +31,11 @@
                     <img src="/profile-400.webp"
                         srcset="/profile-200.webp 200w, /profile-300.webp 300w, /profile-400.webp 400w"
                         sizes="(max-width: 1024px) 110px, 190px"
-                        fetchpriority="high" alt="Oleg Tsvetkov" class="profile-img u-photo"
+                        fetchpriority="high" alt="{{t.person.name}}" class="profile-img u-photo"
                         width="200" height="200" loading="eager" />
                 </div>
                 <div class="profile-details">
-                    <h1 class="name-shimmer p-name">Oleg Tsvetkov</h1>
+                    <h1 class="name-shimmer p-name">{{t.person.name}}</h1>
                     <h2 class="role p-job-title">{{t.home.role}}</h2>
                     <p class="location">📍 <span class="p-locality">{{t.home.locality}}</span>, <span class="p-country-name">{{t.home.country}}</span></p>
                 </div>

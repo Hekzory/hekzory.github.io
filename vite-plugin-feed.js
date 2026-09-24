@@ -73,10 +73,11 @@ export default function feedPlugin({ outDir = "dist", i18nDir = "i18n" } = {}) {
                 /* meta.json optional; the feed falls back to bare defaults */
             }
             const posts = loadPosts(root);
-            const author = meta.siteName || "";
             const authorEmail = meta.authorEmail;
 
             for (const locale of LOCALES) {
+                // Same resolution as og:site_name in vite-plugin-html-meta.js.
+                const author = meta.locales?.[locale]?.siteName || meta.siteName || "";
                 const base = locale === "ru" ? "/ru" : "";
                 const dict = JSON.parse(
                     readFileSync(path.resolve(root, i18nDir, `${locale}.json`), "utf-8")

@@ -185,9 +185,11 @@ export function indexItems(posts, locale, origin, base) {
 // The complete inline JSON-LD (@graph: BlogPosting + BreadcrumbList) for a post,
 // assembled as objects and JSON-encoded so every record string is escaped by
 // construction — nothing reaches the page through raw token substitution.
-export function buildPostJsonLd({ record, locale, canonical, origin, base, blogName, crumbHome, modified }) {
+export function buildPostJsonLd({ record, locale, canonical, origin, base, blogName, crumbHome, personName, modified }) {
     const d = postLocaleData(record, locale);
-    const person = { "@type": "Person", "@id": `${origin}/#person`, name: "Oleg Tsvetkov" };
+    // personName is the locale's dictionary name (person.name), so a Russian post
+    // names its author in Cyrillic like the rest of the ru/ tree.
+    const person = { "@type": "Person", "@id": `${origin}/#person`, name: personName };
     // Optional article image as an ImageObject (absolute url), single-sourced with
     // the og:image and the in-body <figure> from the same record.image.
     const imageObj = record.image?.src

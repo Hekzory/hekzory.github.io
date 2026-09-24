@@ -4,7 +4,7 @@
     "authorEmail": "oleg@tsv.one",
     "title": {
         "en": "Oleg Tsvetkov | Software Engineer",
-        "ru": "Oleg Tsvetkov | Разработчик"
+        "ru": "Олег Цветков | Разработчик"
     },
     "description": {
         "en": "Personal website of Oleg Tsvetkov, Software Engineer at VK. DevOps, CI/CD, Python, Go, Docker, Consul, infrastructure.",
@@ -25,7 +25,7 @@
     "colorScheme": "dark",
     "locales": {
         "en": { "ogLocale": "en_US" },
-        "ru": { "ogLocale": "ru_RU" }
+        "ru": { "ogLocale": "ru_RU", "siteName": "Олег Цветков" }
     },
     "pages": {
         "resume": {
@@ -44,14 +44,14 @@
             "type": "website"
         },
         "ru": {
-            "title": "Oleg Tsvetkov | Разработчик"
+            "title": "Олег Цветков | Разработчик"
         },
         "ru/resume": {
-            "title": "Резюме | Oleg Tsvetkov",
+            "title": "Резюме | Олег Цветков",
             "description": "Резюме Олега Цветкова - разработчика (middle) в VK: DevOps, CI/CD, Python и инфраструктура. Опыт работы, навыки и образование."
         },
         "ru/articles": {
-            "title": "Статьи | Oleg Tsvetkov",
+            "title": "Статьи | Олег Цветков",
             "description": "Личные заметки: инструкции, опыт и разбор сделанного про инфраструктуру, DevOps и разработку. Частично субъективно.",
             "type": "website"
         }

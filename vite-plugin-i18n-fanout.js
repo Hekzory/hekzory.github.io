@@ -102,6 +102,7 @@ export default function i18nFanoutPlugin({ dir = "i18n" } = {}) {
                     base,
                     blogName: lookup(dict, "art.title") ?? "",
                     crumbHome: lookup(dict, "art.crumb_home") ?? "",
+                    personName: lookup(dict, "person.name") ?? "",
                     modified,
                 });
                 // Optional in-body figure from the record (empty when no image);

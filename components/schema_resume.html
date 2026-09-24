@@ -6,9 +6,9 @@
                 "@type": "WebSite",
                 "@id": "{{origin}}/#website",
                 "url": "{{origin}}/",
-                "name": "Oleg Tsvetkov",
-                "alternateName": "Hekzory",
-                "description": "Personal website of Oleg Tsvetkov, Software Engineer at VK.",
+                "name": "{{t.person.name}}",
+                "alternateName": ["{{t.person.name_alt}}", "Hekzory"],
+                "description": "{{t.schema.site_desc}}",
                 "inLanguage": "{{locale}}",
                 "publisher": { "@id": "{{origin}}/#person" }
             },
@@ -25,10 +25,10 @@
             {
                 "@type": "Person",
                 "@id": "{{origin}}/#person",
-                "name": "Oleg Tsvetkov",
-                "givenName": "Oleg",
-                "familyName": "Tsvetkov",
-                "alternateName": "Hekzory",
+                "name": "{{t.person.name}}",
+                "givenName": "{{t.person.given}}",
+                "familyName": "{{t.person.family}}",
+                "alternateName": ["{{t.person.name_alt}}", "Hekzory"],
                 "url": "{{origin}}/",
                 "image": { "@id": "{{origin}}/#primaryimage" },
                 "email": "oleg@tsv.one",
@@ -110,7 +110,7 @@
                 "contentUrl": "{{origin}}/face.webp",
                 "width": 788,
                 "height": 788,
-                "caption": "Oleg Tsvetkov"
+                "caption": "{{t.person.name}}"
             }
         ]
     }
