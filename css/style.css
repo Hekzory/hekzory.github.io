@@ -811,6 +811,11 @@ mark {
     text-shadow: 0 0 10px color-mix(in srgb, var(--primary) 40%, transparent);
     padding: 2px 8px;
     border-radius: 4px;
+    /* A highlight that wraps ("View / resume" in a narrow tile) keeps its
+       padding and rounded ends on every line instead of splitting into two
+       lopsided halves. */
+    -webkit-box-decoration-break: clone;
+    box-decoration-break: clone;
 }
 
 /* Connections Tile (Compact 2-Column Design) */
@@ -1045,6 +1050,29 @@ mark {
 
     @media (max-width: 768px) {
         display: none;
+    }
+}
+
+/* Narrow desktops (1025–1400px): the dashboard's side columns 1 and 12 stay
+   empty on wide screens as margins, but here they're worth ~70–100px each to
+   the side tiles. Without them System Info was ~255px wide at 1100px (300px
+   at 1281px) and broke the kernel version at its hyphens and "View resume"
+   across two lines; the three-column tile only fits both from ~1360px up. */
+@media (min-width: 1025px) and (max-width: 1400px) {
+    .connections-tile {
+        grid-column: 1 / 5;
+    }
+
+    .work-tile {
+        grid-column: 9 / 13;
+    }
+
+    .whoami-tile {
+        grid-column: 1 / 9;
+    }
+
+    .terminal-toggle-tile {
+        grid-column: 9 / 13;
     }
 }
 
