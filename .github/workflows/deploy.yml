@@ -25,7 +25,12 @@ concurrency:
 
 jobs:
   build:
-    runs-on: ubuntu-latest
+    # The self-hosted runner named by the repo variable CI_RUNNER takes the
+    # owner's and Dependabot's own branches; everything else, pull requests
+    # from forks included, runs on GitHub's runners, and so does every job
+    # while CI_RUNNER is unset.
+    runs-on: ${{ (github.actor == github.repository_owner || github.actor == 'dependabot[bot]') && (github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == github.repository) && vars.CI_RUNNER || 'ubuntu-latest' }}
+    timeout-minutes: 15
     outputs:
       indexnow-urls: ${{ steps.indexnow.outputs.urls }}
     steps:
@@ -79,7 +84,9 @@ jobs:
   deploy:
     if: github.event_name != 'pull_request'
     needs: build
-    runs-on: ubuntu-latest
+    # Same runner choice as build.
+    runs-on: ${{ (github.actor == github.repository_owner || github.actor == 'dependabot[bot]') && (github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == github.repository) && vars.CI_RUNNER || 'ubuntu-latest' }}
+    timeout-minutes: 10
     permissions:
       pages: write
       id-token: write
