@@ -26,10 +26,13 @@ concurrency:
 jobs:
   build:
     # The self-hosted runner named by the repo variable CI_RUNNER takes the
-    # owner's and Dependabot's own branches; everything else, pull requests
-    # from forks included, runs on GitHub's runners, and so does every job
-    # while CI_RUNNER is unset.
-    runs-on: ${{ (github.actor == github.repository_owner || github.actor == 'dependabot[bot]') && (github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == github.repository) && vars.CI_RUNNER || 'ubuntu-latest' }}
+    # owner's pushes and own branches; everything else, Dependabot's and
+    # forks' pull requests included, runs on GitHub's runners, and so does
+    # every job while CI_RUNNER is unset. On the self-hosted runner, pnpm,
+    # Node and the package store stay in its cache volume between jobs and
+    # a deploy builds with them, so an unmerged dependency update must not
+    # run there.
+    runs-on: ${{ github.actor == github.repository_owner && (github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == github.repository) && vars.CI_RUNNER || 'ubuntu-latest' }}
     timeout-minutes: 15
     outputs:
       indexnow-urls: ${{ steps.indexnow.outputs.urls }}
@@ -43,10 +46,14 @@ jobs:
       # itself (frozen lockfile under CI). pnpm/action-setup only covers pnpm <= 10.
       # The pnpm version comes from package.json's packageManager: the action
       # refuses to run when a `version` input names it a second time.
+      # On the self-hosted runner pnpm, Node and the store are kept in its
+      # cache volume (/cache); GitHub's runners restore the store from the
+      # Actions cache instead.
       - uses: pnpm/setup@v3.0.0
         with:
           runtime: node@26
-          cache: true
+          dest: ${{ runner.environment == 'self-hosted' && '/cache/setup-pnpm' || '~/setup-pnpm' }}
+          cache: ${{ runner.environment == 'github-hosted' }}
       - run: pnpm run build
       # Zero-dependency sanity check of dist/: every inline JSON-LD and
       # speculation-rules block parses, every internal link/asset/sitemap
@@ -85,7 +92,7 @@ jobs:
     if: github.event_name != 'pull_request'
     needs: build
     # Same runner choice as build.
-    runs-on: ${{ (github.actor == github.repository_owner || github.actor == 'dependabot[bot]') && (github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == github.repository) && vars.CI_RUNNER || 'ubuntu-latest' }}
+    runs-on: ${{ github.actor == github.repository_owner && (github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == github.repository) && vars.CI_RUNNER || 'ubuntu-latest' }}
     timeout-minutes: 10
     permissions:
       pages: write
