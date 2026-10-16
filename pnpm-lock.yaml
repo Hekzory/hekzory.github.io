@@ -167,8 +167,8 @@ importers:
   .:
     devDependencies:
       html-minifier-next:
-        specifier: ^8.10.7
-        version: 8.10.7
+        specifier: ^8.10.8
+        version: 8.10.8
       vite:
         specifier: ^8.3.4
         version: 8.3.4(terser@5.51.2)
@@ -373,8 +373,8 @@ packages:
     engines: {node: ^8.16.0 || ^10.6.0 || >=11.0.0}
     os: [darwin]
 
-  html-minifier-next@8.10.7:
-    resolution: {integrity: sha512-Pbh0fcJJTj8udwfs3bBuFmqlaixKprDDRcuQiP1E9h6KKKixk55yM1lZR2iHz0sSc7Nc+E8X/fXoUCFkrJiuaw==}
+  html-minifier-next@8.10.8:
+    resolution: {integrity: sha512-uXLEew9avGomQdUFhZE9gACACLA7uaIy4N/1ODoF2+CPsAQvJ3ZcHHMoC+DehgDUfLuzazz2xIdvtU4WafFiBw==}
     engines: {node: '>=22.13'}
     hasBin: true
     peerDependencies:
@@ -490,10 +490,6 @@ packages:
   sax@1.6.1:
     resolution: {integrity: sha512-42tBVwLWnaQvW5zc4HbZrTuWccECCZfBi92FDuwtqxasH+JbPB3/FOKb1m222K42R4WxuxzzMsTswfzgtSu64Q==}
     engines: {node: '>=11.0.0'}
-
-  source-map-js@1.2.1:
-    resolution: {integrity: sha512-UXWMKhLOwVKb728IUtQPXxfYU+usdybtUrK/8uGE8CQMvrhOpwvzDBwj0QhSL7MQc7vIsISBG8VQ8+IDQxpfQA==}
-    engines: {node: '>=0.10.0'}
 
   source-map-js@1.2.2:
     resolution: {integrity: sha512-KGj/8Y43x35aZVDtt+J4mK1hoLGHULMYfSkODJNQjNDC3oW1PqPoxMwo0pLUsWM/UEGzON/NxeHywEfNXNP3Vw==}
@@ -656,12 +652,12 @@ snapshots:
   css-tree@2.2.1:
     dependencies:
       mdn-data: 2.0.28
-      source-map-js: 1.2.1
+      source-map-js: 1.2.2
 
   css-tree@3.2.1:
     dependencies:
       mdn-data: 2.27.1
-      source-map-js: 1.2.1
+      source-map-js: 1.2.2
 
   css-what@7.0.0: {}
 
@@ -700,7 +696,7 @@ snapshots:
   fsevents@2.3.3:
     optional: true
 
-  html-minifier-next@8.10.7:
+  html-minifier-next@8.10.8:
     dependencies:
       commander: 15.0.0
       entities: 8.1.0
@@ -799,8 +795,6 @@ snapshots:
       '@rolldown/binding-win32-x64-msvc': 1.2.13
 
   sax@1.6.1: {}
-
-  source-map-js@1.2.1: {}
 
   source-map-js@1.2.2: {}
 
