@@ -49,7 +49,7 @@ jobs:
       # On the self-hosted runner pnpm, Node and the store are kept in its
       # cache volume (/cache); GitHub's runners restore the store from the
       # Actions cache instead.
-      - uses: pnpm/setup@v3.0.0
+      - uses: pnpm/setup@v3.1.1
         with:
           runtime: node@26
           dest: ${{ runner.environment == 'self-hosted' && '/cache/setup-pnpm' || '~/setup-pnpm' }}
