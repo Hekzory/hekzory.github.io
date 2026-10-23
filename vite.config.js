@@ -71,5 +71,6 @@ export default defineConfig({
         // −59 B gzip — parity, and a faster build. terser itself is still
         // installed: html-minifier-next depends on it, and Vite resolves it as
         // its optional peer. The build just never calls it.
+        minify: "oxc",
     },
 });
