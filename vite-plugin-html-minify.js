@@ -17,8 +17,8 @@
 //   is nothing for them to do.
 // - removeEmptyElements / collapseInlineTagWhitespace: they change what renders
 //   (icon-only elements, spaces between inline elements).
-// JSON <script> blocks (JSON-LD, speculation rules) need no option: they are
-// always re-serialised compactly, with "<" escaped.
+// minifyJSON keeps JSON <script> blocks (JSON-LD, speculation rules) compact
+// with "<" escaped; html-minifier-next 9 no longer minifies them by default.
 //
 // Before minifying, each page's icon sprites lose the <symbol>s it never
 // <use>s. The sprite components are shared (icons_index.html ships all nine
@@ -37,6 +37,7 @@ const OPTIONS = {
     removeDefaultTypeAttributes: true,
     removeOptionalTags: true,
     useShortDoctype: true,
+    minifyJSON: true,
     // Vite escapes the attribute values of injected tags (every ' in the CSP
     // becomes &#39;); decode entities back wherever that's safe, and keep
     // double quotes, escaping any " inside as &quot;.
