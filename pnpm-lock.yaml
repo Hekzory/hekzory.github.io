@@ -167,8 +167,8 @@ importers:
   .:
     devDependencies:
       html-minifier-next:
-        specifier: ^9.0.0
-        version: 9.0.0
+        specifier: ^9.1.0
+        version: 9.1.0
       vite:
         specifier: ^8.3.5
         version: 8.3.5(terser@5.51.2)
@@ -373,8 +373,8 @@ packages:
     engines: {node: ^8.16.0 || ^10.6.0 || >=11.0.0}
     os: [darwin]
 
-  html-minifier-next@9.0.0:
-    resolution: {integrity: sha512-O+GK9Bgcak79D2eArZkSL499fyRyzXzgbHk9r8pQNx/GCQc1NSZYcQMCY4/MLVigrEsLEw/zvDShe1WndqyuxQ==}
+  html-minifier-next@9.1.0:
+    resolution: {integrity: sha512-UD0nB4hgG+F2xSxG8OKzv5U3oA/taNnzPaGYIVfELemM8yZjqg5KlGWELKyT6fa8GxrroOXV7V9kKjXVWwW4AQ==}
     engines: {node: '>=22.13'}
     hasBin: true
     peerDependencies:
@@ -696,7 +696,7 @@ snapshots:
   fsevents@2.3.3:
     optional: true
 
-  html-minifier-next@9.0.0:
+  html-minifier-next@9.1.0:
     dependencies:
       commander: 15.0.0
       entities: 8.1.0
